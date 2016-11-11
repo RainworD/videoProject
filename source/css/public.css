@@ -87,47 +87,134 @@ body {
 .pageContent {
   display: none;
 }
-.pageContent .messageBox {
+.pageContent .messageBox,
+.pageContent .commentBox {
   padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
 }
-.pageContent .messageBox .leftImg {
+.pageContent .messageBox .leftImg,
+.pageContent .commentBox .leftImg {
   float: left;
   margin-right: 12px;
 }
-.pageContent .messageBox .leftImg img {
+.pageContent .messageBox .leftImg img,
+.pageContent .commentBox .leftImg img {
   display: block;
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
-.pageContent .messageBox .rightContent {
+.pageContent .messageBox .rightContent,
+.pageContent .commentBox .rightContent {
   padding-left: 50px;
 }
-.pageContent .messageBox .rightContent .rightTitle {
+.pageContent .messageBox .rightContent .rightTitle,
+.pageContent .commentBox .rightContent .rightTitle {
   margin: 10px 0;
   font-size: 16px;
   color: #333;
 }
-.pageContent .messageBox .rightContent .rightPara {
+.pageContent .messageBox .rightContent .rightPara,
+.pageContent .commentBox .rightContent .rightPara {
   font-size: 14px;
   color: #666;
 }
-.pageContent .messageBox .rightContent .articlePic {
+.pageContent .messageBox .rightContent .articlePic,
+.pageContent .commentBox .rightContent .articlePic {
   display: block;
   float: left;
   width: 31.3%;
   margin-right: 3%;
   height: 60px;
 }
-.pageContent .messageBox .rightContent .articlePic_ {
+.pageContent .messageBox .rightContent .articlePic_,
+.pageContent .commentBox .rightContent .articlePic_ {
   margin: 0;
 }
-.pageContent .messageBox .rightContent:after {
+.pageContent .messageBox .rightContent .tips .leftTips,
+.pageContent .commentBox .rightContent .tips .leftTips {
+  font-size: 10px;
+  color: #aaa;
+  float: left;
+  padding-top: 3px;
+  height: 20px;
+}
+.pageContent .messageBox .rightContent .tips img,
+.pageContent .commentBox .rightContent .tips img {
+  display: block;
+  width: 18px;
+  height: 15px;
+  float: right;
+  padding-top: 3px;
+}
+.pageContent .messageBox .rightContent .tips:after,
+.pageContent .commentBox .rightContent .tips:after {
   display: block;
   content: '';
   clear: both;
 }
-.pageContent .messageBox:after {
+.pageContent .messageBox .rightContent:after,
+.pageContent .commentBox .rightContent:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.pageContent .messageBox:after,
+.pageContent .commentBox:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.pageContent .commentBox {
+  padding-left: 65px;
+  border-bottom: none;
+  padding-right: 0;
+}
+.pageContent .commentBox .leftImg {
+  margin-bottom: 5px;
+}
+.pageContent .commentBox .rightContent {
+  border-bottom: 1px solid #ddd;
+}
+.pageContent .commentBox .rightContent .rightPara {
+  font-size: 12px;
+  color: #666;
+  padding-right: 15px;
+}
+.pageContent .commentBox .rightContent .tips .leftTips {
+  height: auto;
+  padding-top: 0;
+}
+/*动态中心*/
+.deliverBox {
+  padding: 10px 15px;
+  background-color: #fff;
+}
+.deliverBox .deliverBox_ {
+  width: 100%;
+}
+.deliverBox .deliverBox_ textarea {
+  border: none;
+}
+.deliverBox .deliverImg {
+  width: 100%;
+}
+.deliverBox .deliverImg .deliverImg_ {
+  display: block;
+  float: left;
+  width: 31.3%;
+  margin-right: 3%;
+  height: 75px;
+  position: relative;
+}
+.deliverBox .deliverImg .deliverImg_ img {
+  display: block;
+  width: 100%;
+}
+.deliverBox .deliverImg .deliverImg_1 {
+  margin: 0;
+}
+.deliverBox:after {
   display: block;
   content: '';
   clear: both;

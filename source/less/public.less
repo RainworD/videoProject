@@ -43,8 +43,9 @@ body{
 }
 .pageContent{
 	display: none;
-	.messageBox{
+	.messageBox,.commentBox{
 		padding: 10px 15px;
+		border-bottom: 1px solid #ddd;
 		.leftImg{
 			float: left;
 			margin-right: 12px;
@@ -77,10 +78,82 @@ body{
 			.articlePic_{
 				margin: 0;
 			}
+			.tips{
+				.leftTips{
+					font-size: 10px;
+					color: #aaa;
+					float: left;
+					padding-top: 3px;
+					height: 20px;
+				}
+				img{
+					display: block;
+				    width: 18px;
+				    height: 15px;
+				    float: right;
+				    padding-top: 3px;				
+				}
+				.after;
+			}
 			.after;
 		}
 		.after;
 	}
+	.commentBox{
+		padding-left: 65px;
+		border-bottom: none;
+		padding-right: 0;
+		.leftImg{
+			margin-bottom: 5px;
+		}
+		.rightContent{
+			border-bottom: 1px solid #ddd;
+			.rightPara{
+				font-size: 12px;
+				color: #666;
+				padding-right: 15px;
+			}
+			.tips{
+				.leftTips{
+					height: auto;
+					padding-top: 0;
+				}
+			}
+		}
+	}
+}
+/*动态中心*/
+.deliverBox{
+	padding: 10px 15px;
+	background-color: #fff;
+	.deliverBox_{
+		width: 100%;
+		textarea{
+			border: none;
+		}
+	}
+	.deliverImg{
+		width: 100%;
+		.deliverImg_{
+			display: block;
+			float: left;
+			width: 31.3%;
+			margin-right: 3%;
+			height: 75px;
+			position: relative;
+			img{
+				display: block;
+				width: 100%;
+			}
+			.removeBtn{
+
+			}
+		}
+		.deliverImg_1{
+			margin: 0;
+		}
+	}
+	.after;
 }
 .show{
 	display: block;
