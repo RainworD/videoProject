@@ -126,10 +126,15 @@ body{
 .deliverBox{
 	padding: 10px 15px;
 	background-color: #fff;
+	margin-bottom: 10px;
 	.deliverBox_{
 		width: 100%;
 		textarea{
 			border: none;
+			font-size: 14px;
+		    padding: 0;
+		    color: #999;
+		    min-height: 100px;
 		}
 	}
 	.deliverImg{
@@ -141,19 +146,146 @@ body{
 			margin-right: 3%;
 			height: 75px;
 			position: relative;
-			img{
+			.commonImg{
 				display: block;
 				width: 100%;
+				height: 100%;
 			}
 			.removeBtn{
-
+				display: block;
+				position: absolute;
+				top: -8px;
+				right: -8px;
+				width: 18px;
+				height: 18px;
+				color: #f33;
 			}
 		}
 		.deliverImg_1{
 			margin: 0;
 		}
+		.plusMoreImg{
+			border:1px solid #d8d8d8;
+		}
 	}
 	.after;
+}
+.notice{
+	background-color: #fff;
+	padding: 10px 15px;
+	.topPara{
+		font-size: 16px;
+		color: #333;
+		span{
+			font-size: 12px;
+			color: #999;
+		}
+	}
+	.userIcon{
+		width: 100%;
+		img{
+			display: block;
+		    width: 15%;
+		    margin-right: 6%;
+		    float: left;
+		    margin-bottom: 10px;
+		    &:nth-child(5n){
+		    	margin-right: 0;
+		    }
+		}
+		.after;
+	}
+}
+.mask{
+	height: 100%;
+	width: 100%;
+	display: none;
+	background: rgba(0,0,0,0.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+.addPhoto{
+	width:100%;
+	position: fixed;
+	z-index: 3;
+	bottom: 0;
+	left: 0;
+	display: none;
+	.addPhotoList{
+		width: 100%;
+		margin-bottom: 50px;
+		li{
+			width: 100%;
+		    height: 40px;
+		    line-height: 40px;
+		    font-size: 16px;
+		    color: #333;
+		    border-bottom: 1px solid #ddd;
+		    text-align: center;
+		    background-color: #fff;		
+		}
+	}
+	.cancelBtn{
+		position: fixed;
+	    bottom: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 40px;
+	    line-height: 40px;
+	    color: #333;
+	    text-align: center;
+	    background-color: #fff;
+	    font-size: 16px;	
+	}
+}
+.workmates{
+	padding: 10px 15px;
+	.workmatesList{
+		.workmateItems{
+			padding-bottom: 10px;
+			list-style-type: none;
+			.leftImg{
+				float: left;
+				margin-right: 12px;
+				img{
+					display: block;
+					width: 40px;
+					height: 40px;
+					border-radius: 50%;
+				}
+			}
+			.rightContent{
+				float: left;
+				border-bottom: 1px solid #ddd;
+				width: 84%;
+				// padding-left: 50px;
+				.rightContent_1{
+					height: 40px;
+					line-height: 40px;
+					.rightPara{
+						height: 40px;
+					    line-height: 40px;
+					    font-size: 16px;
+					    color: #333;
+					    float: left;
+					}
+					.tips{
+						float: right;
+						margin-top: 10px;
+						img{
+							display: block;
+						    width: 20px;
+						    height: 20px;
+						}
+					}
+					.after;
+				}
+			}
+			.after;
+		}
+	}
 }
 .show{
 	display: block;

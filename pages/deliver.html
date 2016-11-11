@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,29 +26,56 @@
         </p>
         <div class="deliverImg">
             <div class="deliverImg_">
-                <img src="../source/img/0.png">
-                <span class='removeBtn'><span><span></span>
+                <img src="../source/img/0.png" class="commonImg">
+                <img src="../source/img/remove.png" alt="" class="removeBtn">
             </div>
             <div class="deliverImg_">
-                <img src="../source/img/0.png">
-                <span class='removeBtn'><i></i></span>
+                <img src="../source/img/0.png" class="commonImg">
+                <img src="../source/img/remove.png" alt="" class="removeBtn">
             </div>
-            <div class="deliverImg_ deliverImg_1">
-                <img src="../source/img/0.png">
+            <div class="deliverImg_ deliverImg_1 plusMoreImg">
+                <img src="../source/img/plus.png" alt="" class="commonImg">
             </div>
-
         </div>
     </div>
     <div class="notice">
-        <p class="topPara">知会同事(再次点击头像可删除)</p>
+        <p class="topPara">知会同事&nbsp;<span>(再次点击头像可删除)</span></p>
         <div class="userIcon">
-            <img src="">
-            <img src="">
-            <img src="">
-            <img src="">
-            <img src="">
-            <img src="">
-            <div class="plusMore"></div>
+            <img src="../source/img/q.png" class="userPic">
+            <img src="../source/img/q.png" class="userPic">
+            <img src="../source/img/q.png" class="userPic">
+            <img src="../source/img/q.png" class="userPic">
+            <img src="../source/img/q.png" class="userPic">
+            <img src="../source/img/q.png" class="userPic">
+            <img src="../source/img/userPlus.png" class="userPlus">
         </div>
     </div>
+    <div class="mask"></div>
+    <div class="addPhoto">
+        <ul class="addPhotoList">
+            <li class="addPhotoItem">拍照</li>
+            <li class="addPhotoItem">相册</li>
+        </ul>
+        <p class="cancelBtn">取消</p>
+    </div>
 </body>
+<script type="text/javascript">
+    $(".removeBtn").bind("click",function(){
+        $(this).parents(".deliverImg_").remove();
+    })
+    $(".userPic").bind("click",function(){
+        $(this).remove();
+    })
+    $(".plusMoreImg").bind("click",function(){
+        $(".mask").addClass("show");
+        $(".addPhoto").addClass("show");
+    })
+    $(".cancelBtn").bind("click",function(){
+        $(".mask").removeClass("show");
+        $(".addPhoto").removeClass("show");
+    })
+    $(".userPlus").bind("click",function(){
+        window.location.href="workmatesList.html"
+    })
+</script>
+</html>

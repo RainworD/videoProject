@@ -189,12 +189,17 @@ body {
 .deliverBox {
   padding: 10px 15px;
   background-color: #fff;
+  margin-bottom: 10px;
 }
 .deliverBox .deliverBox_ {
   width: 100%;
 }
 .deliverBox .deliverBox_ textarea {
   border: none;
+  font-size: 14px;
+  padding: 0;
+  color: #999;
+  min-height: 100px;
 }
 .deliverBox .deliverImg {
   width: 100%;
@@ -207,14 +212,153 @@ body {
   height: 75px;
   position: relative;
 }
-.deliverBox .deliverImg .deliverImg_ img {
+.deliverBox .deliverImg .deliverImg_ .commonImg {
   display: block;
   width: 100%;
+  height: 100%;
+}
+.deliverBox .deliverImg .deliverImg_ .removeBtn {
+  display: block;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  color: #f33;
 }
 .deliverBox .deliverImg .deliverImg_1 {
   margin: 0;
 }
+.deliverBox .deliverImg .plusMoreImg {
+  border: 1px solid #d8d8d8;
+}
 .deliverBox:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.notice {
+  background-color: #fff;
+  padding: 10px 15px;
+}
+.notice .topPara {
+  font-size: 16px;
+  color: #333;
+}
+.notice .topPara span {
+  font-size: 12px;
+  color: #999;
+}
+.notice .userIcon {
+  width: 100%;
+}
+.notice .userIcon img {
+  display: block;
+  width: 15%;
+  margin-right: 6%;
+  float: left;
+  margin-bottom: 10px;
+}
+.notice .userIcon img:nth-child(5n) {
+  margin-right: 0;
+}
+.notice .userIcon:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.mask {
+  height: 100%;
+  width: 100%;
+  display: none;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+.addPhoto {
+  width: 100%;
+  position: fixed;
+  z-index: 3;
+  bottom: 0;
+  left: 0;
+  display: none;
+}
+.addPhoto .addPhotoList {
+  width: 100%;
+  margin-bottom: 50px;
+}
+.addPhoto .addPhotoList li {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  background-color: #fff;
+}
+.addPhoto .cancelBtn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  color: #333;
+  text-align: center;
+  background-color: #fff;
+  font-size: 16px;
+}
+.workmates {
+  padding: 10px 15px;
+}
+.workmates .workmatesList .workmateItems {
+  padding-bottom: 10px;
+  list-style-type: none;
+}
+.workmates .workmatesList .workmateItems .leftImg {
+  float: left;
+  margin-right: 12px;
+}
+.workmates .workmatesList .workmateItems .leftImg img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.workmates .workmatesList .workmateItems .rightContent {
+  float: left;
+  border-bottom: 1px solid #ddd;
+  width: 84%;
+}
+.workmates .workmatesList .workmateItems .rightContent .rightContent_1 {
+  height: 40px;
+  line-height: 40px;
+}
+.workmates .workmatesList .workmateItems .rightContent .rightContent_1 .rightPara {
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  color: #333;
+  float: left;
+}
+.workmates .workmatesList .workmateItems .rightContent .rightContent_1 .tips {
+  float: right;
+  margin-top: 10px;
+}
+.workmates .workmatesList .workmateItems .rightContent .rightContent_1 .tips img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+.workmates .workmatesList .workmateItems .rightContent .rightContent_1:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.workmates .workmatesList .workmateItems:after {
   display: block;
   content: '';
   clear: both;
