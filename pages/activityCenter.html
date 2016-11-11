@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频监控</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+</head>
+<body>
+    <div class="pageContainer">
+        <div class="topBar">
+            <ul class="topBarList">
+                <li class="list_item">
+                    <span class="listItem_name red">知会我的
+                    <span class="redCircle">1</span>
+                    </span>
+                </li>
+                <li class="list_item">
+                    <span class="listItem_name">我评论的
+                    <span class="redCircle">1</span>
+                    </span>
+                </li>
+                <li class="list_item">
+                    <span class="listItem_name">全部
+                    <span class="redCircle">1</span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div class="pageContent_1 pageContent show">
+            <div class="messageBox">
+                <div class="leftImg">
+                    <img src="../source/img/q.png">
+                </div>
+                <div class="rightContent">
+                    <div class="rightContent_1">
+                        <p class="rightTitle">月风溪</p>
+                        <p class="rightPara">用户发布的内容！</p>
+                        <img src="../source/img/0.png" alt="" class="articlePic">
+                        <img src="../source/img/1.png" alt="" class="articlePic">
+                        <img src="../source/img/2.png" alt="" class="articlePic articlePic_">
+                        <p class="tips"><span class="leftTips">刚刚</span></p>
+                    </div>
+                    <div class="CommentShow">
+                        <div class="leftImg"></div>
+                        <div class="rightComment">
+                            <p class="rightPara"></p>
+                            <p class="tips"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pageContent_2 pageContent">
+            <div class="messageBox">
+                <div class="leftImg"></div>
+                <div class="rightContent">
+                    <div class="rightContent_1">
+                        <p class="rightTitle"></p>
+                        <p class="rightPara"></p>
+                        <img src="" alt="">
+                        <img src="" alt="">
+                        <img src="" alt="">
+                        <p class="tips"></p>
+                    </div>
+                    <div class="CommentShow">
+                        <div class="leftImg"></div>
+                        <div class="rightComment">
+                            <p class="rightPara"></p>
+                            <p class="tips"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pageContent_3 pageContent">
+            <div class="messageBox">
+                <div class="leftImg"></div>
+                <div class="rightContent">
+                    <div class="rightContent_1">
+                        <p class="rightTitle"></p>
+                        <p class="rightPara"></p>
+                        <img src="" alt="">
+                        <img src="" alt="">
+                        <img src="" alt="">
+                        <p class="tips"></p>
+                    </div>
+                    <div class="CommentShow">
+                        <div class="leftImg"></div>
+                        <div class="rightComment">
+                            <p class="rightPara"></p>
+                            <p class="tips"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $(".list_item").bind("click",function(){
+        var index=$(this).index();
+        $(".topBar").find(".listItem_name").removeClass("red");
+        $(".topBar").find(".listItem_name").eq(index).addClass("red");
+        $(".pageContent").eq(index).addClass("show").siblings().removeClass("show");
+    })
+</script>
+</html>

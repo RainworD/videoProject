@@ -1,0 +1,67 @@
+// @blue: #016df1;
+// @linkBlue: #007aff;
+// @red: #fe3824;
+// @green: #1cc100;
+// @lineColor: #c8c7cc;
+// @lightLineColor: #e5e5e5;
+// @yellow: #ffce00;
+.after{
+	&:after{
+		display: block;
+		content: '';
+		clear: both;
+	}
+}
+.before{
+	&:before{
+		display: block;
+		content: '';
+		clear: both;
+	}
+}
+.veryCenter{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	-webkit-transform: translate(-50%,-50%);
+}
+.verticalCenter{
+	position: absolute;
+	top: 50%;
+	transform: translate(0,-50%);
+	-webkit-transform: translate(0,-50%);
+}
+.horizontalCenter{
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%,0);
+	-webkit-transform: translate(-50%,0);
+}
+.ellipsis{
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.mutilEllipsis(@n){
+	overflow : hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: @n;
+	-webkit-box-orient: vertical;
+}
+.full{
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+ul,p{
+	margin: 0;
+	padding:0;
+}
+
+
+
+
+
+

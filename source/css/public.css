@@ -1,0 +1,137 @@
+.after:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.before:before {
+  display: block;
+  content: '';
+  clear: both;
+}
+.veryCenter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.verticalCenter {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  -webkit-transform: translate(0, -50%);
+}
+.horizontalCenter {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  -webkit-transform: translate(-50%, 0);
+}
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.full {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+ul,
+p {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: #fff;
+}
+.topBar {
+  height: 40px;
+  line-height: 40px;
+}
+.topBar .topBarList {
+  width: 100%;
+  font-size: 0;
+  border-bottom: 1px solid #ddd;
+  height: 40px;
+}
+.topBar .topBarList li {
+  font-size: 14px;
+  width: 33.3%;
+  display: inline-block;
+  color: #333;
+  text-align: center;
+}
+.topBar .topBarList li .listItem_name {
+  position: relative;
+  display: inline-block;
+  height: 40px;
+}
+.topBar .topBarList li .listItem_name .redCircle {
+  background-color: #e74f3a;
+  border-radius: 8px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  position: absolute;
+  top: 4px;
+  right: -8px;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+}
+.topBar .topBarList li .red {
+  color: #e74f3a;
+  border-bottom: 1px solid #e74f3a;
+}
+.pageContent {
+  display: none;
+}
+.pageContent .messageBox {
+  padding: 10px 15px;
+}
+.pageContent .messageBox .leftImg {
+  float: left;
+  margin-right: 12px;
+}
+.pageContent .messageBox .leftImg img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.pageContent .messageBox .rightContent {
+  padding-left: 50px;
+}
+.pageContent .messageBox .rightContent .rightTitle {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #333;
+}
+.pageContent .messageBox .rightContent .rightPara {
+  font-size: 14px;
+  color: #666;
+}
+.pageContent .messageBox .rightContent .articlePic {
+  display: block;
+  float: left;
+  width: 31.3%;
+  margin-right: 3%;
+  height: 60px;
+}
+.pageContent .messageBox .rightContent .articlePic_ {
+  margin: 0;
+}
+.pageContent .messageBox .rightContent:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.pageContent .messageBox:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.show {
+  display: block;
+}
