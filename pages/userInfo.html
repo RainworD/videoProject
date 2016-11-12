@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频监控</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+</style>
+<body>
+    <div class="userInfo">
+        <div class="userTop">
+            <div class="leftImg">
+                <img src="../source/img/a.png">
+            </div>
+            <div class="rightContent">
+                <div class="rightContent_1">
+                    <p class="rightTitle">真实姓名：<span>未设置</span></p>
+                    <p class="rightPara">手机号码：<span>13890002000</span></p>
+                </div> 
+            </div>
+            <img src="../source/img/right.png" alt="" class="lookMore">
+        </div>
+        <ul class="workmatesList">
+            <a href="">
+                <li class="workmateItems">
+                    <div class="leftImg">
+                        <img src="../source/img/user.png">
+                    </div>
+                    <div class="rightContent">
+                        <div class="rightContent_1">
+                            <p class="rightPara">我的同事</p>
+                            <img src="../source/img/right.png" alt="" class="lookMore">
+                        </div> 
+                    </div>
+                </li>
+            </a>
+            <a href="">
+                <li class="workmateItems">
+                    <div class="leftImg">
+                        <img src="../source/img/motivation.png">
+                    </div>
+                    <div class="rightContent">
+                        <div class="rightContent_1">
+                            <p class="rightPara">我的动态</p>
+                            <img src="../source/img/right.png" alt="" class="lookMore">
+                        </div> 
+                    </div>
+                </li>
+            </a>
+        </ul>
+        <ul class="workmatesList">
+            <a href="">
+                <li class="workmateItems">
+                    <div class="leftImg">
+                        <img src="../source/img/setting.png">
+                    </div>
+                    <div class="rightContent">
+                        <div class="rightContent_1">
+                            <p class="rightPara">通用设置</p>
+                            <img src="../source/img/right.png" alt="" class="lookMore">
+                        </div> 
+                    </div>
+                </li>
+            </a>
+            <a href="aboutus.html">
+                <li class="workmateItems">
+                    <div class="leftImg">
+                        <img src="../source/img/about.png">
+                    </div>
+                    <div class="rightContent">
+                        <div class="rightContent_1">
+                            <p class="rightPara">关于我们</p>
+                            <img src="../source/img/right.png" alt="" class="lookMore">
+                        </div> 
+                    </div>
+                </li>
+            </a>
+            <a href="feedback.html">
+                <li class="workmateItems">
+                    <div class="leftImg">
+                        <img src="../source/img/advice.png">
+                    </div>
+                    <div class="rightContent">
+                        <div class="rightContent_1">
+                            <p class="rightPara">意见反馈</p>
+                            <img src="../source/img/right.png" alt="" class="lookMore">
+                        </div> 
+                    </div>
+                </li>
+            </a>
+        </ul>
+        <p class="quitBtn">退出账号</p>
+    </div>
+    <div class="mask"></div>
+    <div class="submitBox">
+        <p class="para_">确认退出该账号？</p>
+        <p class="para_bot"><span>取消</span><span>确认</span></p>
+    </div>
+</body>
+<script type="text/javascript">
+    $(".checkImg").bind("click",function(){
+        var class_=$(this).attr("class");
+        var array=class_.split(" ");
+        console.log(class_);
+        if(array.length>1){
+            $(this).attr("src","../source/img/uncheck.png");
+            $(this).removeClass("checkJudge");
+        }
+        else{
+            $(this).attr("src","../source/img/checked.png");
+            $(this).addClass("checkJudge");
+        }
+    })
+    $(".quitBtn").bind("click",function(){
+        $(".mask").addClass("show");
+        $(".submitBox").addClass("show");
+    })
+    $(".para_bot span").bind("click",function(){
+        $(".mask").removeClass("show");
+        $(".submitBox").removeClass("show");
+    })
+</script>
+</html>

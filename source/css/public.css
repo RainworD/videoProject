@@ -42,6 +42,10 @@ p {
   margin: 0;
   padding: 0;
 }
+ul,
+li {
+  list-style: none;
+}
 body {
   background-color: #fff;
 }
@@ -324,18 +328,18 @@ body {
 }
 .workmates .workmatesList .workmateItems .leftImg img {
   display: block;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
 }
 .workmates .workmatesList .workmateItems .rightContent {
   float: left;
   border-bottom: 1px solid #ddd;
-  width: 84%;
+  width: 80%;
 }
 .workmates .workmatesList .workmateItems .rightContent .rightContent_1 {
-  height: 40px;
-  line-height: 40px;
+  height: 50px;
+  line-height: 50px;
 }
 .workmates .workmatesList .workmateItems .rightContent .rightContent_1 .rightPara {
   height: 40px;
@@ -362,6 +366,281 @@ body {
   display: block;
   content: '';
   clear: both;
+}
+.userInfo .userTop {
+  padding: 10px 15px;
+  margin-top: 10px;
+  background-color: #fff;
+  position: relative;
+}
+.userInfo .userTop .lookMore {
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 18px;
+  top: 30px;
+  right: 15px;
+}
+.userInfo .userTop .leftImg {
+  float: left;
+  width: 60px;
+  height: 60px;
+}
+.userInfo .userTop .leftImg img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.userInfo .userTop .rightContent {
+  float: left;
+  position: relative;
+  height: 60px;
+}
+.userInfo .userTop .rightContent .rightContent_1 {
+  width: 100%;
+  height: 60px;
+  padding: 7px 15px;
+  /* line-height: 60px; */
+}
+.userInfo .userTop .rightContent .rightContent_1 .rightTitle {
+  font-size: 14px;
+  color: #666;
+  padding-bottom: 5px;
+}
+.userInfo .userTop .rightContent .rightContent_1 .rightTitle span {
+  color: #333;
+}
+.userInfo .userTop .rightContent .rightContent_1 .rightPara {
+  font-size: 14px;
+  color: #666;
+}
+.userInfo .userTop .rightContent .rightContent_1 .rightPara span {
+  color: #333;
+}
+.userInfo .userTop:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.userInfo .workmatesList {
+  margin-top: 10px;
+  background-color: #fff;
+}
+.userInfo .workmatesList a {
+  display: block;
+  border-bottom: 1px solid #ddd;
+}
+.userInfo .workmatesList .workmateItems {
+  padding: 10px 15px;
+}
+.userInfo .workmatesList .workmateItems .leftImg {
+  float: left;
+  width: 20px;
+  height: 20px;
+}
+.userInfo .workmatesList .workmateItems .leftImg img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.userInfo .workmatesList .workmateItems .rightContent {
+  float: left;
+  position: relative;
+  width: 93%;
+  height: 20px;
+}
+.userInfo .workmatesList .workmateItems .rightContent .rightContent_1 {
+  width: 100%;
+  height: 20px;
+  padding: 0px 15px;
+  line-height: 20px;
+}
+.userInfo .workmatesList .workmateItems .rightContent .rightContent_1 .rightTitle {
+  font-size: 14px;
+  color: #666;
+  padding-bottom: 5px;
+}
+.userInfo .workmatesList .workmateItems .rightContent .rightContent_1 .rightTitle span {
+  color: #333;
+}
+.userInfo .workmatesList .workmateItems .rightContent .rightContent_1 .rightPara {
+  font-size: 14px;
+  color: #666;
+}
+.userInfo .workmatesList .workmateItems .rightContent .rightContent_1 .rightPara span {
+  color: #333;
+}
+.userInfo .workmatesList .workmateItems .rightContent .rightContent_1 .lookMore {
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 18px;
+  top: 0px;
+  right: 0;
+}
+.userInfo .workmatesList .workmateItems:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.userInfo .workmatesList .workmateItems:last-child {
+  border: none;
+}
+.userInfo .quitBtn {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  background-color: #fff;
+  text-align: center;
+  font-size: 16px;
+  color: #e74f3a;
+  margin-top: 20px;
+}
+.feedbackBox .tips {
+  padding: 10px 15px;
+  font-size: 12px;
+  color: #999;
+}
+.feedbackBox .deliverBox_ {
+  width: 100%;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.feedbackBox .deliverBox_ textarea {
+  border: none;
+  width: 100%;
+  font-size: 12px;
+  color: #ccc;
+  margin-top: 0;
+  min-height: 100px;
+}
+.feedbackBox .deliverBox_ input {
+  padding: 11px 15px;
+  width: 100%;
+  border: none;
+  font-size: 12px;
+  color: #ccc;
+}
+.submitBox {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  border-radius: 20px;
+  z-index: 2;
+  background-color: #fff;
+  width: 240px;
+}
+.submitBox .para_ {
+  font-size: 16px;
+  color: #000;
+  text-align: center;
+  padding: 20px 0px;
+  margin-bottom: 45px;
+}
+.submitBox .para_1 {
+  color: #000;
+  font-size: 16px;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+.submitBox .para_2 {
+  color: #333;
+  font-size: 14px;
+  /* padding-bottom: 20px; */
+  text-align: center;
+  margin-bottom: 60px;
+}
+.submitBox .para_bot {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  height: 45px;
+  line-height: 45px;
+  border-top: 1px solid #ddd;
+  color: #06f;
+}
+.submitBox .para_bot span {
+  display: inline-block;
+  width: 50%;
+  height: 44px;
+}
+.submitBox .para_bot span:first-child {
+  border-right: 1px solid #ddd;
+}
+.aboutus .TopImg {
+  background-image: linear-gradient(-180deg, #fb9f92 0%, #e74f3a 100%);
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  margin: auto;
+  margin-top: 30px;
+}
+.aboutus .rightTitle {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.aboutus .workmatesList {
+  margin-top: 10px;
+  background-color: #fff;
+}
+.aboutus .workmatesList a {
+  display: block;
+  border-bottom: 1px solid #ddd;
+}
+.aboutus .workmatesList .workmateItems {
+  padding: 10px 15px;
+}
+.aboutus .workmatesList .workmateItems .rightContent {
+  float: left;
+  position: relative;
+  width: 100%;
+  height: 20px;
+}
+.aboutus .workmatesList .workmateItems .rightContent .rightContent_1 {
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+}
+.aboutus .workmatesList .workmateItems .rightContent .rightContent_1 .rightTitle {
+  font-size: 14px;
+  color: #666;
+  padding-bottom: 5px;
+}
+.aboutus .workmatesList .workmateItems .rightContent .rightContent_1 .rightTitle span {
+  color: #333;
+}
+.aboutus .workmatesList .workmateItems .rightContent .rightContent_1 .rightPara {
+  font-size: 14px;
+  color: #666;
+}
+.aboutus .workmatesList .workmateItems .rightContent .rightContent_1 .rightPara span {
+  color: #333;
+}
+.aboutus .workmatesList .workmateItems .rightContent .rightContent_1 .lookMore {
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 18px;
+  top: 0px;
+  right: 0;
+}
+.aboutus .workmatesList .workmateItems:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.aboutus .workmatesList .workmateItems:last-child {
+  border: none;
 }
 .show {
   display: block;
