@@ -34,7 +34,7 @@
                 <img src="../source/img/remove.png" alt="" class="removeBtn">
             </div>
             <div class="deliverImg_ deliverImg_1 plusMoreImg">
-                <img src="../source/img/plus.png" alt="" class="commonImg">
+                <a href="#picture" style="display:block;"><img src="../source/img/plus.png" alt="" class="commonImg"></a>
             </div>
         </div>
     </div>
@@ -50,13 +50,29 @@
             <img src="../source/img/userPlus.png" class="userPlus">
         </div>
     </div>
-    <div class="mask"></div>
+    <!-- <div class="mask"></div>
     <div class="addPhoto">
         <ul class="addPhotoList">
             <li class="addPhotoItem">拍照</li>
             <li class="addPhotoItem">相册</li>
         </ul>
         <p class="cancelBtn">取消</p>
+    </div>
+ -->
+    <div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <a href="#">拍照</a>
+            </li>
+            <li class="mui-table-view-cell">
+                <a href="#">相册</a>
+            </li>
+        </ul>
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <a href="#picture"><b>取消</b></a>
+            </li>
+        </ul>
     </div>
 </body>
 <script type="text/javascript">
@@ -78,4 +94,30 @@
         window.location.href="workmatesList.html"
     })
 </script>
+<script>
+    mui.init({
+        swipeBack:true //启用右滑关闭功能
+    });
+    mui('body').on('shown', '.mui-popover', function(e) {
+        //console.log('shown', e.detail.id);//detail为当前popover元素
+    });
+    mui('body').on('hidden', '.mui-popover', function(e) {
+        //console.log('hidden', e.detail.id);//detail为当前popover元素
+    });
+    // var info = document.getElementById("info");
+    mui('body').on('tap', '.mui-popover-action li>a', function() {
+        var a = this,
+            parent;
+        //根据点击按钮，反推当前是哪个actionsheet
+        for (parent = a.parentNode; parent != document.body; parent = parent.parentNode) {
+            if (parent.classList.contains('mui-popover-action')) {
+                break;
+            }
+        }
+        //关闭actionsheet
+        mui('#' + parent.id).popover('toggle');
+        // info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
+    })
+</script>
+
 </html>

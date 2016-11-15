@@ -100,15 +100,25 @@
                 </li>
             </a>
         </ul>
-        <p class="quitBtn">退出账号</p>
+        <p class="quitBtn" id="confirmBtn">退出账号</p>
     </div>
-    <div class="mask"></div>
+    <!-- <div class="mask"></div>
     <div class="submitBox">
         <p class="para_">确认退出该账号？</p>
         <p class="para_bot"><span>取消</span><span>确认</span></p>
     </div>
-</body>
+ --></body>
 <script type="text/javascript">
+    document.getElementById("confirmBtn").addEventListener('tap', function() {
+        var btnArray = ['否', '是'];
+        mui.confirm('', '确认退出该账号？', btnArray, function(e) {
+            // if (e.index == 1) {
+            //     info.innerText = '你刚确认MUI是个好框架';
+            // } else {
+            //     info.innerText = 'MUI没有得到你的认可，继续加油'
+            // }
+        })
+    });
     $(".checkImg").bind("click",function(){
         var class_=$(this).attr("class");
         var array=class_.split(" ");
