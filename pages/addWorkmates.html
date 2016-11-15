@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频监控</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+</style>
+<body>
+    <div class="workmates">
+        <div class="mui-content">
+            <p class="topCode">邀请码:&nbsp;&nbsp;<span>JK001002</span></p>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <div class="addContent">
+                        <span>手机号</span>
+                        <input type="text">
+                        <img src="../source/img/phone.png">
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="mask"></div>
+    <div class="submitBox">
+        <p class="para_">确认退出该账号？</p>
+        <p class="para_bot"><span>取消</span><span>确认</span></p>
+    </div>
+</body>
+<script type="text/javascript">
+    mui.init({
+        swipeBack: true //启用右滑关闭功能
+    });
+    document.getElementById("alertBtn").addEventListener('tap', function() {
+        mui.alert(' ','新增成功',function() {
+           
+        });
+    });
+    document.getElementById("alertBtn").addEventListener('tap', function() {
+        mui.alert('请到”设置-隐私-通讯录“中开启联系人访问权限', '无法访问通讯录', function() {
+           
+        });
+    });
+</script>
+</html>

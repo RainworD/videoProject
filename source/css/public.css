@@ -642,6 +642,153 @@ body {
 .aboutus .workmatesList .workmateItems:last-child {
   border: none;
 }
-.show {
+.detailBox {
+  padding: 10px 15px;
+}
+.detailBox .tips {
+  color: #666;
+  font-size: 14px;
+  padding-bottom: 5px;
+}
+.detailBox .contentBox {
+  width: 100%;
+  height: 210px;
+  margin-bottom: 5px;
+}
+.detailBox .contentBox img {
   display: block;
+  width: 100%;
+  height: 100%;
+}
+.flowSetting .workmatesList {
+  margin-top: 10px;
+  background-color: #fff;
+}
+.flowSetting .workmatesList a {
+  display: block;
+  border-bottom: 1px solid #ddd;
+}
+.flowSetting .workmatesList .workmateItems {
+  padding: 10px 15px;
+}
+.flowSetting .workmatesList .workmateItems .leftImg {
+  float: left;
+  width: 20px;
+  height: 20px;
+}
+.flowSetting .workmatesList .workmateItems .leftImg img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.flowSetting .workmatesList .workmateItems .rightContent {
+  float: left;
+  position: relative;
+  width: 100%;
+  height: 20px;
+}
+.flowSetting .workmatesList .workmateItems .rightContent .rightContent_1 {
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+}
+.flowSetting .workmatesList .workmateItems .rightContent .rightContent_1 span {
+  position: absolute;
+  right: 15px;
+  top: 0;
+  font-size: 14px;
+  color: #999;
+}
+.flowSetting .workmatesList .workmateItems .rightContent .rightContent_1 .rightTitle {
+  font-size: 14px;
+  color: #666;
+  padding-bottom: 5px;
+}
+.flowSetting .workmatesList .workmateItems .rightContent .rightContent_1 .rightTitle span {
+  color: #333;
+}
+.flowSetting .workmatesList .workmateItems .rightContent .rightContent_1 .rightPara {
+  font-size: 14px;
+  color: #666;
+}
+.flowSetting .workmatesList .workmateItems .rightContent .rightContent_1 .rightPara span {
+  color: #333;
+}
+.flowSetting .workmatesList .workmateItems .rightContent .rightContent_1 .flowCtr {
+  position: absolute;
+  right: 0px;
+  top: -5px;
+}
+.flowSetting .workmatesList .workmateItems .rightContent .rightContent_1 .lookMore {
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 18px;
+  top: 0px;
+  right: 0;
+}
+.flowSetting .workmatesList .workmateItems:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.flowSetting .workmatesList .workmateItems:last-child {
+  border: none;
+}
+.workmates {
+  padding: 0;
+}
+.workmates .mui-content .mui-table-view {
+  margin-top: 0;
+}
+.workmates .mui-content .mui-table-view .listContent {
+  font-size: 14px;
+  color: #333;
+  position: relative;
+}
+.workmates .mui-content .mui-table-view .listContent .num_ {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 12px;
+  color: #666;
+}
+.workmates .mui-content .mui-table-view .listContent .redColor {
+  color: #f33;
+}
+.workmates .mui-content .mui-table-view .listContent .greenColor {
+  color: #4cd964;
+}
+.workmates .mui-content .mui-table-view .mui-slider-right .green {
+  display: none;
+  line-height: 40px;
+  font-size: 16px;
+}
+.workmates .mui-content .mui-table-view .mui-slider-right .red {
+  display: none;
+  line-height: 40px;
+  font-size: 16px;
+}
+.workmates .mui-content .topCode {
+  padding: 6px 15px;
+}
+.workmates .mui-content .addContent {
+  font-size: 14px;
+  color: #333;
+  position: relative;
+}
+.workmates .mui-content .addContent input {
+  border: none;
+  width: 79%;
+  margin: 0;
+  padding: 0;
+  height: 20px;
+}
+.workmates .mui-content .addContent img {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+}
+.show {
+  display: block!important;
 }
