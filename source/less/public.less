@@ -67,6 +67,7 @@ body{
 			.rightPara{
 				font-size: 14px;
 				color: #666;
+				margin-bottom: 10px;
 			}
 			.articlePic{
 				display: block;
@@ -112,6 +113,7 @@ body{
 				font-size: 12px;
 				color: #666;
 				padding-right: 15px;
+				margin-bottom: 0;
 			}
 			.tips{
 				.leftTips{
@@ -383,6 +385,14 @@ body{
 						span{
 							color: #333;
 						}
+					}
+					.commonNum{
+						display: inline-block;
+					    position: absolute;
+					    right: 15px;
+					    top: 0px;
+					    font-size: 12px;
+					    color: #666;
 					}
 					.lookMore{
 						display: block;
@@ -707,6 +717,9 @@ body{
 .messageShowBox{
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
+	a{
+		display: block;
+	}
     .messageShowContent{
     	padding: 10px 15px;
 	    background-color: #fff;
@@ -779,6 +792,136 @@ body{
     		border: none;
     	}
     }
+}
+.detailBox{
+	padding: 10px 15px;
+	.topTitle{
+		margin-bottom: 8px;
+		font-size: 16px;
+		color: #333;
+	}
+	.date{
+		font-size: 10px;
+		color: #999;
+		margin-bottom: 12px;
+	}
+	.para{
+		width: 100%;
+		img{
+			display: block;
+			width: 100%;
+			height: 180px;
+			margin-bottom: 14px;
+		}
+		.innerPara{
+			font-size:14px;
+			color: #999;
+			text-indent: 2em;
+		}
+	}
+}
+.company_list{
+	.workmatesList{
+		// margin-top: 10px;
+		background-color: #fff;
+		a{
+			display: block;
+			border-bottom: 1px solid #ddd;
+		}
+		.workmateItems{
+			padding: 10px 15px;
+			.rightContent{
+			    float: left;
+			    position: relative;
+			    width: 100%;
+			    height: 20px;			    
+			    .rightContent_1{
+			    	width: 100%;
+				    height: 20px;
+				    line-height: 20px; 
+				    .rightTitle{
+				    	font-size: 14px;
+				    	color: #666;
+				    	padding-bottom: 5px;
+				    	span{
+				    		color: #333;
+				    	}
+				    }
+				    .rightPara{
+						font-size: 14px;
+						color: #666;
+						span{
+							color: #333;
+						}
+					}
+					.lookMore{
+						display: block;
+						position: absolute;
+						width: 10px;
+						height: 18px;
+						top: 0px;
+						right: 0;
+					}
+					.redNum{
+						height: 18px;
+					    width: 18px;
+					    background-color: #e74f3a;
+					    display: inline-block;
+					    position: absolute;
+					    right: 15px;
+					    top: 0px;
+					    border-radius: 10px;
+					    text-align: center;
+					    color: #fff;
+					    font-size: 12px;
+					    line-height: 18px;
+					}
+					.commoNum{
+						display: inline-block;
+					    position: absolute;
+					    right: 15px;
+					    top: 0px;
+					    font-size: 12px;
+					    color: #666;
+					}
+			    }			
+			}
+			.after;
+			&:last-child{
+				border:none;
+			}
+		}
+	}
+}
+.monitor_detail{
+	.mui-table-view{
+		margin-top: 0;
+	}
+	.leftImg{
+		float: left;
+	    width: 29%;
+	    height: 70px;
+	    img{
+	    	display: block;
+		    width: 100%;
+		    height: 100%
+	    }
+	}
+	.rightContent{
+		float: left;
+		margin-left: 15px;
+		.rightTitle{
+			margin-bottom: 11px;
+		    margin-top: 11px;
+		    font-size: 16px;
+		    color: #666;
+		}
+		.rightPara{
+			color: #999;
+    		font-size: 14px;
+		}
+	}
+	.after;
 }
 .show{
 	display: block!important;
