@@ -1009,6 +1009,158 @@ body {
   content: '';
   clear: both;
 }
+.accountBalanceBox .topShow {
+  background-image: linear-gradient(-180deg, #e74f3a 0%, #e88274 100%);
+  width: 100%;
+  height: 150px;
+  position: relative;
+}
+.accountBalanceBox .topShow .para_1 {
+  padding-top: 20px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+}
+.accountBalanceBox .topShow .para_2 {
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 9px;
+  text-align: center;
+}
+.accountBalanceBox .topShow .para_3 {
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+}
+.accountBalanceBox .topShow .bottomBtn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  font-size: 0;
+}
+.accountBalanceBox .topShow .bottomBtn span {
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  padding-bottom: 14px;
+}
+.accountBalanceBox .listName {
+  padding: 9px 15px;
+  font-size: 12px;
+  color: #999;
+}
+.accountBalanceBox .mui-table-view .mui-table-view-cell .cashShow {
+  position: absolute;
+  right: 15px;
+  top: 21px;
+  font-size: 16px;
+  color: #333;
+}
+.accountBalanceBox .mui-table-view .mui-table-view-cell .para_ {
+  font-size: 14px;
+  color: #333;
+}
+.accountBalanceBox .mui-table-view .mui-table-view-cell .date {
+  font-size: 12px;
+  color: #999;
+}
+.cash_detail a {
+  display: block;
+}
+.cash_detail .listNew {
+  margin-top: 10px;
+}
+.cash_detail .mui-table-view-cell {
+  padding-bottom: 0;
+}
+.cash_detail .mui-table-view-cell:last-child {
+  padding-bottom: 10px;
+}
+.cash_detail .mui-table-view-cell:after {
+  height: 0;
+}
+.cash_detail .leftName {
+  font-size: 14px;
+  color: #666;
+}
+.cash_detail .showProcess {
+  width: 100%;
+  padding-top: 10px;
+}
+.cash_detail .showProcess .leftPart {
+  float: left;
+  width: 50%;
+  position: relative;
+}
+.cash_detail .showProcess .leftPart .date {
+  text-align: center;
+  color: #e74f3a;
+  font-size: 12px;
+}
+.cash_detail .showProcess .leftPart .circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid #e74f3a;
+  text-align: center;
+  line-height: 60px;
+  font-size: 12px;
+  color: #e74f3a;
+  margin: auto;
+  margin-bottom: 10px;
+}
+.cash_detail .showProcess .leftPart_1:after {
+  content: '';
+  border-top: 1px dashed #fff;
+  position: absolute;
+  width: 100px;
+  right: -50px;
+  top: 28px;
+  height: 1px;
+  background: -webkit-linear-gradient(90deg, #e74f3a, #f5a623);
+}
+.cash_detail .showProcess .yellow .circle {
+  border-color: #f5a623;
+  color: #f5a623;
+}
+.cash_detail .showProcess .yellow .date {
+  color: #f5a623;
+}
+.cash_detail .showProcess .grey .circle {
+  border-color: #ccc;
+  color: #ccc;
+}
+.cash_detail .showProcess .grey .date {
+  color: #ccc;
+}
+.cash_detail .rightName {
+  font-size: 14px;
+  color: #333;
+  position: absolute;
+  right: 15px;
+}
+.cash_detail .rightName_ {
+  font-size: 12px;
+  color: #ccc;
+}
+.cash_detail .bottomBtn {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  height: 40px;
+  line-height: 40px;
+  width: 165px;
+  margin: auto;
+  text-align: center;
+  background-color: #e74f3a;
+  color: #fff;
+  margin-top: 40px;
+}
 .show {
   display: block!important;
 }
