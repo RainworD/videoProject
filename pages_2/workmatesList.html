@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频监控</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+</head>
+<body>
+    <div class="workmates">
+        <ul class="workmatesList">
+            <li class="workmateItems">
+                <div class="leftImg">
+                    <img src="../source/img/q.png">
+                </div>
+                <div class="rightContent">
+                    <div class="rightContent_1">
+                        <p class="rightPara">月风溪</p>
+                        <p class="tips">
+                           <img src="../source/img/uncheck.png" class="checkImg">
+                        </p>
+                    </div> 
+                </div>
+            </li>
+            <li class="workmateItems">
+                <div class="leftImg">
+                    <img src="../source/img/q.png">
+                </div>
+                <div class="rightContent">
+                    <div class="rightContent_1">
+                        <p class="rightPara">月风溪</p>
+                        <p class="tips">
+                           <img src="../source/img/uncheck.png" class="checkImg">
+                        </p>
+                    </div> 
+                </div>
+            </li>
+            <li class="workmateItems">
+                <div class="leftImg">
+                    <img src="../source/img/q.png">
+                </div>
+                <div class="rightContent">
+                    <div class="rightContent_1">
+                        <p class="rightPara">月风溪</p>
+                        <p class="tips">
+                           <img src="../source/img/uncheck.png" class="checkImg">
+                        </p>
+                    </div> 
+                </div>
+            </li>
+            <li class="workmateItems">
+                <div class="leftImg">
+                    <img src="../source/img/q.png">
+                </div>
+                <div class="rightContent">
+                    <div class="rightContent_1">
+                        <p class="rightPara">月风溪</p>
+                        <p class="tips">
+                           <img src="../source/img/uncheck.png" class="checkImg">
+                        </p>
+                    </div> 
+                </div>
+            </li>
+            <li class="workmateItems">
+                <div class="leftImg">
+                    <img src="../source/img/q.png">
+                </div>
+                <div class="rightContent">
+                    <div class="rightContent_1">
+                        <p class="rightPara">月风溪</p>
+                        <p class="tips">
+                           <img src="../source/img/uncheck.png" class="checkImg">
+                        </p>
+                    </div> 
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+<script type="text/javascript">
+    $(".checkImg").bind("click",function(){
+        var class_=$(this).attr("class");
+        var array=class_.split(" ");
+        console.log(class_);
+        if(array.length>1){
+            $(this).attr("src","../source/img/uncheck.png");
+            $(this).removeClass("checkJudge");
+        }
+        else{
+            $(this).attr("src","../source/img/checked.png");
+            $(this).addClass("checkJudge");
+        }
+    })
+</script>
+</html>

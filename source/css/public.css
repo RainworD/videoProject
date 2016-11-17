@@ -745,59 +745,175 @@ body {
 .flowSetting .workmatesList .workmateItems:last-child {
   border: none;
 }
-.myworkmates {
+.myworkmates,
+.addworkmates {
   padding: 0;
 }
-.myworkmates .mui-content .mui-table-view {
+.myworkmates .goDetail,
+.addworkmates .goDetail {
+  display: block;
+}
+.myworkmates .topPara,
+.addworkmates .topPara {
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #999;
+}
+.myworkmates .topPara .larger,
+.addworkmates .topPara .larger {
+  color: #e74f3a;
+  font-size: 21px;
+}
+.myworkmates .tips,
+.addworkmates .tips {
+  padding: 7px 15px;
+  font-size: 10px;
+  color: #999;
+}
+.myworkmates .mui-content .mui-table-view,
+.addworkmates .mui-content .mui-table-view {
   margin-top: 0;
 }
-.myworkmates .mui-content .mui-table-view .listContent {
+.myworkmates .mui-content .mui-table-view .listContent,
+.addworkmates .mui-content .mui-table-view .listContent {
   font-size: 14px;
   color: #333;
   position: relative;
 }
-.myworkmates .mui-content .mui-table-view .listContent .num_ {
+.myworkmates .mui-content .mui-table-view .listContent .num_,
+.addworkmates .mui-content .mui-table-view .listContent .num_ {
   position: absolute;
   right: 0;
   top: 0;
   font-size: 12px;
   color: #666;
 }
-.myworkmates .mui-content .mui-table-view .listContent .redColor {
+.myworkmates .mui-content .mui-table-view .listContent .redColor,
+.addworkmates .mui-content .mui-table-view .listContent .redColor {
   color: #f33;
 }
-.myworkmates .mui-content .mui-table-view .listContent .greenColor {
+.myworkmates .mui-content .mui-table-view .listContent .greenColor,
+.addworkmates .mui-content .mui-table-view .listContent .greenColor {
   color: #4cd964;
 }
-.myworkmates .mui-content .mui-table-view .mui-slider-right .green {
+.myworkmates .mui-content .mui-table-view .listContent .commonNum,
+.addworkmates .mui-content .mui-table-view .listContent .commonNum,
+.myworkmates .mui-content .mui-table-view .listContent .commonNum_,
+.addworkmates .mui-content .mui-table-view .listContent .commonNum_ {
+  display: inline-block;
+  position: absolute;
+  right: 15px;
+  top: 0px;
+  font-size: 12px;
+  color: #999;
+}
+.myworkmates .mui-content .mui-table-view .listContent .deadLine,
+.addworkmates .mui-content .mui-table-view .listContent .deadLine {
+  font-size: 12px;
+  color: #999;
+}
+.myworkmates .mui-content .mui-table-view .listContent .commonNum_,
+.addworkmates .mui-content .mui-table-view .listContent .commonNum_ {
+  border-radius: 13px;
+  width: 80px;
+  height: 24px;
+  font-size: 12px;
+  color: #999;
+  line-height: 24px;
+  border: 1px solid #ccc;
+  text-align: center;
+  top: 10px;
+}
+.myworkmates .mui-content .mui-table-view .listContent .green,
+.addworkmates .mui-content .mui-table-view .listContent .green {
+  background-color: #44db5e;
+  color: #fff;
+}
+.myworkmates .mui-content .mui-table-view .listContent .lookMore,
+.addworkmates .mui-content .mui-table-view .listContent .lookMore {
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 18px;
+  top: 0px;
+  right: 0;
+}
+.myworkmates .mui-content .mui-table-view .mui-slider-right .green,
+.addworkmates .mui-content .mui-table-view .mui-slider-right .green {
   display: none;
   line-height: 40px;
   font-size: 16px;
 }
-.myworkmates .mui-content .mui-table-view .mui-slider-right .red {
+.myworkmates .mui-content .mui-table-view .mui-slider-right .red,
+.addworkmates .mui-content .mui-table-view .mui-slider-right .red,
+.myworkmates .mui-content .mui-table-view .mui-slider-right .red_,
+.addworkmates .mui-content .mui-table-view .mui-slider-right .red_ {
   display: none;
   line-height: 40px;
   font-size: 16px;
 }
-.myworkmates .mui-content .topCode {
+.myworkmates .mui-content .mui-table-view .mui-slider-right .red_,
+.addworkmates .mui-content .mui-table-view .mui-slider-right .red_ {
+  line-height: 64px;
+}
+.myworkmates .mui-content .topCode,
+.addworkmates .mui-content .topCode {
   padding: 6px 15px;
 }
-.myworkmates .mui-content .addContent {
+.myworkmates .mui-content .addContent,
+.addworkmates .mui-content .addContent {
   font-size: 14px;
   color: #333;
   position: relative;
 }
-.myworkmates .mui-content .addContent input {
+.myworkmates .mui-content .addContent input,
+.addworkmates .mui-content .addContent input {
   border: none;
   width: 79%;
   margin: 0;
   padding: 0;
   height: 20px;
 }
-.myworkmates .mui-content .addContent img {
+.myworkmates .mui-content .addContent img,
+.addworkmates .mui-content .addContent img {
   display: inline-block;
   width: 18px;
   height: 18px;
+}
+.myworkmates .mui-content .addContent .inputInfo,
+.addworkmates .mui-content .addContent .inputInfo {
+  position: absolute;
+  right: 0;
+  width: 52%;
+  color: #ccc;
+  font-size: 12px;
+  text-align: right;
+}
+.myworkmates .bottomBtn,
+.addworkmates .bottomBtn {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  height: 40px;
+  line-height: 40px;
+  width: 165px;
+  margin: auto;
+  text-align: center;
+  background-color: #e74f3a;
+  color: #fff;
+  margin-top: 40px;
+}
+.myworkmates .addCash,
+.addworkmates .addCash {
+  position: fixed;
+  bottom: 20px;
+  top: 95%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: #e74f3a;
+  text-decoration: underline;
 }
 .messageShowBox {
   border-top: 1px solid #ddd;
@@ -1160,6 +1276,71 @@ body {
   background-color: #e74f3a;
   color: #fff;
   margin-top: 40px;
+}
+.rechargeBox .topPara {
+  padding: 6px 15px;
+  font-size: 12px;
+  color: #999;
+}
+.rechargeBox .cashBox {
+  background-color: #fff;
+  padding: 10px 15px;
+}
+.rechargeBox .cashBox .cashContent {
+  width: 100%;
+}
+.rechargeBox .cashBox .cashContent .cashItem {
+  width: 31%;
+  height: 70px;
+  margin-right: 3%;
+  text-align: center;
+  border: 1px solid #45a3ef;
+  border-radius: 4px;
+  float: left;
+  margin-bottom: 3%;
+  line-height: 70px;
+  color: #45a3ef;
+}
+.rechargeBox .cashBox .cashContent .blue {
+  background-color: #45a3ef;
+  color: #fff;
+}
+.rechargeBox .cashBox .cashContent:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.rechargeBox .cashBox .cashContent .cashItem:nth-child(3n) {
+  margin-right: 0;
+}
+.rechargeBox .cashBox .cashContent .payIcon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+.rechargeBox .cashBox .cashContent .payPara {
+  font-size: 14px;
+  color: #00a9f2;
+}
+.rechargeBox .bottomBtn {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  height: 40px;
+  line-height: 40px;
+  width: 165px;
+  margin: auto;
+  text-align: center;
+  background-color: #e74f3a;
+  color: #fff;
+  margin-top: 40px;
+}
+.addworkmates {
+  padding: 0!important;
 }
 .show {
   display: block!important;

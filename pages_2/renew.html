@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频监控</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link href="../source/mui/css/mui.picker.css" rel="stylesheet" />
+    <link href="../source/mui/css/mui.poppicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+</style>
+<body>
+    <div class="myworkmates">
+        <p class="topPara">应付金额:&nbsp;&nbsp;<span class="larger">￥&nbsp;<span>600</span>元</span></p>
+        <div class="mui-content">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <div class="mui-slider-handle listContent">
+                        <span>每月价格</span>
+                        <span class="commonNum">200元</span>                   
+                    </div>
+                </li>
+                <a href="" id='showUserPicker' style="display: block">
+                    <li class="mui-table-view-cell">
+                        <div class="mui-slider-handle listContent">
+                            <span>续费时间</span>
+                            <span class="commonNum" id="userResult">3个月</span>    
+                            <img src="../source/img/right.png" alt="" class="lookMore">               
+                        </div>  
+                    </li>
+                </a>
+            </ul>
+        </div>
+        <p class="tips">该设备有效期将延长至<span>2016-09-11</span></p>
+        <p class="bottomBtn" id="bottomBtn">余额支付</p>
+        <a class="addCash" href="recharge_main.html">账户充值</p>
+    </div>
+</body>
+<script src="../source/mui/js/mui.min.js"></script>
+<!--<script src="../source/mui/js/mui.picker.min.js"></script>-->
+<script src="../source/mui/js/mui.picker.js"></script>
+<script src="../source/mui/js/mui.poppicker.js"></script>
+<script type="text/javascript">
+    (function($, doc) {
+        $.init();
+        $.ready(function() {
+            //普通示例
+            var userPicker = new $.PopPicker();
+            userPicker.setData([{
+                value: '0',
+                text: '3个月'
+            }, {
+                value: '1',
+                text: '4个月'
+            }, 
+            {
+                value: '2',
+                text: '5个月'
+            },
+            {
+                value: '3',
+                text: '6个月'
+            }]);
+            var showUserPickerButton = doc.getElementById('showUserPicker');
+            var userResult = doc.getElementById('userResult');
+            showUserPickerButton.addEventListener('tap', function(event) {
+                userPicker.show(function(items) {
+                    console.log(items[0].text);
+                    // userResult.innerText = JSON.stringify(items[0].text);
+                    userResult.innerText=items[0].text;
+                    //返回 false 可以阻止选择框的关闭
+                    //return false;
+                });
+            }, false);
+        });
+    })(mui, document);
+</script>
+</html>

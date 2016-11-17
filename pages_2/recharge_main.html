@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频监控</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+</style>
+<body>
+    <div class="rechargeBox">
+        <p class="topPara">选择充值金额</p>
+        <div class="cashBox">
+            <div class="cashContent">
+                <p class="cashItem">1,000元</p>
+                <p class="cashItem blue">2,000元</p>
+                <p class="cashItem">3,000元</p>
+                <p class="cashItem">5,000元</p>
+                <p class="cashItem">10,000元</p>
+                <p class="cashItem">20,000元</p>
+            </div>
+        </div>
+        <p class="topPara">选择支付方式</p>
+        <div class="cashBox">
+            <div class="cashContent">
+                <input type="radio" name="" class="payType" checked>
+                <img src="" alt="" class="payIcon">
+                <span class="payPara">支付宝支付</span>
+            </div>
+        </div>
+        <p class="bottomBtn" id="bottomBtn">充值</p>
+    </div>
+</body>
+<script type="text/javascript">
+    $(".cashItem").bind("click",function(){
+        $(this).addClass("blue").siblings(".cashItem").removeClass("blue");
+    })
+    document.getElementById("bottomBtn").addEventListener('tap', function() {
+        mui.alert('','充值成功',function() {
+           
+        });
+    });
+</script>
+</html>

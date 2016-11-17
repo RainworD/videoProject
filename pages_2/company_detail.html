@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频监控</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+</style>
+<body>
+    <div class="myworkmates">
+        <div class="mui-content">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <div class="mui-slider-right mui-disabled">
+                        <a class="mui-btn mui-btn-red red_">解绑</a>
+                    </div>
+                    <div class="mui-slider-handle listContent">
+                        <span>设备号</span>
+                        <span class="redColor" data-type="0">(到期)</span>
+                        <p class="deadLine">有效期截止:<span>2016-07-01</span></p>
+                        <span class="commonNum_">续费</span>                   
+                    </div>
+                </li>
+                <li class="mui-table-view-cell">
+                    <div class="mui-slider-right mui-disabled">
+                        <a class="mui-btn mui-btn-red red_">解绑</a>
+                    </div>
+                    <div class="mui-slider-handle listContent">
+                        <span>设备号</span>
+                        <span class="redColor" data-type="0"></span>
+                        <p class="deadLine">有效期截止:<span>2016-07-01</span></p>
+                        <span class="commonNum_">续费</span>                   
+                    </div>  
+                </li>
+                <li class="mui-table-view-cell">
+                    <div class="mui-slider-right mui-disabled">
+                        <a class="mui-btn mui-btn-red red_">解绑</a>
+                    </div>
+                    <div class="mui-slider-handle listContent">
+                        <span>设备号</span>
+                        <span class="redColor" data-type="0"></span>
+                        <p class="deadLine">有效期截止:<span>2016-07-01</span></p>
+                        <span class="commonNum_">续费</span>                   
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    // mui(".mui-table-view").on("tap",".red_",function(){
+    //     // $(this).removeClass("show");
+    //     $(this).parent(".mui-slider-right").siblings('.listContent').children("span").eq(1).text("(停用)").addClass("redColor"); 
+    // });
+    $(".mui-table-view .listContent").each(function(i){
+        var type=$(".listContent").eq(i).children("span").eq(1).attr("data-type");
+        if(type=="0"){
+            $(".listContent").eq(i).siblings(".mui-slider-right").children(".red_").addClass("show").siblings(".green").removeClass("show");
+        }
+    })
+    $(".redColor").each(function(i){
+        var txt=$(".redColor").eq(i).text();
+        if(txt=="(到期)"){
+            $(".redColor").eq(i).siblings(".commonNum_").addClass("green");
+        }
+        else{
+            $(".redColor").eq(i).parent(".listContent").prev().children("a").addClass("confirmBtn")
+        }
+    })
+    $(".green").bind("click",function(){
+        window.location.href="renew.html";
+    })
+    $(".confirmBtn").bind('tap', function() {
+        var btnArray = ['否', '是'];
+        var that=this;
+        mui.confirm('', '该设备尚未到期，确认解绑？', btnArray, function(e) {
+            var node=$(that);
+            if (e.index == 1) {
+                node.parent().next().children("span").eq(1).text("(停用)");
+            } else {
+                // node.parent().next().children("span").eq(1).text("");
+            }
+        })
+    });
+</script>
+</html>
