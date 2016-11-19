@@ -1,0 +1,196 @@
+<div id="admin_content_template" class="admin_content_template">
+	<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+		<div class="admin_scrollBox">
+			<div class="admin_ui_header">
+				<i class="fa fa-internet-explorer fa-2x admin_ui_mainColor"></i>
+				<span class="maintitle" v-if="queryData.type == 'edit'">合作网站管理－详情</span>
+				<span class="maintitle" v-else>新增合作网站</span>
+			</div>
+			<div class="admin_ui_cont">
+				<div class="admin_ui_border admin_ui_cont">
+					<table class="admin_ui_table_split_half">
+						<tbody>
+							<tr v-if="queryData.type == 'edit'">
+								<td>
+									<div class="admin_ui_form_field">
+										<div class="admin_ui_name">网站id</div>
+										<input value="{{queryData.id}}" type="text" class="admin_ui_input" disabled />
+									</div>
+								</td>
+								<td>
+									
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="admin_ui_form_field">
+										<div class="admin_ui_name">网站名</div>
+										<input v-model="queryData.name" type="text" class="admin_ui_input" placeholder="请输入品牌名" />
+									</div>
+								</td>
+								<td>
+									<div class="admin_ui_form_field">
+										<div class="admin_ui_name">网址</div>
+										<input v-model="queryData.url" type="text" class="admin_ui_input" placeholder="请输入品牌地址" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="admin_ui_form_field">
+										<div class="admin_ui_name">网站图片</div>
+										<div class="imageBox">
+											<img :src="imageUrl" style="max-width: 100%;">
+										</div>
+										<div class="admin_ui_button admin_ui_button_green" @click="uploadImage()">上传</div>
+									</div>
+								</td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="admin_ui_cont_bottomFixed">
+		<div class="admin_ui_button_group" style="float: right">
+			<a href="#/partnerSiteManagement.html" class="admin_ui_button admin_ui_button_white">
+				返回
+			</a>
+			<div v-if="queryData.type == 'edit'" class="admin_ui_button admin_ui_button_green editBrandButton" @click="editBrandButton()">
+				修改
+			</div>
+			<div v-else class="admin_ui_button admin_ui_button_green editBrandButton" @click="editBrandButton()">
+				新增
+			</div>
+		</div>
+	</div>
+</div>
+	
+<script>
+var vm = new Tvm({
+	el: '#admin_content',
+	data:{
+		queryData:{
+			photo:{
+				url:""
+			}
+		},
+		file:""
+	},
+	computed: {
+		imageUrl: function(){
+			var self = this;
+			if(self.file){
+				return window.URL.createObjectURL(self.file);
+			}
+			else{
+				if(self.queryData.type == "edit"){
+					// 编辑
+					// 返回的应该是现有的url
+					return getImageByUrl(self.queryData.photo.url)
+				}
+				else{
+					// 新增
+					return "";
+				}
+			}
+		}
+	},
+	methods: {
+		editBrandButton: function(){
+			var self = this;
+			if($.trim(self.queryData.name)&&$.trim(self.queryData.url)){
+				if(self.queryData.type == "edit"){
+					// 编辑
+					if(!self.file){
+						// 未传新图片
+						$.when(editPartnerSite(self.queryData.id,self.queryData.name,self.queryData.url, self.queryData.photo.url)).done(function(data){
+							if(data.state == 0){
+								alert("编辑成功！");
+								window.location.hash = "#/partnerSiteManagementDetail.html?"+encodeURI(JSON.stringify(self.queryData));
+							}
+						});
+					}
+					else{
+						// 传了新图片
+						var formData = new FormData();
+						formData.append("file",self.file);
+						$.when(uploadImage(formData)).done(function(data){
+							if(data.state == 0){
+								var uploadedImageUrl = data.name;
+								self.queryData.photo.url = uploadedImageUrl;
+								$.when(editPartnerSite(self.queryData.id, self.queryData.name, self.queryData.url, uploadedImageUrl)).done(function(data){
+									if(data.state == 0){
+										alert("编辑成功！");
+										window.location.hash = "#/partnerSiteManagementDetail.html?"+encodeURI(JSON.stringify(self.queryData));
+									}
+								})
+							}
+						})
+					}
+						
+				}
+				else{
+					// 新增
+					if(!self.file){
+						alert("请上传一张图片")
+					}
+					else{
+						var formData = new FormData();
+						formData.append("file",self.file);
+						$.when(uploadImage(formData)).done(function(data){
+							if(data.state == 0){
+								var uploadedImageUrl = data.name;
+								$.when(editPartnerSite(undefined, self.queryData.name, self.queryData.url, uploadedImageUrl)).done(function(data){
+									if(data.state == 0){
+										alert("新增成功！");
+										window.location.reload();
+									}
+								})
+							}
+						})
+					}
+						
+							
+				}
+			}
+			else{
+				alert("网站名或网址不能为空");
+			}
+		},
+		uploadImage: function(){
+			var self = this;
+			var fileInput = document.createElement("input");
+			fileInput.type = "file";
+			fileInput.accept = "image/*";
+			fileInput.click();
+			$(fileInput).bind('change',function(){
+                self.file = this.files[0];
+			})
+		}
+	},
+	created: function(){
+		var self = this;
+		var queryData = getQueryData();
+		if(!queryData){
+			// 新增
+			self.queryData.type = "add";
+		}
+		else{
+			self.queryData = queryData;
+			self.queryData.type = "edit";
+		}
+	}
+});
+</script>
+
+
+
+
+
+
+
+
+

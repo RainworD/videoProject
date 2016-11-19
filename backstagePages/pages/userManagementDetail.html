@@ -1,0 +1,183 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-users fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">用户管理－详情</span>
+		</div>
+		<div class="admin_ui_cont">
+			<div id="userManagementDetailForm" class="admin_ui_border admin_ui_cont">
+				<table class="admin_ui_table_split_half">
+					<tbody>
+						<tr>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">头像</div>
+									<img id="user_photo" style="width: 60px;" src="" />
+								</div>
+							</td>
+							<td>
+								
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">id</div>
+									<input id="user_id" type="text" class="admin_ui_input" disabled />
+								</div>
+							</td>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">昵称</div>
+									<input id="user_nick" type="text" class="admin_ui_input" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">身高</div>
+									<input id="user_height" type="text" class="admin_ui_input" style="width: 100px" />cm
+								</div>
+							</td>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">体重</div>
+									<input id="user_weight" type="text" class="admin_ui_input" style="width: 100px" />kg
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">胸围</div>
+									<input id="user_bust" type="text" class="admin_ui_input" style="width: 100px" />cm
+								</div>
+							</td>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">腰围</div>
+									<input id="user_waistline" type="text" class="admin_ui_input" style="width: 100px" />cm
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">臀围</div>
+									<input id="user_hips" type="text" class="admin_ui_input" style="width: 100px" />cm
+								</div>
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">手机号</div>
+									<input id="user_phone" type="text" class="admin_ui_input" />
+								</div>
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">淘宝账号</div>
+									<input id="user_taobao" type="text" class="admin_ui_input" />
+								</div>
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="admin_ui_form_field">
+									<div class="admin_ui_name">京东账号</div>
+									<input id="user_jingdong" type="text" class="admin_ui_input" />
+								</div>
+							</td>
+							<td>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="admin_ui_cont_bottomFixed">
+	<div class="admin_ui_button_group" style="float: right">
+		<div class="admin_ui_button admin_ui_button_white" data-urlback>
+			返回
+		</div>
+		<div id="userManagementDetailEditButton" class="admin_ui_button admin_ui_button_green">
+			修改
+		</div>
+	</div>
+</div>
+<script>
+	var queryData = getQueryData();
+	if(!queryData){
+		alert("查询参数错误，为您自动跳转至列表页");
+		window.location.hash = "#/userManagement.html";
+	}
+	$("#user_photo").attr("src","/map?photo="+handleNullObject(queryData.userinfo.photo, "url"));
+	$("#user_id").val(queryData.id);
+	$("#user_nick").val(queryData.userinfo.nick);
+	$("#user_height").val(queryData.userinfo.height);
+	$("#user_weight").val(queryData.userinfo.weight);
+	$("#user_bust").val(queryData.userinfo.bust);
+	$("#user_hips").val(queryData.userinfo.hips);
+	$("#user_phone").val(queryData.userinfo.phone);
+	$("#user_waistline").val(queryData.userinfo.waistline);
+	$("#user_taobao").val(queryData.userinfo.taobao);
+	$("#user_jingdong").val(queryData.userinfo.jingdong);
+
+	$("#userManagementDetailEditButton").bind('click',function(){
+		if(confirm("您确定修改吗？")){			
+			$.when(changeUserInfo(
+				$("#user_id").val(),
+				$("#user_nick").val(),
+				$("#user_height").val(),
+				$("#user_weight").val(),
+				$("#user_bust").val(),
+				$("#user_waistline").val(),
+				$("#user_hips").val(),
+				$("#user_taobao").val(),
+				$("#user_jingdong").val(),
+				$("#user_phone").val()
+			)).done(function(data){
+				if(data.state == 0){
+					alert("修改成功");
+					queryData.userinfo.nick = $("#user_nick").val();
+					queryData.userinfo.height = $("#user_height").val();
+					queryData.userinfo.weight = $("#user_weight").val();
+					queryData.userinfo.bust = $("#user_bust").val();
+					queryData.userinfo.hips = $("#user_hips").val();
+					queryData.userinfo.phone = $("#user_phone").val();
+					queryData.userinfo.waistline = $("#user_waistline").val();
+					queryData.userinfo.taobao = $("#user_taobao").val();
+					queryData.userinfo.jingdong = $("#user_jingdong").val();
+					window.location.hash = "#/userManagementDetail.html?"+encodeURI(JSON.stringify(queryData));
+				}
+			});
+		}
+	});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

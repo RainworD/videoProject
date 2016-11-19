@@ -1,0 +1,138 @@
+<div class="admin_content_innerBox" id="admin_content_innerBox">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-history fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">操作记录</span>
+		</div>	
+		<div class="admin_ui_cont">
+			<div class="admin_ui_search">
+				<div style="float:right;height:30px;">
+					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
+					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
+				</div>
+			</div>
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th>操作id</th>
+						<th>管理员id</th>
+						<th>管理员</th>
+						<th>登录时间</th>
+						<th style="width: 30%;">操作</th>
+					</tr>
+				</thead>
+				<tbody id="operateRecord_data" class="admin_ui_table_hoverEffect">
+					<tr v-for="record in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+						<td>{{record.id}}</td>
+						<td>{{record.user.id}}</td>
+						<td>
+							{{record.user.userinfo.nick}}
+						</td>
+						<td>
+							{{stamp2time(record.in_time)}}
+						</td>
+						<td>
+							{{record.text}}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="admin_ui_pagination">
+				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var vm = new Tvm({
+	el: '#admin_content_innerBox',
+	data:{
+		keyword: "",
+		dataSource: [],
+		dataSource_filter: [],
+		pageIndex: 1
+	},
+	computed: {
+	},
+	methods: {
+		search: function(){
+			var self = this;
+			self.dataSource_filter = [];
+			for(index in self.dataSource){
+				var _data = self.dataSource[index];
+				var labelString = "";
+				for(j in _data.pointShows){
+					labelString += _data.pointShows[j].name+" ";
+				}
+				if(self.isContainKeyword([_data.id, _data.user.id, stamp2time(_data.in_time), _data.user.userinfo.nick, _data.text], self.keyword)){
+					self.dataSource_filter.push(_data);
+				}
+			}
+			self.refreshTable();
+		},
+		isContainKeyword: function(arr,keyword){
+			for(index in arr){
+				if(typeof arr[index] == "undefined"){
+					arr[index]="";
+				}
+				if(typeof arr[index] != "string"){
+					arr[index] = arr[index]+"";
+				}
+				if(arr[index].search(keyword)>=0){
+					return true;
+				}
+			}
+			return false;
+		},
+		refreshTable: function(){
+			var self = this;
+			$('.M-box').pagination({
+				totalData: self.dataSource_filter.length,
+			    showData: 10,
+			    current: self.pageIndex,
+			    count: 3,
+			    jump: true,
+				coping: true,
+				prevContent:'<i class="fa fa-angle-left"></i>',		//上一页内容
+				nextContent:'<i class="fa fa-angle-right"></i>',		//下一页内容
+			    callback:function(index){
+			    	self.pageIndex = index;
+			    }
+			});
+		}
+	},
+	created: function(){
+		var self = this;
+		$.when(getRecord()).done(function(data){
+			if(data.state == 0){
+				self.dataSource = data.record;
+				self.dataSource_filter = self.dataSource;
+				self.refreshTable();
+			}
+		});
+	}
+});
+	// $.when(getRecord()).done(function(data){
+	// 	if(data.state == 0){
+	// 		var html = "";
+	// 		for(var i = 0, length = data.record.length; i < length; i++){
+	// 			var record = data.record[i];
+	// 			html+= '<tr>'+
+	// 						'<td>'+record.id+'</td>'+
+	// 						'<td>'+record.user.id+'</td>'+
+	// 						'<td>'+
+	// 					(record.user.userinfo.nick?record.user.userinfo.nick:"管理员")+
+	// 						'</td>'+
+	// 						'<td>'+
+	// 							stamp2time(record.in_time)+
+	// 						'</td>'+
+	// 						'<td>'+
+	// 							record.text
+	// 						'</td>'+
+	// 					'</tr>';
+	// 		}
+	// 		$("#operateRecord_data").append(html);
+	// 		TablePage(".admin_ui_table",10);
+	// 	}
+	// });
+</script>

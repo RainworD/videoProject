@@ -1,0 +1,116 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-edit fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">表单和编辑器</span>
+		</div>
+		<div class="admin_ui_cont">
+			<div class="admin_ui_border admin_ui_cont">
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name">选择框</div>
+					<div class="admin_ui_select">
+						<select>
+							<option>选项1</option>
+							<option>选项2</option>
+						</select>
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name">输入框</div>
+					<input type="text" class="admin_ui_input" placeholder="请输入标题">
+				</div>
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name">输入自动补齐</div>
+					<div class="admin_ui_input_autoCompleteBox" 
+							data-autoComplete 
+							data-params='{"url":"../source/JSON/autoComplete.json","type":"GET","data": {"keyword": "<js>$input.val()</js>","otherValue":"<js>$this.height()</js>"}}'>
+						<input type="text" class="admin_ui_input" placeholder="请输入西" />
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name">tinymce</div>
+					<textarea id="tinymce"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="admin_ui_cont_bottomFixed">
+	<div class="admin_ui_button_group" style="float: right">
+		<div class="admin_ui_button admin_ui_button_white" data-urlback>
+			返回
+		</div>
+		<div class="admin_ui_button admin_ui_button_green">
+			确定
+		</div>
+	</div>
+</div>
+<script>
+var editor =  new tinymce.Editor('tinymce', {
+    height: 500,
+	theme: 'modern',
+	language: 'zh_CN',
+	plugins: [
+	    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+	    'searchreplace wordcount visualblocks visualchars code fullscreen',
+	    'insertdatetime media nonbreaking save table contextmenu directionality',
+	    'emoticons template paste textcolor colorpicker textpattern imagetools'
+	],
+	toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+	toolbar2: 'print preview media | forecolor backcolor emoticons | example',
+	setup: function(ed) {
+      	ed.addButton('example', {
+         	title: 'My title',
+         	image: 'https://avatars0.githubusercontent.com/u/9668199?v=3&s=40',
+         	onclick: function() {
+            	ed.insertContent('Hello world!!');
+         	}
+      	});
+      	ed.addMenuItem('example2', {
+	        text: 'My menu item',
+	        context: 'tools',// 定义菜单被加入的位置： file\edit\insert\view\format\table\tools
+	        onclick: function() {
+	            ed.insertContent('Hello world!!');
+	        }
+        });
+    },
+	image_advtab: true,
+	image_upload: true,
+	image_upload_url: '/upload',
+	relative_url: false,
+	templates: [
+	    { title: 'Test template 1', content: 'Test 1' },
+	    { title: 'Test template 2', content: 'Test 2' }
+	],
+	content_css: [
+	    '//www.tinymce.com/css/codepen.min.css'
+	]
+}, tinymce.EditorManager);
+
+editor.render();
+// 获得编辑器中内容
+function getEditorContent(){
+	return editor.getContent();
+}
+// 设置编辑器内容
+function setEditorContent(html){
+	editor.setContent(html);
+}
+// 往编辑器中插入内容
+function insertContentToEditor(html){
+	editor.insertContent(html);
+}
+// 设置 "design", "code" or "readonly"
+function setEditorMode(mode){
+	editor.setMode(mode);
+}
+function getBase64Image(img) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    var dataURL = canvas.toDataURL("image/png");
+    return dataURL;
+}
+</script>

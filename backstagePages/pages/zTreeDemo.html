@@ -1,0 +1,82 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+				<i class="labelcolor fa fa-university fa-2x"></i>
+				<span class="maintitle">zTreeDemo</span>
+		</div>
+		<div class="admin_ui_cont">
+			<table class="admin_ui_form">
+				<tbody>
+					<tr>
+						<td style="width: 312px;">
+							<div id="zTree_org" class="admin_scrollBox admin_ui_border admin_ui_padding ztree" style="height: 600px;">
+								
+							</div>
+						</td>
+						<td>
+							<div class="admin_scrollBox admin_ui_border admin_ui_padding" style="height: 600px;background-color:#fff;">
+								<h1 style="padding: 10px 5px;">ztree的文档与demo地址：</h1>
+								<p style="padding: 5px;">DEMO：<a class="admin_ui_link" href="http://www.chendind.com/zTree/demo/cn/index.html" target="_blank">http://www.chendind.com/zTree/demo/cn/index.html<a></p>
+								<p style="padding: 5px;">文档：<a class="admin_ui_link" href="http://www.chendind.com/zTree/api/API_cn.html" target="_blank">http://www.chendind.com/zTree/api/API_cn.html<a></p>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="admin_ui_cont_bottomFixed">
+	<div class="admin_ui_button_group" style="float: right">
+		<div class="admin_ui_button admin_ui_button_white">
+			返回
+		</div>
+		<div class="admin_ui_button admin_ui_button_green">
+			确定
+		</div>
+	</div>
+</div>
+<script>
+function getZTreeData(){
+	var ajax = $.ajax({
+		url: "../source/JSON/get_org.json"
+	});
+	return ajax;
+}
+var ztreeSetting = {
+    async: {
+        enable: false
+    },
+    data:{
+        key:{
+            name: "name",
+            children: "data"
+        }
+    },
+    callback : {
+        onClick: function (event, treeId, treeNode, clickFlag) {
+
+        }
+    }
+};
+$.when(getZTreeData()).done(function(data){
+	$.fn.zTree.init($("#zTree_org"), ztreeSetting, data.org);
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

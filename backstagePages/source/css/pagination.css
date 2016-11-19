@@ -1,0 +1,70 @@
+.M-box {
+  position: relative;
+  text-align: right;
+  zoom: 1;
+}
+.M-box:before,
+.M-box:after {
+  content: "";
+  display: table;
+}
+.M-box:after {
+  clear: both;
+  overflow: hidden;
+}
+.M-box > * {
+  min-width: 30px;
+  height: 28px;
+  line-height: 28px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+.M-box span {
+  color: #bdbdbd;
+  font-size: 14px;
+}
+.M-box .active {
+  background: #aaa;
+  color: #fff;
+  font-size: 14px;
+  border: 1px solid #aaa;
+}
+.M-box a {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  margin-right: -1px;
+  font-size: 14px;
+}
+.M-box a i {
+  font-size: 18px;
+  position: relative;
+  bottom: 1px;
+}
+.M-box a:hover {
+  background-color: #f4f4f4;
+}
+.M-box .now,
+.M-box .count {
+  color: #f00;
+}
+.M-box input.jump-ipt {
+  width: 30px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #aaa;
+  outline: none;
+  font-size: 14px;
+  margin: 0 5px;
+}
+.M-box .jump-btn {
+  padding: 0 5px;
+}
+.M-box .next,
+.M-box .prev {
+  width: 28px;
+  height: 28px;
+  font-family: "Simsun";
+  font-size: 16px;
+  font-weight: bold;
+}

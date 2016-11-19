@@ -1,0 +1,73 @@
+@borderColor: #aaa;
+@activeColor: #aaa;
+@hoverColor: #f4f4f4;
+.M-box{
+	position: relative;
+    text-align: right;
+  	zoom: 1;
+    &:before,&:after{
+        content:"";
+        display:table;
+    }
+    &:after{
+        clear:both;
+        overflow:hidden;
+    }
+    &>*{
+        min-width: 30px;
+        height: 28px;
+        line-height: 28px;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+    }
+    span{
+        color: #bdbdbd;
+        font-size: 14px;
+    }
+    .active{
+        background: @activeColor;
+        color: #fff;
+        font-size: 14px;
+        border: 1px solid @activeColor;
+    }
+    a{
+        background-color: #fff;
+        border: 1px solid @borderColor;
+        margin-right: -1px;
+        font-size: 14px;        
+        i{
+            font-size: 18px;
+            position: relative;
+            bottom: 1px;
+        }
+    }
+    a:hover{
+        background-color: @hoverColor;
+    }
+    
+    .now,.count{
+        color:#f00;
+    }
+    input.jump-ipt{
+        width: 30px;
+        text-align: center;
+        background: #fff;
+        border: 1px solid @borderColor;
+        outline: none;
+        font-size: 14px;
+        margin: 0 5px;
+    }
+    .jump-btn{
+        padding: 0 5px;
+    }
+    .next{
+    }
+    .next,.prev{
+        width: 28px;
+        height: 28px;
+        font-family: "Simsun";
+        font-size: 16px;
+        font-weight: bold;
+    }
+}

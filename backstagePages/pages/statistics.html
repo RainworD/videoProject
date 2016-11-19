@@ -1,0 +1,57 @@
+<div class="admin_content_innerBox">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-bar-chart fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">数据统计</span>
+		</div>	
+		<div class="admin_ui_cont">
+			<div class="admin_ui_statisticsBox">
+				<a href="#/statisticsUsage.html" class="admin_ui_statisticsBox_unit">
+					<div class="rightPart">
+						<div id="usageValue" class="value redColor"></div>
+						<div class="name">使用量</div>
+					</div>
+					<div class="leftPart">
+						<i class="fa fa-users redColor"></i>
+					</div>
+				</a>
+				<a href="#/userManagement.html" class="admin_ui_statisticsBox_unit">
+					<div class="rightPart">
+						<div id="registValue" class="value greenColor"></div>
+						<div class="name">注册量</div>
+					</div>
+					<div class="leftPart">
+						<i class="fa fa-user greenColor"></i>
+					</div>
+				</a>
+				<!-- <div class="admin_ui_statisticsBox_unit">
+					<div class="rightPart">
+						<div class="value yellowColor">340</div>
+						<div class="name">交易量</div>
+					</div>
+					<div class="leftPart">
+						<i class="fa fa-shopping-cart yellowColor"></i>
+					</div>
+				</div> -->
+				<a href="#/statisticsComment.html" class="admin_ui_statisticsBox_unit">
+					<div class="rightPart">
+						<div id="commentValue" class="value blueColor"></div>
+						<div class="name">意见统计</div>
+					</div>
+					<div class="leftPart">
+						<i class="fa fa-sticky-note blueColor"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$.when(getStatistics()).done(function(data){
+		if(data.state == 0){
+			$("#usageValue").text(data.success_times);
+			$("#registValue").text(data.registered);
+			$("#commentValue").text(data.opinion);
+		}
+	})
+</script>

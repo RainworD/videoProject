@@ -1,0 +1,186 @@
+<div class="admin_content_innerBox">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-cogs fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">账号管理</span>
+		</div>
+		<div class="admin_ui_cont">
+			<div class="admin_ui_border admin_ui_cont">
+				<table class="admin_ui_leadForm">
+					<tbody>
+						<td class="admin_ui_leadForm_lead" style="width: 35%">
+							<h3>
+								<i class="fa fa-user admin_ui_mainColor"></i>
+								账户
+							</h3>
+							<p>
+								您可以修改您的用户名
+							</p>
+						</td>
+						<td>
+							<div class="admin_ui_form_field">
+								<div class="admin_ui_name">用户名</div>
+								<input id="adminAccount_adminName" class="admin_ui_input" type="text" value="" />
+							</div>
+							<div class="admin_ui_form_field">
+								<div class="admin_ui_name">角色</div>
+								<div class="admin_ui_select">
+									<select disabled>
+										<option selected>主管理员</option>
+										<option>一般管理员</option>
+									</select>
+								</div>
+							</div>		
+							<div id="changeUserNameButton" class="admin_ui_button admin_ui_button_green" style="margin-top: 40px;">
+								确定修改
+							</div>
+						</td>
+					</tbody>
+				</table>
+				<div class="admin_ui_separator"></div>
+				<table class="admin_ui_leadForm">
+					<tbody>
+						<td class="admin_ui_leadForm_lead" style="width: 35%">
+							<h3>
+								<i class="fa fa-unlock-alt admin_ui_mainColor"></i>
+								修改密码
+							</h3>
+							<p>
+								请在安全的网络中修改密码；切勿在网吧或他人电脑进行操作
+							</p>
+						</td>
+						<td>
+							<div class="admin_ui_form_field">
+								<div class="admin_ui_name">原密码</div>
+								<input id="oldPassword" class="admin_ui_input" type="password" placeholder="请输入原密码" />
+							</div>
+							<div class="admin_ui_form_field">
+								<div class="admin_ui_name">新密码</div>
+								<input id="newPassword" class="admin_ui_input" type="password" placeholder="请输入新密码" />
+							</div>
+							<div class="admin_ui_form_field">
+								<div class="admin_ui_name">确认新密码</div>
+								<input id="newPasswordConfirm" class="admin_ui_input" type="password" placeholder="请再次输入新密码" />
+							</div>
+							<div id="changePasswordButton" class="admin_ui_button admin_ui_button_green" style="margin-top: 40px;">
+								确定修改
+							</div>
+						</td>
+					</tbody>
+				</table>
+				<div class="admin_ui_separator"></div>
+				<table class="admin_ui_leadForm" id="addNewAdminTable" style="display: none;">
+					<tbody>
+						<td class="admin_ui_leadForm_lead" style="width: 35%">
+							<h3>
+								<i class="fa fa-user-plus admin_ui_mainColor"></i>
+								新增管理员
+							</h3>
+							<p>
+								请在安全的网络中进行操作；操作成功后请尽快通知管理员修改密码。
+							</p>
+						</td>
+						<td>
+							<div class="admin_ui_form_field">
+								<div class="admin_ui_name">用户名</div>
+								<input id="addAdmin_adminName" class="admin_ui_input" type="text" />
+							</div>
+							<div class="admin_ui_form_field">
+								<div class="admin_ui_name">角色</div>
+								<div class="admin_ui_select">
+									<select>
+										<option selected>普通管理员</option>
+									</select>
+								</div>
+							</div>
+							<div class="admin_ui_form_field">
+								<div class="admin_ui_name">设置密码</div>
+								<input id="addAdmin_password" class="admin_ui_input" type="password" placeholder="请输入密码" />
+							</div>
+							<div class="admin_ui_form_field">
+								<div class="admin_ui_name">确定密码</div>
+								<input id="addAdmin_passwordConfirm" class="admin_ui_input" type="password" placeholder="请再次输入密码" />
+							</div>
+							<div id="addAdminButton" class="admin_ui_button admin_ui_button_green" style="margin-top: 40px;">
+								确定新增
+							</div>
+						</td>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$.when(getAdmin()).done(function(data){
+    if(data.state == 0){
+        var info = data.user.userinfo;
+        $("#adminAccount_adminName").val(info.nick);
+        if(data.competence == 3){
+        	// 超级管理员
+        	$("#addNewAdminTable").show();
+        }
+    }
+});
+$("#changeUserNameButton").bind('click',function(){
+	$.when(setMyNickName($("#adminAccount_adminName").val())).done(function(data){
+		if(data.state == 0){
+			alert("修改成功");
+		}
+	});
+});
+$("#changePasswordButton").bind('click',function(){
+	var oldPassword = $.trim($("#oldPassword").val()),
+		newPassword = $.trim($("#newPassword").val()),
+		newPasswordConfirm = $.trim($("#newPasswordConfirm").val());
+	if(!oldPassword){
+		alert("请输入原密码");
+	}
+	else if(!newPassword){
+		alert("请输入新密码");
+	}
+	else if(newPassword != newPasswordConfirm){
+		alert("两次输入密码不一致，请检查");
+	}
+	else{
+		$.when(changePassword(oldPassword,newPassword)).done(function(data){
+			if(data.state == 0){
+				alert("修改成功!");
+			}
+		});
+	}
+});
+$("#addAdminButton").bind('click',function(data){
+	var addAdmin_adminName = $("#addAdmin_adminName").val(),
+		addAdmin_password = $("#addAdmin_password").val(),
+		addAdmin_passwordConfirm = $("#addAdmin_passwordConfirm").val();
+	if(!addAdmin_adminName){
+		alert("请输入管理员用户名");
+	}
+	else if(!addAdmin_password){
+		alert("请输入密码");
+	}
+	else if(addAdmin_password != addAdmin_passwordConfirm){
+		alert("两次输入密码不一致，请检查");
+	}
+	else{
+		$.when(addAdmin(addAdmin_adminName, addAdmin_password)).done(function(data){
+			if(data.state == 0){
+				alert("新增用户成功，用户名："+addAdmin_adminName+"，密码："+addAdmin_password);
+			}
+		});
+	}
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

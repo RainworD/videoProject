@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="../source/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../source/plunges/fontAwesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../source/css/sign_in.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+	<script src="../source/js/ajax.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="application">
+			<a href="sign_in.html"><div class="heart"><i class="fa fa-heart fa-lg"></i></div>
+			<span>视频监控后台管理系统</span></a>
+		</div>
+	</div>
+	<div class="controls" style="height:300px;">
+		<div class="caret"></div>
+		<div class="form-wrapper">
+			<h1>登录</h1>
+			<div class="gd">
+				<input type="text" class="denglu" placeholder="用户名" id="mail">
+				<i class="fa fa-user user" ></i>
+			</div>
+			<div class="gd">
+				<input type="password" class="denglu" placeholder="密码" id="pass">
+				<i class="fa fa-lock user" ></i>
+			</div>
+			
+			<a id="loginButton" class="btn" style="cursor:pointer">登录</a>
+			
+		</div>
+	</div>
+<script>
+$("#loginButton").bind("click",function(){
+	var mail = $.trim($("#mail").val()), pass = $.trim($("#pass").val());
+	if(!mail){
+		alert("请输入用户名!");
+	}
+	else if(!pass){
+		alert("请输入密码");
+	}
+	else {
+		$.when(loginApi(mail,pass)).done(function (data) {
+			if (data.state == 0) {
+				window.location.href = "index.html";
+			}
+			else{
+				
+			}
+		})
+	}
+})
+
+</script>
+</body>
+</html>

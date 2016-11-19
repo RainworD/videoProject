@@ -1,0 +1,136 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">品牌街管理</span>
+		</div>	
+		<div class="admin_ui_cont">
+			<div class="admin_ui_search">
+				<div style="float:right;height:30px;">
+					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
+					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
+				</div>
+			</div>
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th>品牌id</th>
+						<th>品牌名</th>
+						<th>品牌地址</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody class="admin_ui_table_hoverEffect">
+					<tr v-for="brand in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+						<td>
+							{{brand.id}}
+						</td>
+						<td>{{brand.name}}</td>
+						<td>
+							{{brand.url}}
+						</td>
+						<td class="admin_ui_table_action">
+							<a href="#/brandStreetManagementDetail.html?{{encodeURI(JSON.stringify(brand))}}" class="iconButton checkIcon">
+								<i class="fa fa-pencil"></i>
+								编辑
+							</a>
+							<div class="iconButton removeIcon" @click="removeBrand($index)">
+								<i class="fa fa-remove"></i>
+								删除
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="admin_ui_pagination">
+				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="admin_ui_cont_bottomFixed">
+	<div class="admin_ui_button_group" style="float: right">
+		<a href="#/brandStreetManagementDetail.html" class="admin_ui_button admin_ui_button_green">
+			新增
+		</a>
+	</div>
+</div>
+<script type="text/javascript">
+var vm = new Tvm({
+	el: '#admin_content_innerBox',
+	data:{
+		keyword: "",
+		dataSource: [],
+		dataSource_filter: [],
+		pageIndex: 1
+	},
+	computed: {
+	},
+	methods: {
+		search: function(){
+			var self = this;
+			self.dataSource_filter = [];
+			for(index in self.dataSource){
+				var _data = self.dataSource[index];
+				if(self.isContainKeyword([_data.id,_data.name, _data.url],self.keyword)){
+					self.dataSource_filter.push(_data);
+				}
+			}
+			self.refreshTable();
+		},
+		isContainKeyword: function(arr,keyword){
+			for(index in arr){
+				if(typeof arr[index] == "undefined"){
+					arr[index]="";
+				}
+				if(typeof arr[index] != "string"){
+					arr[index] = arr[index]+"";
+				}
+				if(arr[index].search(keyword)>=0){
+					return true;
+				}
+			}
+			return false;
+		},
+		refreshTable: function(){
+			var self = this;
+			$('.M-box').pagination({
+				totalData: self.dataSource_filter.length,
+			    showData: 10,
+			    current: self.pageIndex,
+			    count: 3,
+			    jump: true,
+				coping: true,
+				prevContent:'<i class="fa fa-angle-left"></i>',		//上一页内容
+				nextContent:'<i class="fa fa-angle-right"></i>',		//下一页内容
+			    callback:function(index){
+			    	self.pageIndex = index;
+			    }
+			});
+		},
+		removeBrand: function(index){
+			var self = this;
+			var id = self.dataSource_filter[index].id;
+			if(confirm("您确定删除这个品牌吗？")){
+				$.when(deleteBrand(id)).done(function(data){
+					if(data.state == 0){
+						alert("删除成功");
+						self.dataSource_filter.splice(index,1);
+						self.refreshTable();
+					}
+				})
+			}
+		}
+	},
+	created: function(){
+		var self = this;
+		$.when(getBrands()).done(function(data){
+			if(data.state == 0){
+				self.dataSource = data.brands;
+				self.dataSource_filter = self.dataSource;
+				self.refreshTable();
+			}
+		});
+	}
+});
+</script>

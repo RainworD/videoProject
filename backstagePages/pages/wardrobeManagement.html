@@ -1,0 +1,132 @@
+<div class="admin_content_innerBox" id="admin_content_innerBox">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-black-tie fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">衣橱管理</span>
+		</div>	
+		<div class="admin_ui_cont">
+			<div class="admin_ui_search">
+				<div style="float:right;height:30px;">
+					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
+					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
+				</div>
+			</div>
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th>衣橱id</th>
+						<th>发布人</th>
+						<th>季节</th>
+						<th>标签</th>
+					</tr>
+				</thead>
+				<tbody id="wardrobeManagement_data" class="admin_ui_table_hoverEffect">
+					<tr v-for="point in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+						<td>{{point.id}}</td>
+						<td>
+							{{point.users.userinfo.nick}}
+						</td>
+						<td>{{point.season}}</td>
+						<td>
+							<a v-for="pointShow in point.pointShows" href="{{pointShow.url}}" class="admin_ui_colorLabel {{colorList[$index%3]}}" style="margin-right: 8px;">{{pointShow.name}}</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="admin_ui_pagination">
+				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var vm = new Tvm({
+	el: '#admin_content_innerBox',
+	data:{
+		keyword: "",
+		dataSource: [],
+		dataSource_filter: [],
+		pageIndex: 1,
+		colorList: ["admin_ui_colorLabel_red","admin_ui_colorLabel_green","admin_ui_colorLabel_yellow"]
+	},
+	computed: {
+	},
+	methods: {
+		search: function(){
+			var self = this;
+			self.dataSource_filter = [];
+			for(index in self.dataSource){
+				var _data = self.dataSource[index];
+				var labelString = "";
+				for(j in _data.pointShows){
+					labelString += _data.pointShows[j].name+" ";
+				}
+				if(self.isContainKeyword([_data.id,_data.season, _data.users.userinfo.nick, labelString],self.keyword)){
+					self.dataSource_filter.push(_data);
+				}
+			}
+			self.refreshTable();
+		},
+		isContainKeyword: function(arr,keyword){
+			for(index in arr){
+				if(typeof arr[index] == "undefined"){
+					arr[index]="";
+				}
+				if(typeof arr[index] != "string"){
+					arr[index] = arr[index]+"";
+				}
+				if(arr[index].search(keyword)>=0){
+					return true;
+				}
+			}
+			return false;
+		},
+		refreshTable: function(){
+			var self = this;
+			$('.M-box').pagination({
+				totalData: self.dataSource_filter.length,
+			    showData: 10,
+			    current: self.pageIndex,
+			    count: 3,
+			    jump: true,
+				coping: true,
+				prevContent:'<i class="fa fa-angle-left"></i>',		//上一页内容
+				nextContent:'<i class="fa fa-angle-right"></i>',		//下一页内容
+			    callback:function(index){
+			    	self.pageIndex = index;
+			    }
+			});
+		}
+	},
+	created: function(){
+		var self = this;
+		$.when(getWardrobe()).done(function(data){
+			if(data.state == 0){
+				self.dataSource = data.point;
+				self.dataSource_filter = self.dataSource;
+				self.refreshTable();
+			}
+		});
+	}
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,57 @@
+@length_cenbox: 1000px;
+@radius: 5px;
+@textColor: #666;
+@mainColor: #55a012;
+@subColor: #7ed321;
+@redColor: #e70118;
+@placeholder: #d8d8d8;
+@lineColor: #999;
+@greyColor:#f9f9f9;
+@lightGreyColor: #fafafa;
+@bodyWhite: #fefefe;
+@blackColor:#333;
+@green:#66cecc;
+.ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.mutilEllipsis(@n) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: @n;
+    -webkit-box-orient: vertical;
+}
+.after{
+    &:after{
+        display: block;
+        content: '';
+        clear: both;
+    }
+}
+.transition(@property: all,@duration: 300ms ,@timeFn: ease,@delay: 0ms) {
+    transition: @property,@duration,@timeFn,@delay;
+    -webkit-transition: @property,@duration,@timeFn,@delay;
+    -moz-transition: @property,@duration,@timeFn,@delay;
+    -ms-transition: @property,@duration,@timeFn,@delay;
+    -o-transition: @property,@duration,@timeFn,@delay;
+}
+.veryCenter{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+}
+
+
+
+
+
+
+
+
+
+
+

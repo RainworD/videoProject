@@ -1,0 +1,238 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-image fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">轮播图设置</span>
+		</div>
+		<div id="slideImagesBox" class="admin_ui_cont">
+			<div class="admin_ui_border admin_ui_cont_header admin_ui_cont_header_grey">
+				顶部轮播图
+			</div>
+			<div id="topSlideImagesBox" class="admin_ui_border admin_ui_cont" style="margin-bottom: 20px;">
+				<div class="admin_ui_slideImageBox" data-sildeImageBox="0" data-src="">
+					<div class="slideImageUpload">
+						<p class="tip">
+							<i class="fa fa-cloud-upload"></i>
+							点击上传图片
+						</p>
+					</div>
+					<textarea class="admin_ui_textarea" rows="2" placeholder="请输入链接地址"></textarea>
+					<div class="admin_ui_button admin_ui_button_red deleteButton">删除</div>
+				</div>
+			</div>
+			<div class="admin_ui_border admin_ui_cont_header admin_ui_cont_header_grey">
+				底部轮播图
+				<a href="#/showImageManagement.html" style="font-size: 12px;float:right;" class="redColor">*请在秀图管理中设置底部轮播图</a>
+			</div>
+			<div id="bottomSlideImagesBox" class="admin_ui_border admin_ui_cont">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="admin_ui_cont_bottomFixed">
+	<div class="admin_ui_button_group" style="float: right">
+		<div class="admin_ui_button admin_ui_button_white" data-urlback>
+			返回
+		</div>
+		<div id="saveSlideImagesButton" class="admin_ui_button admin_ui_button_green">
+			保存
+		</div>
+	</div>
+</div>
+<div id="template_top" class="template" style="display:block">
+	<div class="admin_ui_slideImageBox" data-sildeImageBox="1" data-src="">
+		<div class="slideImageUpload">
+			<p class="tip">
+				<i class="fa fa-cloud-upload"></i>
+				点击上传图片
+			</p>
+		</div>
+		<textarea class="admin_ui_textarea" rows="2" placeholder="请输入链接地址"></textarea>
+		<div class="admin_ui_button admin_ui_button_red deleteButton">删除</div>
+	</div>
+</div>
+<div id="template_bottom" class="template" style="display:block">
+	<div class="admin_ui_slideImageBox" data-sildeImageBox="1" data-src="">
+		<div class="slideImageUpload">
+			<p class="tip">
+				<i class="fa fa-cloud-upload"></i>
+				点击上传图片
+			</p>
+		</div>
+		<textarea class="admin_ui_textarea" rows="2" placeholder="请输入链接地址" disabled></textarea>
+		<div class="admin_ui_button admin_ui_button_red deleteButton">删除</div>
+	</div>
+</div>
+<script>
+	var topSlideImagesBox = $("#topSlideImagesBox"), bottomSlideImagesBox = $("#bottomSlideImagesBox");
+	$.when(getSlideImages()).done(function(data){
+		if(data.state == 0){
+			// 顶部轮播图
+			var topSlideImages = data.top, bottomSlideImages = data.bottom;
+			var temHtml = $("<div>");
+			for(var t = 0, length = topSlideImages.length; t < length; t++){
+				var _topSlideImage = topSlideImages[t];
+				var _html = $("#template_top .admin_ui_slideImageBox").clone();
+				var img = new Image();
+				img.src = getImageByUrl(_topSlideImage.photo.url);
+
+				_html.attr({"data-src":img.src, "data-id":_topSlideImage.id})
+						.find(".slideImageUpload").append(img).end()
+						.find("textarea").text(_topSlideImage.url);
+				temHtml.append(_html);
+			}
+			topSlideImagesBox.prepend(temHtml.html());
+			temHtml.empty();
+			for(var t = 0, length = bottomSlideImages.length; t < length; t++){
+				var _bottomSlideImage = bottomSlideImages[t];
+				var _html = $("#template_bottom .admin_ui_slideImageBox").clone();
+				var img = new Image();
+				img.src = getImageByUrl(_bottomSlideImage.photo.url);
+				_html.attr({"data-src":img.src,"data-id":_bottomSlideImage.id}).find(".slideImageUpload").append(img).end()
+						.find("textarea").text("秀图id: "+_bottomSlideImage.show_id);
+				temHtml.append(_html);
+			}
+			bottomSlideImagesBox.prepend(temHtml.html());
+		}
+	});
+	$("#saveSlideImagesButton").bind('click',function(){
+		var topLength = topSlideImagesBox.find("[data-id='0']").length,
+			bottomLength = bottomSlideImagesBox.find("[data-id='0']").length;
+
+		var topLength_edit = topSlideImagesBox.find(".admin_ui_slideImageBox[data-id!='0'][data-sildeimagebox='1']").length;// 编辑url的图
+		
+		var beenLength_top = 0, beenLength_bottom = 0, beenLength_top_edit = 0;
+		var deferred_top = $.Deferred(),
+				deferred_bottom = $.Deferred(),
+				deferred_top_edit = $.Deferred();
+
+		for(var k = 0; k < topLength_edit; k++){
+			var id = topSlideImagesBox.find(".admin_ui_slideImageBox[data-id!='0'][data-sildeimagebox='1']").eq(k).attr("data-id"),
+				url = topSlideImagesBox.find(".admin_ui_slideImageBox[data-id!='0'][data-sildeimagebox='1']").eq(k).find(".admin_ui_textarea").val();
+			console.log(id, url);
+			$.when(editTopSlideImagesUrl(id,url)).done(function(data){
+				if(data.state == 0){
+					beenLength_top_edit++;
+					if (beenLength_top_edit == topLength_edit) {
+						deferred_top_edit.resolve();
+					}
+				}
+				else{
+					deferred_top_edit.reject();
+				}
+			});
+		}
+		for(var i = 0; i<topLength; i++){
+			var file = topSlideImagesBox.find("[data-id='0']").eq(i).data("file");
+			var formData = new FormData();
+
+			var url = topSlideImagesBox.find("[data-id='0']").eq(i).find("textarea").val();
+			if(url&&url.search(/^(?:http||https):\/\//)){
+				url = "http://"+url;
+			}
+			else{
+				url = "";
+			}
+			formData.append("file",file);
+			formData.append("url",url);
+
+			$.when(addTopSlideImages(formData)).done(function(data){
+				if(data.state == 0) {
+					beenLength_top++;
+					if (beenLength_top == topLength) {
+						deferred_top.resolve();
+					}
+				}
+				else{
+					deferred_top.reject();
+				}
+
+			});
+		}
+		for(var i = 0; i<bottomLength; i++){
+			var file = bottomSlideImagesBox.find("[data-id='0']").eq(i).data("file");
+			var formData = new FormData();
+
+			var url = bottomSlideImagesBox.find("[data-id='0']").eq(i).find("textarea").val();
+			if(url&&url.search(/^(?:http||https):\/\//)){
+				url = "http://"+url;
+			}
+			else{
+				url = "";
+			}
+			formData.append("file",file);
+			formData.append("url",url);
+
+			$.when(addBottomSlideImages(formData)).done(function(data){
+				if(data.state == 0) {
+					beenLength_bottom++;
+					if (beenLength_bottom == topLength) {
+						deferred_bottom.resolve();
+					}
+				}
+				else{
+					deferred_bottom.reject();
+				}
+
+			});
+		}
+		$.when(deferred_top, deferred_bottom,deferred_top_edit).done(function(data){
+			alert("保存成功!");
+			window.location.reload();
+		})
+	});
+
+    $("#slideImagesBox").on('click','.deleteButton',function(){
+        if(confirm("确定删除吗？")){
+        	var $deleteButton = $(this);
+        	var $slideImageBox = $(this).closest(".admin_ui_slideImageBox");
+        	var id = $slideImageBox.attr("data-id");
+        	if($deleteButton.closest("#topSlideImagesBox").length){
+        		// 顶部轮播图
+        		$.when(deleteTopSlideImages(id)).done(function(data){
+        			if(data.state == 0){
+        				$slideImageBox.remove();
+        			}
+        		});
+        	}
+        	else{
+        		// 底部轮播图
+        		$.when(deleteBottomSlideImages(id)).done(function(data){
+        			if(data.state == 0){
+        				$slideImageBox.remove();
+        			}
+        		});
+        	}
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

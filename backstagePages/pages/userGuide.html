@@ -1,0 +1,93 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-mouse-pointer fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">使用指南</span>
+		</div>
+		<div class="admin_ui_cont">
+			<textarea id="tinymce" style="display:none;"></textarea>
+		</div>
+	</div>
+</div>
+<div class="admin_ui_cont_bottomFixed">
+	<div class="admin_ui_button_group" style="float: right">
+		<div class="admin_ui_button admin_ui_button_white" data-urlback>
+			返回
+		</div>
+		<div id="saveButton" class="admin_ui_button admin_ui_button_green">
+			保存
+		</div>
+	</div>
+</div>
+<script>
+var editor =  new tinymce.Editor('tinymce', {
+    height: 500,
+	theme: 'modern',
+	language: 'zh_CN',
+	plugins: [
+	    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+	    'searchreplace wordcount visualblocks visualchars code fullscreen',
+	    'insertdatetime media nonbreaking save table contextmenu directionality',
+	    'emoticons template paste textcolor colorpicker textpattern imagetools'
+	],
+	toolbar1: 'insertfile undo redo | fontsizeselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+	toolbar2: 'print preview media | forecolor backcolor | example',
+	setup: function(ed) {
+    },
+    fontsize_formats: "12px 14px 18px 24px 36px 48px 60px 72px 84px 96px 108px 120px",
+	image_advtab: true,
+	image_upload: true,
+	relative_url: false,
+	templates: [
+	    { title: 'Test template 1', content: 'Test 1' },
+	    { title: 'Test template 2', content: 'Test 2' }
+	],
+	content_css: [
+	    '../source/css/tinymce.css'
+	]
+}, tinymce.EditorManager);
+
+$.when(getGlobal("userGuide")).done(function(data){
+	if(data.state == 0){
+		if(data.text){
+			$("#tinymce").html(data.text);
+		}
+		$("#tinymce").show()
+		editor.render();
+	}
+});
+$("#saveButton").bind('click',function(data){
+	var content = $(editor.getContent());
+	var imgLen = $(content).find('img').length;
+	var count = 0;
+	var uploadImageDeferred = $.Deferred();
+	for(var i = 0, imgLen = content.find('img').length; i < imgLen; i++){
+		var _img = content.find('img')[i];
+		var file = dataURL2Bolb(getBase64Image(_img));
+		var formData = new FormData();
+		formData.append('file',file);
+		$.when(uploadImage(formData)).done(function(data){
+			if(data.state == 0){
+				_img.src = getImageByUrl(data.name);
+				count ++;
+				if(count == imgLen){
+					uploadImageDeferred.resolve();
+				}
+			}
+			else{
+				uploadImageDeferred.reject();
+			}
+		});
+	}
+	$.when(uploadImageDeferred).done(function(){
+		var _contentHTML = $("<div>").append(content).html();
+		$.when(setGlobal("userGuide", _contentHTML)).done(function(data){
+			if(data.state == 0){
+				alert("保存成功");
+			}
+		});
+	}).fail(function(){
+		alert("上传图片至服务器失败，请检查网络");
+	});
+});
+</script>

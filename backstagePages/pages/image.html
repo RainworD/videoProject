@@ -1,0 +1,124 @@
+<div class="imgm-header">
+		<i class="labelcolor fa fa-picture-o fa-2x" aria-hidden="true"></i>
+		<span class="maintitle">&nbsp;图片管理</span>
+	</div>
+
+	<div class="imgm-zh">
+	<div class="imgm-box">
+		<div class="imgm-img">
+			<div class="imgm-jia">
+				<i class="fa fa-plus-square-o fa-5x" style="color:#ebebeb"></i>
+				<input type="file" class="imgm-tj">
+			</div>
+		</div>
+		
+		<input type="text" style="width:100%;height:30px;border:0px;margin-top:20px;" class="ui-input" placeholder="请填入图片名">
+
+		<input type="text" style="width:100%;height:30px;border:0px;margin-top:20px;" class="ui-input" placeholder="请填入图片链接">
+		<input type="text" style="width:100%;height:30px;border:0px;margin-top:20px;" class="ui-input" placeholder="请填入图片排序">
+
+		
+		<input class="color ui-input" type="text"  style="width:100%;height:30px;border:0px;margin-top:20px;padding-right:60px;" placeholder="请填入图片颜色">
+        
+        <!-- <button id="picker" class="picker">选择颜色</button> -->
+
+        <div class="bi"><i id="picker" class="fa fa-pencil fa-1x " style="margin-left:4px;color:white;"></i></div>
+				
+		
+		<!-- <div class="imgm-btn1">确定</div> -->
+
+		<div class="imgm-btn2">删除</div>
+	</div>
+	<form action="" method="post" enctype="multipart/form-data" id="myform" target="myiframe">
+	<div class="imgm-box">
+		<div class="imgm-img">
+			<div class="imgm-jia">
+				<i class="fa fa-plus-square-o fa-5x" style="color:#ebebeb"></i>
+				<input type="file" class="imgm-tj">
+			</div>
+		</div>
+		
+		<input type="text" style="width:100%;height:30px;border:0px;margin-top:20px;" class="ui-input" placeholder="请填入图片名">
+
+		<input type="text" style="width:100%;height:30px;border:0px;margin-top:20px;" class="ui-input" placeholder="请填入图片链接">
+		<input type="text" style="width:100%;height:30px;border:0px;margin-top:20px;" class="ui-input" placeholder="请填入图片排序">
+
+		
+		<input class="color ui-input" type="text"  style="width:100%;height:30px;border:0px;margin-top:20px;padding-right:60px;" placeholder="请填入图片颜色">
+        
+        <!-- <button id="picker" class="picker">选择颜色</button> -->
+
+        <div class="bi"><i id="picker" class="fa fa-pencil fa-1x " style="margin-left:4px;color:white;"></i></div>
+				
+		
+		<div class="imgm-btn1">确定</div>
+
+		<!-- <div class="imgm-btn2">删除</div> -->
+	</div>
+	</form>
+	<iframe style="display:none;" name="myiframe" id="myiframe"></iframe>
+ 	</div>
+	<script type="text/javascript">
+	$(document).unbind('click');
+	
+	$(".imgm-btn1").click(function(){
+		$("#myiframe").load(function(){
+			alert("添加成功！");
+			loadContent("img_roll.html");
+		});
+		$("form#myform").submit();
+	})
+
+	// var result = $(".imgm-img")[0]; 
+    var input = $(".imgm-tj")[0];
+
+    if(typeof FileReader==='undefined'){ 
+		    result.innerHTML = "抱歉，你的浏览器不支持 FileReader"; 
+		    input.setAttribute('disabled','disabled'); 
+		    }
+	else{ 
+		    // input.addEventListener('change',readFile,false); 
+		    $(document).on('change','.imgm-tj',function(){
+		    	var file = this.files[0]; 
+		    	var result = $(this).parent().parent(".imgm-img")[0];
+			    if(!/image\/\w+/.test(file.type)){ 
+			        alert("文件必须为图片！"); 
+			        return false; 
+			    } 
+			    var reader = new FileReader(); 
+			    reader.readAsDataURL(file); 
+			    reader.onload = function(e){ 
+			        result.innerHTML = '<img style="width:260px;height:146px;" src="'+this.result+'" alt=""/>' 
+			    } 
+		    });
+		}
+		  //   function readFile(){ 
+		    
+    // }  
+      $('.bi').colpick();
+      var yanse;
+      var $tpresult;
+          // $tpresult=$(".picker").prev();
+      $(document).on("click",".bi",function(){
+      	console.log($(this).prev());
+      	 $tpresult = $(this).prev();
+ 		 
+
+      });
+// $(".picker").bind('click',function(){
+// 	console.log($(this).prev());
+//     $tpresult = $(this).prev();
+// })
+      
+
+      $(document).on("click",".colpick_submit",function(){
+    	 // yanse=$(".colpick_hex_field>input").val();
+           
+    	 yanse=$(this).siblings(".colpick_hex_field").children("input").val();
+    	 console.log($tpresult);
+    	$tpresult.val("#"+yanse);
+    	$(".colpick").hide();
+      });
+    
+
+	</script>

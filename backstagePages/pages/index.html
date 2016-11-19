@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="chendind">
+    <meta name="reply-to" content="chendind@xiyoukeji.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="../source/css/colpick.css">
+    <link rel="stylesheet" type="text/css" href="../source/css/classic.css">
+    <link rel="stylesheet" type="text/css" href="../source/css/classic.date.css">
+    <link rel="stylesheet" type="text/css" href="../source/plunges/fontAwesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../source/plunges/zTree/css/awesomeStyle/awesome.css">
+
+    <link rel="stylesheet" type="text/css" href="../source/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../source/css/ui.css">
+    <link rel="stylesheet" type="text/css" href="../source/css/index.css">
+    <link rel="stylesheet" type="text/css" href="../source/css/pagination.css">
+
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/ajax.js"></script>
+    <script src="../source/js/public.js"></script>
+
+    <script src="../source/plunges/tinymce/tinymce.js"></script>
+    <script src="../source/plunges/zTree/js/jquery.ztree.all.min.js"></script>
+    <script src="../source/plunges/ueditor/ueditor.config.js"></script>
+    <script src="../source/plunges/ueditor/ueditor.all.min.js"> </script>
+    <script src="../source/plunges/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script src="../source/js/jquery.pagination.min.js"></script>
+</head>
+<body>
+    <div id="admin_body" class="admin_body">
+        <div id="admin_header" class="admin_header">
+            <div class="brand">
+            <div class="heart"><i class="fa fa-heart-o fa-lg"></i></div>
+            <span style="font-size:20px;margin-left:10px;">视频监控后台管理系统</span>
+        </div>
+        <div class="client" id="client">
+            <img src="../source/images/avatar.jpg" class="personimg">
+            <div id="admin_name" class="name"></div>
+            <div class="xiala"><i class="fa fa-sort-desc" style="color:white"></i></div>
+        </div>
+        <div id="admin_ui_dropdown_menu" class="admin_ui_dropdown_menu" data-hideWhenBlur>
+            <a href="#/adminAccount.html">
+                <i class="fa fa-cogs"></i>&nbsp;账号管理
+            </a>
+            <a id="logoutButton">
+                <i class="fa fa-sign-out"></i>&nbsp;退出登录
+            </a>
+        </div>
+    </div>
+    <div id="admin_left" class="admin_left">
+        <div class="leftmenu">
+            <div>
+                <a class="line">
+                    <span class="icon markIcon">
+                       <i class="fa fa-sticky-note fa-lg"></i>
+                    </span>
+                    <div class="name">行业信息</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
+                </a>
+                <div class="submenu">
+                    <a class="line" href="#/labelManagement.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-github-alt"></i>
+                        </span>
+                        <div class="name">标签管理</div>
+                    </a>
+                    <a class="line" href="#/articleManagement.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-mouse-pointer"></i>
+                        </span>
+                        <div class="name">文章管理</div>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <a class="line">
+                    <span class="icon markIcon">
+                       <i class="fa fa-sticky-note fa-lg"></i>
+                    </span>
+                    <div class="name">账户管理</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
+                </a>
+                <div class="submenu">
+                    <a class="line" href="#/contactUs.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-github-alt"></i>
+                        </span>
+                        <div class="name">代理商管理</div>
+                    </a>
+                    <a class="line" href="#/showImageManagement.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-mouse-pointer"></i>
+                        </span>
+                        <div class="name">企业管理</div>
+                    </a>
+                    <a class="line" href="#/labelManagement.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-github-alt"></i>
+                        </span>
+                        <div class="name">企业同事管理</div>
+                    </a>
+                    <a class="line" href="#/labelManagement.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-github-alt"></i>
+                        </span>
+                        <div class="name">后台账户管理</div>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <a class="line" href="#/statistics.html">
+                    <span class="icon markIcon">
+                        <i class="fa fa-bar-chart fa-lg"></i>
+                    </span>
+                    <div class="name">动态管理</div>
+                </a>
+            </div>
+            <div>
+                <a class="line" href="#/statistics.html">
+                    <span class="icon markIcon">
+                        <i class="fa fa-bar-chart fa-lg"></i>
+                    </span>
+                    <div class="name">设备管理</div>
+                </a>
+            </div>
+            <div>
+                <a class="line">
+                    <span class="icon markIcon">
+                       <i class="fa fa-sticky-note fa-lg"></i>
+                    </span>
+                    <div class="name">财务信息</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
+                </a>
+                <div class="submenu">
+                    <a class="line" href="#/labelManagement.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-github-alt"></i>
+                        </span>
+                        <div class="name">流水账单</div>
+                    </a>
+                    <a class="line" href="#/showImageManagement.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-mouse-pointer"></i>
+                        </span>
+                        <div class="name">代理商财务</div>
+                    </a>
+                    <a class="line" href="#/labelManagement.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-github-alt"></i>
+                        </span>
+                        <div class="name">提现管理</div>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <a class="line">
+                    <span class="icon markIcon">
+                       <i class="fa fa-sticky-note fa-lg"></i>
+                    </span>
+                    <div class="name">其他信息</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
+                </a>
+                <div class="submenu">
+                    <a class="line" href="#/labelManagement.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-github-alt"></i>
+                        </span>
+                        <div class="name">系统推送</div>
+                    </a>
+                </div>
+            </div>
+            <!-- <div>
+                <a class="line">
+                    <span class="icon markIcon">
+                        <i class="fa fa-users fa-lg"></i>
+                    </span>
+                    <div class="name">列表与编辑</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
+                </a>
+                <div class="submenu">
+                    <a class="line" href="#/charts.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-table"></i>
+                        </span>
+                        <div class="name">表格</div>
+                    </a>
+                    <a class="line" href="#/formAndEditor.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-edit"></i>
+                        </span>
+                        <div class="name">表单和编辑器</div>
+                    </a>
+                    <a class="line" href="#/image.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-edit"></i>
+                        </span>
+                        <div class="name">图片上传</div>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <a class="line">
+                    <span class="icon markIcon">
+                        <i class="fa fa-users fa-lg"></i>
+                    </span>
+                    <div class="name">组件</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
+                </a>
+                <div class="submenu">
+                    <a class="line" href="#/zTreeDemo.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-caret-right"></i>
+                        </span>
+                        <div class="name">zTreeDemo</div>
+                    </a>
+                    <a class="line" href="#/formAndEditor.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-caret-right"></i>
+                        </span>
+                        <div class="name">表单和编辑器</div>
+                    </a>
+                </div>
+            </div>
+ -->        </div>
+    </div>
+    <div id="admin_content" class="admin_content"></div>
+</div>
+<script>
+    $("#logoutButton").bind('click',function(){
+        $.when(logoutApi()).done(function(data){
+            if(data.state == 0){
+                window.location.href="sign_in.html";
+            }
+        })
+    });
+</script>
+</body>
+</html>
