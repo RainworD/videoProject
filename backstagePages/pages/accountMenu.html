@@ -2,7 +2,7 @@
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-comments fa-2x admin_ui_mainColor"></i>
-			<span class="maintitle">评论管理</span>
+			<span class="maintitle">财务信息</span>
 		</div>	
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
@@ -11,17 +11,27 @@
 					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
 				</div>
 			</div>
+			<div class="admin_ui_search">
+				<div style="float:left;width:20%height:30px;line-height: 30px;">
+					今日统计
+				</div>
+				<div style="float:right;height:30px;">
+					<a href="#/accountMenuDetail.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">查看更多</a>
+				</div>
+			</div>
+			<div class="admin_ui_search">
+				<div style="float:left;width:20%;line-height: 30px;"><span>今日提现总额:</span><span></span></div><div style="float:left;width:20%;line-height: 30px;"><span>今日充值总额:</span><span></span></div><div style="float:left;width:20%;line-height: 30px;"><span>今日消费总额:</span><span></span></div><div style="float:left;width:20%;line-height: 30px;"><span>所有代理商账户余额:</span><span></span></div><div style="float:left;width:20%;line-height: 30px;"><span>押金总额:</span><span></span></div>
+			</div>
 			<table class="admin_ui_table">
 				<thead>
 					<tr>
-						<th>评论id</th>
-						<th>评论内容</th>
-						<th>发布人</th>
-						<th>发布时间</th>
-						<th>所属动态</th>
-						<th>所属企业</th>
+						<th>交易单号</th>
+						<th>交易时间</th>
+						<th>金额</th>
+						<th>交易类型</th>
+						<th>操作人</th>
+						<th>联系方式</th>
 						<th>代理商名称</th>
-						<th>操作</th>
 					</tr>
 				</thead>
 				<tbody id="commentManagement_commentData" class="admin_ui_table_hoverEffect">

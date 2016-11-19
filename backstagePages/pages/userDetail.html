@@ -2,36 +2,37 @@
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
-			<span class="maintitle">文章管理</span>
+			<span class="maintitle">后台用户管理</span>
 		</div>
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/articleManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">返回</a>
+					<a href="#/user.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">返回</a>
+				</div>
+				<div style="float:right;height:30px;">
+					<a href="#/user.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;">保存</a>
 				</div>
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name">文章标题：<input style="width: 92%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">账户名称：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name">行业标签：<span></span></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">账户类型：</span>
+						<select style="width: 88%;height: 30px;padding:0 10px;border:none;" type="" name="">
+								
+						</select>
+					</div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name">是否置顶：<label for="up"><input type="radio" name=selName"" id="up" style="margin:5px;">是</label><label for="down"><input type="radio" name=selName"" id="down" style="margin:5px;">否</label></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
-				<!-- <div class="admin_ui_cont"> -->
-					<textarea id="tinymce" style="display: none;"></textarea>
-				<!-- </div> -->
+				<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">登录账号：</span><span></span></div>
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">登录密码：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+				</div>
 			</div>
-		</div>
-	</div>
-</div>
-<div class="admin_ui_cont_bottomFixed">
-	<div class="admin_ui_button_group" style="float: right">
-		<div class="admin_ui_button admin_ui_button_green" data-urlback>
-			发布
 		</div>
 	</div>
 </div>
