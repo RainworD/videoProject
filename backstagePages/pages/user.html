@@ -17,7 +17,7 @@
 			<table class="admin_ui_table">
 				<thead>
 					<tr>
-						<th>id</th>
+						<th>账户id</th>
 						<th>账户名称</th>
 						<th>联系方式</th>
 						<th>账户权限</th>
@@ -27,26 +27,18 @@
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
 					<tr v-for="show in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
-						<td>{{show.id}}</td>
+						<td>{{show.user_id}}</td>
 						<td>{{show.user_nick}}</td>
 						<td>{{show.like}}</td>
 						<td>{{show.comment}}</td>
-						<td>{{show.read}}</td>
-						<td style="width:136px;">
-							<div class="admin_ui_select">
-							<select v-model="show._top" @change="topShowButton($index)">
-								<option :value="true">是</option>
-								<option :value="false">否</option>
-							</select>
-							</div>
-						</td>
-						<!-- <td>
-							<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" data-addShowImageAsTopSlideImage>设置</div>
-						</td> -->
 						<td>
-							<div @click="addShowImageAsBottomSlideImage($index)" class="admin_ui_button admin_ui_button_xs admin_ui_button_white">设置</div>
+							<div @click="addShowImageAsBottomSlideImage($index)" class="admin_ui_button admin_ui_button_xs admin_ui_button_white">重置</div>
 						</td>
 						<td class="admin_ui_table_action">
+							<a href="#/articleManagementDetail.html?{{encodeURI(JSON.stringify(website))}}" class="iconButton checkIcon">
+								<i class="fa fa-pencil"></i>
+								修改
+							</a>
 							<div class="iconButton removeIcon" @click="removeWebsite($index)">
 								<i class="fa fa-remove"></i>
 								启用
@@ -68,7 +60,8 @@ var vm = new Tvm({
 		keyword: "",
 		dataSource: [],
 		dataSource_filter: [],
-		pageIndex: 1
+		pageIndex: 1,
+		competence:["一般管理员","财务管理员"],
 	},
 	computed: {
 	},
@@ -114,33 +107,6 @@ var vm = new Tvm({
 			    }
 			});
 		},
-		topShowButton: function(index){
-			var self = this;
-			var showId = self.dataSource_filter[index].id,
-				value = self.dataSource_filter[index]._top;
-			if(!value){
-				// 取消置顶
-				$.when(cancelTopShow(showId)).done(function(data){
-					if(data.state == 0){
-						alert("取消置顶成功！");
-					}
-					else{
-						self.dataSource_filter[index]._top = true;
-					}
-				});
-			}
-			else{
-				// 置顶
-				$.when(topShow(showId)).done(function(data){
-					if(data.state == 0){
-						alert("置顶成功！");
-					}
-					else{
-						self.dataSource_filter[index]._top = false;
-					}
-				});
-			}
-		},
 		addShowImageAsBottomSlideImage: function(index){
 			var self = this;
 			var showId = self.dataSource_filter[index].id;
@@ -154,7 +120,7 @@ var vm = new Tvm({
 	},
 	created: function(){
 		var self = this;
-		$.when(getShowRank(1,0)).done(function(data){
+		$.when(getUserInfo(self.competence)).done(function(data){
 			if(data.state == 0){
 				self.dataSource = data.show;
 				self.dataSource_filter = self.dataSource;

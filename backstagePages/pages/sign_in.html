@@ -46,6 +46,7 @@ $("#loginButton").bind("click",function(){
 	else {
 		$.when(loginApi(mail,pass)).done(function (data) {
 			if (data.state == 0) {
+				localStorage.setItem("username",data.username);
 				window.location.href = "index.html";
 			}
 			else{
@@ -54,7 +55,6 @@ $("#loginButton").bind("click",function(){
 		})
 	}
 })
-
 </script>
 </body>
 </html>

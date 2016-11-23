@@ -49,147 +49,162 @@ li {
 body {
   background-color: #fff;
 }
-.topBar {
-  height: 40px;
-  line-height: 40px;
+.mui-segmented-control-negative.mui-segmented-control-inverted .mui-control-item.mui-active {
+  color: #e74f3a;
+  border: none;
+  background: none;
 }
-.topBar .topBarList {
-  width: 100%;
-  font-size: 0;
-  border-bottom: 1px solid #ddd;
-  height: 40px;
+.mui-segmented-control-negative.mui-segmented-control-inverted .mui-control-item.mui-active .listItem_name {
+  color: #e74f3a;
+  border-bottom: 2px solid #e74f3a;
 }
-.topBar .topBarList li {
-  font-size: 14px;
-  width: 33.3%;
+.redNum {
+  height: 18px;
+  width: 18px;
+  background-color: #e74f3a;
   display: inline-block;
-  color: #333;
+  position: absolute;
+  right: 32px;
+  top: 22px;
+  border-radius: 10px;
   text-align: center;
+  color: #fff;
+  font-size: 12px;
+  line-height: 18px;
 }
-.topBar .topBarList li .listItem_name {
-  position: relative;
-  display: inline-block;
-  height: 40px;
-}
-.topBar .topBarList li .listItem_name .redCircle {
+.redCircle {
   background-color: #e74f3a;
   border-radius: 8px;
   width: 16px;
   height: 16px;
   line-height: 16px;
   position: absolute;
-  top: 4px;
+  top: -5px;
   right: -8px;
   color: #fff;
   font-size: 12px;
   text-align: center;
 }
-.topBar .topBarList li .red {
+.listItem_name {
+  position: relative;
+  padding-bottom: 10px;
+}
+.red {
   color: #e74f3a;
-  border-bottom: 1px solid #e74f3a;
+  border-bottom: 2px solid #e74f3a;
 }
-.pageContent {
-  display: none;
+.no-padding-list .mui-table-view-cell {
+  padding: 0;
 }
-.pageContent .messageBox,
-.pageContent .commentBox {
+.messageBox,
+.commentBox {
   padding: 10px 15px;
   border-bottom: 1px solid #ddd;
 }
-.pageContent .messageBox .leftImg,
-.pageContent .commentBox .leftImg {
+.messageBox .leftImg,
+.commentBox .leftImg {
   float: left;
   margin-right: 12px;
 }
-.pageContent .messageBox .leftImg img,
-.pageContent .commentBox .leftImg img {
+.messageBox .leftImg img,
+.commentBox .leftImg img {
   display: block;
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
-.pageContent .messageBox .rightContent,
-.pageContent .commentBox .rightContent {
+.messageBox .rightContent,
+.commentBox .rightContent {
   padding-left: 50px;
 }
-.pageContent .messageBox .rightContent .rightTitle,
-.pageContent .commentBox .rightContent .rightTitle {
+.messageBox .rightContent .rightTitle,
+.commentBox .rightContent .rightTitle {
   margin: 10px 0;
   font-size: 16px;
   color: #333;
 }
-.pageContent .messageBox .rightContent .rightPara,
-.pageContent .commentBox .rightContent .rightPara {
+.messageBox .rightContent .rightPara,
+.commentBox .rightContent .rightPara {
   font-size: 14px;
   color: #666;
   margin-bottom: 10px;
 }
-.pageContent .messageBox .rightContent .articlePic,
-.pageContent .commentBox .rightContent .articlePic {
+.messageBox .rightContent .articlePic,
+.commentBox .rightContent .articlePic {
   display: block;
   float: left;
   width: 31.3%;
   margin-right: 3%;
   height: 60px;
 }
-.pageContent .messageBox .rightContent .articlePic_,
-.pageContent .commentBox .rightContent .articlePic_ {
+.messageBox .rightContent .articlePic_,
+.commentBox .rightContent .articlePic_ {
   margin: 0;
 }
-.pageContent .messageBox .rightContent .tips .leftTips,
-.pageContent .commentBox .rightContent .tips .leftTips {
+.messageBox .rightContent .tips .leftTips,
+.commentBox .rightContent .tips .leftTips {
   font-size: 10px;
   color: #aaa;
   float: left;
-  padding-top: 3px;
+  padding-top: 5px;
   height: 20px;
 }
-.pageContent .messageBox .rightContent .tips img,
-.pageContent .commentBox .rightContent .tips img {
+.messageBox .rightContent .tips img,
+.commentBox .rightContent .tips img {
   display: block;
   width: 18px;
   height: 15px;
   float: right;
-  padding-top: 3px;
+  padding-top: 5px;
 }
-.pageContent .messageBox .rightContent .tips:after,
-.pageContent .commentBox .rightContent .tips:after {
+.messageBox .rightContent .tips:after,
+.commentBox .rightContent .tips:after {
   display: block;
   content: '';
   clear: both;
 }
-.pageContent .messageBox .rightContent:after,
-.pageContent .commentBox .rightContent:after {
+.messageBox .rightContent:after,
+.commentBox .rightContent:after {
   display: block;
   content: '';
   clear: both;
 }
-.pageContent .messageBox:after,
-.pageContent .commentBox:after {
+.messageBox:after,
+.commentBox:after {
   display: block;
   content: '';
   clear: both;
 }
-.pageContent .commentBox {
+.commentBox {
   padding-left: 65px;
   border-bottom: none;
   padding-right: 0;
 }
-.pageContent .commentBox .leftImg {
+.commentBox .leftImg {
   margin-bottom: 5px;
 }
-.pageContent .commentBox .rightContent {
+.commentBox .rightContent {
+  padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
 }
-.pageContent .commentBox .rightContent .rightPara {
+.commentBox .rightContent .rightPara {
   font-size: 12px;
   color: #666;
   padding-right: 15px;
   margin-bottom: 0;
 }
-.pageContent .commentBox .rightContent .tips .leftTips {
+.commentBox .rightContent .tips .leftTips {
   height: auto;
   padding-top: 0;
+}
+.comment {
+  border-bottom: 1px solid #ddd;
+}
+.comment .commentBox {
+  padding-bottom: 0;
+}
+.comment .commentBox:last-child .rightContent {
+  border-bottom: none;
 }
 /*动态中心*/
 .deliverBox {
@@ -991,6 +1006,9 @@ body {
 }
 .messageShowBox .messageShowContent:last-child .rightContent {
   border: none;
+}
+.messageShowBox .mui-table-view-cell:after {
+  left: 55px;
 }
 .detailBox {
   padding: 10px 15px;

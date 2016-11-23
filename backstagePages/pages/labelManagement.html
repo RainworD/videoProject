@@ -7,8 +7,8 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input">
-					<span style="display: inline-block;border: 1px solid #ccc;background-color: #ddd;height: 24px;line-height: 20px;text-align: center;border-radius: 5px;width: 50px;">新增</span>
+					<input v-model="addword" @keyup.13="add" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input">
+					<span style="display: inline-block;border: 1px solid #ccc;background-color: #ddd;height: 24px;line-height: 20px;text-align: center;border-radius: 5px;width: 50px;" @click="add">新增</span>
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
@@ -24,10 +24,10 @@
 					</tr>
 				</thead>
 				<tbody id="labelManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="point in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
-						<td>{{point.id}}</td>
+					<tr v-for="data in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+						<td>{{data.id}}</td>
 						<td>
-							{{point.name}}
+							{{data.name}}
 						</td>
 						<td class="admin_ui_table_action">
 							<div class="iconButton removeIcon deleteCommentButton" @click="deleteCommentButton($index)">
@@ -49,9 +49,10 @@ var vm = new Tvm({
 	el: '#admin_content_innerBox',
 	data:{
 		keyword: "",
+		addword:"",
 		dataSource: [],
 		dataSource_filter: [],
-		pageIndex: 1
+		pageIndex: 1,
 	},
 	computed: {
 	},
@@ -66,6 +67,19 @@ var vm = new Tvm({
 				}
 			}
 			self.refreshTable();
+		},
+		add:function(){
+			var self = this;
+			self.dataSource_filter = [];
+			var name=self.addword;
+			$.ajax({
+				url:'/model/save/Label?name='+name,
+				type:'POST',
+				success:function(data){
+					console.log(data);
+				}
+
+			})
 		},
 		isContainKeyword: function(arr,keyword){
 			for(index in arr){
@@ -102,7 +116,8 @@ var vm = new Tvm({
 		var self = this;
 		$.when(getLabel()).done(function(data){
 			if(data.state == 0){
-				self.dataSource = data.point;
+				console.log(data);
+				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
 				self.refreshTable();
 			}

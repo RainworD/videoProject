@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="../source/mui/css/mui.css">
     <link rel="stylesheet" type="text/css" href="../source/Font-Awesome-3.2.1/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="../source/Font-Awesome-3.2.1/css/font-awesome-ie7.min.css">
+    <link rel="stylesheet" href="../source/css/imagepreview.css">
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
-    <script src="../source/mui/js/mui.js"></script>
+    <!-- <script src="../source/mui/js/mui.js"></script> -->
 </head>
 <style type="text/css">
     body{
@@ -26,11 +27,11 @@
         </p>
         <div class="deliverImg">
             <div class="deliverImg_">
-                <img src="../source/img/0.png" class="commonImg">
+                <img src="../source/img/0.png" data-preview-src="" data-preview-group="1" class="commonImg">
                 <img src="../source/img/remove.png" alt="" class="removeBtn">
             </div>
             <div class="deliverImg_">
-                <img src="../source/img/0.png" class="commonImg">
+                <img src="../source/img/0.png" data-preview-src="" data-preview-group="1" class="commonImg">
                 <img src="../source/img/remove.png" alt="" class="removeBtn">
             </div>
             <div class="deliverImg_ deliverImg_1 plusMoreImg">
@@ -94,6 +95,9 @@
         window.location.href="workmatesList.html"
     })
 </script>
+<script src="../source/mui/js/mui.min.js"></script>
+<script src="../source/mui/js/mui.zoom.js"></script>
+<script src="../source/mui/js/mui.previewimage.js"></script>
 <script>
     mui.init({
         swipeBack:true //启用右滑关闭功能
@@ -119,5 +123,7 @@
         // info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
     })
 </script>
-
+<script>
+    mui.previewImage();
+</script>
 </html>

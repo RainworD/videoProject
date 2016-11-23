@@ -8,12 +8,15 @@ var ADMIN_CONFIG = {
 $(function(){
     adminInit();
     function adminInit(){
-        $.when(getMyInfo()).done(function(data){
-            if(data.state == 0){
-                var info = data.info;
-                $("#admin_name").text(info.nick);
-            }
-        });
+        // $.when(getMyInfo()).done(function(data){
+        //     if(data.state == 0){
+        //         console.log(data);
+        //         var info = data.da;
+        //         $("#admin_name").text(info.username);
+        //     }
+        // });
+        var name=localStorage.getItem("username");
+        $("#admin_name").text(name);
     	eventBind();
     }
 });
