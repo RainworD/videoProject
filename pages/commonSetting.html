@@ -19,8 +19,8 @@
     }
 </style>
 <body>
-    <div class="flowSetting">
-        <ul class="workmatesList">
+    <div class="flowSetting mui-content">
+        <!-- <ul class="workmatesList">
             <a href="" id='showUserPicker'>
                 <li class="workmateItems">
                     <div class="rightContent">
@@ -42,6 +42,22 @@
                             <div class="mui-switch-handle"></div>
                         </div>
                     </div> 
+                </div>
+            </li>
+        </ul> -->
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right" id='showUserPicker'>
+                    <p class="rightPara">流量限制</p>
+                    <span id='userResult' class="flowShow"></span>
+                </a>
+            </li>
+        </ul>
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <p class="rightPara">设备自动升级</p>
+                <div class="mui-switch mui-switch-mini mui-active flowCtr">
+                    <div class="mui-switch-handle"></div>
                 </div>
             </li>
         </ul>

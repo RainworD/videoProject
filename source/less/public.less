@@ -150,9 +150,9 @@ body{
 			img{
 				display: block;
 			    width: 18px;
-			    height: 15px;
+			    height: 12px;
 			    float: right;
-			    padding-top: 5px;				
+			    margin-top: 7px;			
 			}
 			.after;
 		}
@@ -358,6 +358,42 @@ body{
 				}
 			}
 			.after;
+		}
+	}
+}
+.workmates_{
+	.mui-table-view{
+		.icon-img{
+			display:block;
+			width:50px;
+			height:50px;
+			max-width: 50px;
+		}
+		.rightPara{
+			height: 45px;
+		    line-height: 59px;
+		    font-size: 16px;
+		    color: #333;
+		}
+		.tips{
+			position: absolute;
+			right:15px;
+			top:26px;
+			img{
+				display:block;
+				width:20px;
+				height:20px;
+			}
+		}
+		.mui-table-view-cell:after{
+			right:15px;
+			left:75px;
+		}
+		&:before{
+			height:0;
+		}
+		&:after{
+			height:0;
 		}
 	}
 }
@@ -634,6 +670,13 @@ body{
 			}
 		}
 	}
+	.mui-table-view{
+		margin-top:10px;
+		.rightPara{
+			font-size: 14px;
+			color: #666;
+		}
+	}
 }
 .detailBox{
 	padding: 10px 15px;
@@ -725,6 +768,23 @@ body{
 				border:none;
 			}
 		}
+	}
+	.mui-table-view{
+		margin-top:10px!important;
+		.mui-table-view-cell{
+			span{
+		    	position: absolute;
+			    right: 36px;
+			    top: 12px;
+			    font-size: 14px;
+			    color: #999;
+		    }
+		    p{
+		    	font-size: 14px;
+    			color: #666;
+		    }
+		}
+
 	}
 }
 .myworkmates,.addworkmates{
@@ -956,6 +1016,36 @@ body{
 .messageShowBox .mui-table-view-cell:after{
 	left:55px;
 }
+.messageShowBox .mui-table-view-cell{
+	.timeShow{
+		position: absolute;
+	    top: 11px;
+	    right: 15px;
+	    font-size: 10px;
+	    color: #999;
+	}
+}
+.messageShowBox .mui-table-view-cell{
+	.timeShow{
+		position: absolute;
+	    top: 11px;
+	    right: 15px;
+	    font-size: 10px;
+	    color: #999;
+	}
+}
+a .mui-table-view-cell:after{
+	height:1px!important
+	;
+}
+.messageShowBox ul>a:last-child{
+	.mui-table-view-cell:after{
+		height:0px!important;
+	}
+}
+.messageShowBox ul:before{
+	height:0px;
+}
 .detailBox{
 	padding: 10px 15px;
 	.topTitle{
@@ -1054,6 +1144,42 @@ body{
 				border:none;
 			}
 		}
+	}
+}
+.company_list_{
+	.redNum{
+		height: 18px;
+	    width: 18px;
+	    background-color: #e74f3a;
+	    display: inline-block;
+	    position: absolute;
+	    right: 30px;
+	    top: 13px;
+	    border-radius: 10px;
+	    text-align: center;
+	    color: #fff;
+	    font-size: 12px;
+	    line-height: 18px;
+	}
+	.commoNum{
+		display: inline-block;
+	    position: absolute;
+	    right: 30px;
+    	top: 12px;
+	    font-size: 12px;
+	    color: #666;
+	}
+	.mui-table-view-cell{
+		.rightPara{
+			font-size: 14px;
+			color: #666;
+			span{
+				color: #333;
+			}
+		}
+	}
+	.mui-table-view-cell:after{
+		left:0;
 	}
 }
 .monitor_detail{
@@ -1322,4 +1448,29 @@ body{
 }
 .show{
 	display: block!important;
+}
+.mui-content > .mui-table-view:first-child{
+	margin-top:0;
+}
+.mui-navigate-right:after, .mui-push-left:after, .mui-push-right:after{
+	font-size: 23px;
+	right:10px;
+}
+.mui-content{
+	background-color: #f3f3f3;
+}
+.mui-poppicker-header .mui-btn{
+	font-size: 14px;
+    border: none;
+    background: transparent;
+    color: #0081eb;
+}
+.mui-picker{
+	background-color: #fff;
+}
+.mui-poppicker{
+	background-color: #fff;
+}
+.mui-poppicker-body{
+	border-top:none;
 }

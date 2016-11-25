@@ -153,9 +153,9 @@ body {
 .commentBox .rightContent .tips img {
   display: block;
   width: 18px;
-  height: 15px;
+  height: 12px;
   float: right;
-  padding-top: 5px;
+  margin-top: 7px;
 }
 .messageBox .rightContent .tips:after,
 .commentBox .rightContent .tips:after {
@@ -383,6 +383,38 @@ body {
   display: block;
   content: '';
   clear: both;
+}
+.workmates_ .mui-table-view .icon-img {
+  display: block;
+  width: 50px;
+  height: 50px;
+  max-width: 50px;
+}
+.workmates_ .mui-table-view .rightPara {
+  height: 45px;
+  line-height: 59px;
+  font-size: 16px;
+  color: #333;
+}
+.workmates_ .mui-table-view .tips {
+  position: absolute;
+  right: 15px;
+  top: 26px;
+}
+.workmates_ .mui-table-view .tips img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+.workmates_ .mui-table-view .mui-table-view-cell:after {
+  right: 15px;
+  left: 75px;
+}
+.workmates_ .mui-table-view:before {
+  height: 0;
+}
+.workmates_ .mui-table-view:after {
+  height: 0;
 }
 .userInfo .userTop {
   padding: 10px 15px;
@@ -667,6 +699,13 @@ body {
 .aboutus .workmatesList .workmateItems:last-child {
   border: none;
 }
+.aboutus .mui-table-view {
+  margin-top: 10px;
+}
+.aboutus .mui-table-view .rightPara {
+  font-size: 14px;
+  color: #666;
+}
 .detailBox {
   padding: 10px 15px;
 }
@@ -759,6 +798,20 @@ body {
 }
 .flowSetting .workmatesList .workmateItems:last-child {
   border: none;
+}
+.flowSetting .mui-table-view {
+  margin-top: 10px!important;
+}
+.flowSetting .mui-table-view .mui-table-view-cell span {
+  position: absolute;
+  right: 36px;
+  top: 12px;
+  font-size: 14px;
+  color: #999;
+}
+.flowSetting .mui-table-view .mui-table-view-cell p {
+  font-size: 14px;
+  color: #666;
 }
 .myworkmates,
 .addworkmates {
@@ -1010,6 +1063,30 @@ body {
 .messageShowBox .mui-table-view-cell:after {
   left: 55px;
 }
+.messageShowBox .mui-table-view-cell .timeShow {
+  position: absolute;
+  top: 11px;
+  right: 15px;
+  font-size: 10px;
+  color: #999;
+}
+.messageShowBox .mui-table-view-cell .timeShow {
+  position: absolute;
+  top: 11px;
+  right: 15px;
+  font-size: 10px;
+  color: #999;
+}
+a .mui-table-view-cell:after {
+  height: 1px!important
+	;
+}
+.messageShowBox ul > a:last-child .mui-table-view-cell:after {
+  height: 0px!important;
+}
+.messageShowBox ul:before {
+  height: 0px;
+}
 .detailBox {
   padding: 10px 15px;
 }
@@ -1110,6 +1187,38 @@ body {
 }
 .company_list .workmatesList .workmateItems:last-child {
   border: none;
+}
+.company_list_ .redNum {
+  height: 18px;
+  width: 18px;
+  background-color: #e74f3a;
+  display: inline-block;
+  position: absolute;
+  right: 30px;
+  top: 13px;
+  border-radius: 10px;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  line-height: 18px;
+}
+.company_list_ .commoNum {
+  display: inline-block;
+  position: absolute;
+  right: 30px;
+  top: 12px;
+  font-size: 12px;
+  color: #666;
+}
+.company_list_ .mui-table-view-cell .rightPara {
+  font-size: 14px;
+  color: #666;
+}
+.company_list_ .mui-table-view-cell .rightPara span {
+  color: #333;
+}
+.company_list_ .mui-table-view-cell:after {
+  left: 0;
 }
 .monitor_detail .mui-table-view {
   margin-top: 0;
@@ -1362,4 +1471,31 @@ body {
 }
 .show {
   display: block!important;
+}
+.mui-content > .mui-table-view:first-child {
+  margin-top: 0;
+}
+.mui-navigate-right:after,
+.mui-push-left:after,
+.mui-push-right:after {
+  font-size: 23px;
+  right: 10px;
+}
+.mui-content {
+  background-color: #f3f3f3;
+}
+.mui-poppicker-header .mui-btn {
+  font-size: 14px;
+  border: none;
+  background: transparent;
+  color: #0081eb;
+}
+.mui-picker {
+  background-color: #fff;
+}
+.mui-poppicker {
+  background-color: #fff;
+}
+.mui-poppicker-body {
+  border-top: none;
 }

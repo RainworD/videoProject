@@ -137,8 +137,10 @@
         line-height: 40px;
     }
     .head-img {
-        width: 40px;
-        height: 40px;
+        max-width: 60px!important;
+        height: 60px!important;
+        display: block;
+        width: 60px!important;
     }
     #head-img1 {
         position: absolute;
@@ -176,9 +178,21 @@
         width: 20px;
         height: 20px;
         vertical-align: middle;
-        margin-top: -5px;
+        margin-top: -4px;
         margin-right: 6px;
     }
+    .mui-media-body{
+        height: 60px;
+        line-height: 29px;
+    }
+    .rightTitle{
+        color: #666;
+        font-size: 14px;
+        span{
+            color:#333;
+            font-size: 14px;
+        }
+    } 
     /*问题反馈在setting页面单独的css==end*/
         
 </style>
@@ -276,7 +290,7 @@
                             <img class="mui-media-object mui-pull-left head-img" id="head-img" src="../source/img/a.png">
                             <div class="mui-media-body">
                                 <p class="rightTitle">真实姓名：<span>未设置</span></p>
-                                <p class="rightPara">手机号码：<span>13890002000</span></p>
+                                <p class="rightTitle">手机号码：<span>13890002000</span></p>
                             </div>
                         </a>
                     </li>
@@ -286,7 +300,7 @@
                         <a href="myWorkmates.html" class="mui-navigate-right"><img class="icon-img" src="../source/img/user.png">我的同事</a>
                     </li>
                     <li class="mui-table-view-cell">
-                        <a href="myActivity.html" class="mui-navigate-right"><img class="icon-img" src="../source/img/motivation.png"> 我的动态</a>
+                        <a href="myActivity.html" class="mui-navigate-right"><img class="icon-img" src="../source/img/motivation.png">我的动态</a>
                     </li>
                 </ul>
                 <ul class="mui-table-view mui-table-view-chevron">
@@ -301,7 +315,7 @@
                     </li>
                 </ul>
                 <ul class="mui-table-view">
-                    <li class="mui-table-view-cell" style="text-align: center;">
+                    <li class="mui-table-view-cell" style="text-align: center;color:#e74f3a;>
                         <a id="confirmBtn">退出登录</a>
                     </li>
                 </ul>

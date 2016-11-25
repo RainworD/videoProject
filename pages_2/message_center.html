@@ -16,9 +16,22 @@
     body{
         background-color: #f3f3f3;
     }
+    .icon-img{
+        width: 30px;
+        height: 30px!important;
+        margin-top: 5px;
+    }
+    .rightTitle {
+        font-size: 16px;
+        color: #333;
+    }
+    .rightPara {
+        font-size: 12px;
+        color: #999;
+    }
 </style>
 <body>
-    <div class="messageShowBox">
+    <!-- <div class="messageShowBox">
         <a href="message_detail.html">
             <div class="messageShowContent">
                 <div class="userTop">
@@ -152,6 +165,101 @@
                 </div>
             </div>
         </a>
+    </div> -->
+    <div class="mui-content messageShowBox">
+        <ul class="mui-table-view">
+            <a href="message_detail.html">
+                <li class="mui-table-view-cell">
+                    <img src="../source/img/warning.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
+                    <div class="mui-media-body">
+                        <p class="rightTitle">异常警告</p>
+                        <p class="rightPara">设备发生...</p>
+                        <div class="timeShow">
+                            <span class="date">2016-09-26</span>
+                            <span class="time">11:00</span>
+                        </div>
+                    </div>
+                </li>
+            </a>
+            <a href="message_detail.html">
+                <li class="mui-table-view-cell">
+                    <img src="../source/img/register.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
+                    <div class="mui-media-body">
+                        <p class="rightTitle">注册通知</p>
+                        <p class="rightPara">设备发生...</p>
+                        <div class="timeShow">
+                            <span class="date">2016-09-26</span>
+                            <span class="time">11:00</span>
+                        </div>
+                    </div>
+                </li>
+            </a>
+            <a href="message_detail.html">
+                <li class="mui-table-view-cell">
+                    <img src="../source/img/system.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
+                    <div class="mui-media-body">
+                        <p class="rightTitle">系统公告</p>
+                        <p class="rightPara">设备发生...</p>
+                        <div class="timeShow">
+                            <span class="date">2016-09-26</span>
+                            <span class="time">11:00</span>
+                        </div>
+                    </div>
+                </li>
+            </a>
+            <a href="message_detail.html">
+                <li class="mui-table-view-cell">
+                    <img src="../source/img/drawCash.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
+                    <div class="mui-media-body">
+                        <p class="rightTitle">提现提示</p>
+                        <p class="rightPara">设备发生...</p>
+                        <div class="timeShow">
+                            <span class="date">2016-09-26</span>
+                            <span class="time">11:00</span>
+                        </div>
+                    </div>
+                </li>
+            </a>
+            <a href="message_detail.html">
+                <li class="mui-table-view-cell">
+                    <img src="../source/img/addCash.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
+                    <div class="mui-media-body">
+                        <p class="rightTitle">充值成功</p>
+                        <p class="rightPara">设备发生...</p>
+                        <div class="timeShow">
+                            <span class="date">2016-09-26</span>
+                            <span class="time">11:00</span>
+                        </div>
+                    </div>
+                </li>
+            </a>
+            <a href="message_detail.html">
+                <li class="mui-table-view-cell">
+                    <img src="../source/img/deadline.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
+                    <div class="mui-media-body">
+                        <p class="rightTitle">设备到期</p>
+                        <p class="rightPara">设备发生...</p>
+                        <div class="timeShow">
+                            <span class="date">2016-09-26</span>
+                            <span class="time">11:00</span>
+                        </div>
+                    </div>
+                </li>
+            </a>
+            <a href="message_detail.html">
+                <li class="mui-table-view-cell">
+                    <img src="../source/img/motivation_.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
+                    <div class="mui-media-body">
+                        <p class="rightTitle">动态更新</p>
+                        <p class="rightPara">设备发生...</p>
+                        <div class="timeShow">
+                            <span class="date">2016-09-26</span>
+                            <span class="time">11:00</span>
+                        </div>
+                    </div>
+                </li>
+            </a>
+        </ul>
     </div>
 </body>
 <script type="text/javascript">
