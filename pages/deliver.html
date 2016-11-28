@@ -23,7 +23,7 @@
 <body>
     <div class="deliverBox">
         <p class="deliverBox_">
-            <textarea placeholder="输入文本，请少于200字"></textarea>
+            <textarea placeholder="输入文本，请少于200字" id="textArea"></textarea>
         </p>
         <div class="deliverImg">
             <!-- <div class="deliverImg_">
@@ -160,6 +160,7 @@
         }
     });
     $("#upload").bind("click",function(){
+        var photo_arr=[];
         if(type_arr.length){
             console.log("success");
             for(var i=0;i<type_arr.length;i++){
@@ -183,31 +184,23 @@
                         formData.append("key",key);
                         formData.append("policy",policy);
                         formData.append("file" , picFileList[i]);
-
-                        $.ajax({
-                            url: 'http://xiyou-monitor.oss-cn-hangzhou.aliyuncs.com',
-                            type: 'POST',
-                            cache: false,
-                            data: formData,
-                            processData: false,
-                            contentType: false
-                        }).done(function(res) {
-                            if(res.state==0){
-                                alert("发布成功！");
-                            }
-                            else{
-                                alert("发布失败！");
-                            }
-                        }).fail(function(res) {
-                        });
+                        $.when(uploadImg(formData)).done(function(data){
+                            alert("2222");
+                            photo_arr.push(data.id);
+                            var title;
+                            var text=$("#textArea").val();
+                            informed=[];
+                            $.when(deliverActivity(title,text,photo_arr,informed)).done(function(data){
+                                if(data.state==0){
+                                    alert("发布成功！")
+                                }
+                            })
+                        })
                     }
                     // formData.append('file', $('#file')[0].files[0]);
                 })
             }
         }
     })
-    function deliverActivity(){
-
-    }
 </script>
 </html>

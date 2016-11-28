@@ -100,3 +100,28 @@ function getImgUrl(type){//邀请同事
 	});
 	return ajax;
 }
+function uploadImg(formData){
+	var ajax=$.ajax({
+        url: 'http://xiyou-monitor.oss-cn-hangzhou.aliyuncs.com',
+        type: 'POST',
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false
+    })
+    return ajax;
+}
+function deliverActivity(title,text,photo,informed){
+	var ajax=$.ajax({
+        url: '/model/save/Dynamic',
+        type: 'POST',
+       	traditional:true,
+        data: {
+        	title:title,
+        	text:text,
+        	photo:photo,
+        	informed:informed,
+        },
+    })
+    return ajax;
+}
