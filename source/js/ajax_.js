@@ -11,21 +11,92 @@ function successHandle(data){
 		alert(data.msg);
 	}
 }
-function getLabel(){//获得标签列表
+function getUserInfo(){//获得我的信息
 	var ajax = $.ajax({
-		url: "/model/get/Label",
+		url: "/model/get/User?my=1",
 		type: "POST",
-		success: successHandle,
-		error: errorHandle
+		// success: successHandle,
+		// error: errorHandle
 	});
 	return ajax;
 }
-function getMyInfo(){
+function getAllActicities(){//获得所有动态
 	var ajax = $.ajax({
-		url: "/front/my_info",
+		url: "/model/get/Dynamic?add=comment",
 		type: "POST",
-		success: successHandle,
-		error: errorHandle
+		// success: successHandle,
+		// error: errorHandle
+	});
+	return ajax;
+}
+function getCommentActivities(){//获得评论动态
+	var ajax = $.ajax({
+		url: "/model/get/Dynamic?add=comment&commented=1",
+		type: "POST",
+		// success: successHandle,
+		// error: errorHandle
+	});
+	return ajax;
+}
+function getInformActivities(){//获得知会动态
+	var ajax = $.ajax({
+		url: "/model/get/Dynamic?add_=comment&informed=1",
+		type: "POST",
+		// success: successHandle,
+		// error: errorHandle
+	});
+	return ajax;
+}
+function postFeedback(text,contact){//反馈信息
+	var ajax = $.ajax({
+		url: "/model/save/Feedback",
+		type: "POST",
+		data:{
+			text:text,
+			contact:contact
+		}
+	});
+	return ajax;
+}
+function inviteColleague(text,contact,competence){//邀请同事
+	var ajax = $.ajax({
+		url: "/model/save/Register",
+		type: "POST",
+		data:{
+			text:text,
+			contact:contact,
+			competence:competence,
+		}
+	});
+	return ajax;
+}
+function deliverComment(text,dynamic){//邀请同事
+	var ajax = $.ajax({
+		url: "/model/save/Comment",
+		type: "POST",
+		data:{
+			text:text,
+			dynamic:dynamic,
+		}
+	});
+	return ajax;
+}
+function getWorkmates(){//邀请同事
+	var ajax = $.ajax({
+		url: "/model/get/User",
+		type: "POST",
+		data:{
+		}
+	});
+	return ajax;
+}
+function getImgUrl(type){//邀请同事
+	var ajax = $.ajax({
+		url: "/upload",
+		type: "POST",
+		data:{
+			type:type,
+		}
 	});
 	return ajax;
 }

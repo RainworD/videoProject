@@ -30,32 +30,39 @@
                 <li class="mui-table-view-cell">
                     <div class="addContent">
                         <span>手机号</span>
-                        <input type="text">
+                        <input type="text" id="telNum">
                         <img src="../source/img/phone.png" class="phone">
                     </div>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="mask"></div>
-    <div class="submitBox">
-        <p class="para_">确认退出该账号？</p>
-        <p class="para_bot"><span>取消</span><span>确认</span></p>
-    </div>
 </body>
 <script type="text/javascript">
     mui.init({
         swipeBack: true //启用右滑关闭功能
     });
-    document.getElementById("alertBtn").addEventListener('tap', function() {
-        mui.alert(' ','新增成功',function() {
+    function inviteMethod(){
+        var code=$(".topCode").children("span").val();
+        var phone=$("#telNum").val();
+        var competence;
+        $.when(getUserInfo()).done(function(data){
+            if(data.state==0){
+                competence=data.competence;
+            }
+            $.when(inviteColleague(text,contact,competence)).done(function(data){
+                if(data.state==0){
+                    mui.alert(' ','新增成功',function() {
            
-        });
-    });
-    document.getElementById("alertBtn").addEventListener('tap', function() {
-        mui.alert('请到”设置-隐私-通讯录“中开启联系人访问权限', '无法访问通讯录', function() {
+                    });
+                }
+                else{
+                    mui.alert('请到”设置-隐私-通讯录“中开启联系人访问权限', '无法访问通讯录', function() {
            
-        });
-    });
+                    });
+                }
+            })
+        })
+    }
 </script>
 </html>

@@ -220,6 +220,25 @@ body{
 			margin-right: 3%;
 			height: 75px;
 			position: relative;
+			display: block;
+		    float: left;
+		    width: 31%;
+		    margin-right: 2%;
+		    height: 75px;
+		    position: relative;
+		    margin-bottom: 3%;
+			input{
+				display: block;
+			    position: absolute;
+			    top: 0;
+			    left: 0;
+			    width: 100%;
+			    height: 100%;
+			    border: none;
+			    opacity: 0;
+			    z-index: 1;
+			    cursor: default;
+			}
 			.commonImg{
 				display: block;
 				width: 100%;
@@ -1473,4 +1492,43 @@ a .mui-table-view-cell:after{
 }
 .mui-poppicker-body{
 	border-top:none;
+}
+.enterHide{
+	// display:none;
+	position: fixed;
+    bottom: -40px;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    z-index: 2;
+    input{
+    	margin: 0;
+	    border: 1px solid #ddd;
+	    border-left: none;
+	    border-right: none;
+    }
+    label{
+    	position: absolute;
+	    right: 0px;
+	    width: auto;
+	    color: #999;
+	    background-color: #fff;
+	    height: 25px;
+	    top: 12px;
+	    padding: 0 15px;
+    }
+}
+#picture{
+	input{
+		display: block;
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    border: none;
+	    opacity: 0;
+	    z-index: 1;
+	    cursor: default;
+	}
 }

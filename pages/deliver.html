@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
-    <!-- <script src="../source/mui/js/mui.js"></script> -->
+    <script src="../source/js/ajax_.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -26,14 +26,21 @@
             <textarea placeholder="输入文本，请少于200字"></textarea>
         </p>
         <div class="deliverImg">
-            <div class="deliverImg_">
+            <!-- <div class="deliverImg_">
                 <img src="../source/img/0.png" data-preview-src="" data-preview-group="1" class="commonImg">
                 <img src="../source/img/remove.png" alt="" class="removeBtn">
             </div>
             <div class="deliverImg_">
                 <img src="../source/img/0.png" data-preview-src="" data-preview-group="1" class="commonImg">
                 <img src="../source/img/remove.png" alt="" class="removeBtn">
-            </div>
+            </div> -->
+           <!--  <div class="deliverImg_ deliverImg_1 plusMoreImg" id="uploadForm">
+                <a href="#picture">
+                    <input id="file" type="file"  multiple="multiple"/>
+                    <img src="../source/img/plus.png" alt="" class="commonImg">
+                </a>
+                <button id="upload" type="button">导入excel</button>
+            </div> -->
             <div class="deliverImg_ deliverImg_1 plusMoreImg">
                 <a href="#picture"><img src="../source/img/plus.png" alt="" class="commonImg"></a>
             </div>
@@ -51,30 +58,28 @@
             <img src="../source/img/userPlus.png" class="userPlus">
         </div>
     </div>
-    <!-- <div class="mask"></div>
-    <div class="addPhoto">
-        <ul class="addPhotoList">
-            <li class="addPhotoItem">拍照</li>
-            <li class="addPhotoItem">相册</li>
-        </ul>
-        <p class="cancelBtn">取消</p>
-    </div>
- -->
     <div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
         <ul class="mui-table-view">
             <li class="mui-table-view-cell">
                 <a href="#">拍照</a>
             </li>
-            <li class="mui-table-view-cell">
-                <a href="#">相册</a>
+            <li class="mui-table-view-cell" id="uploadForm">
+                <a>相册
+                </a>
+                <input id="file" type="file"  multiple="multiple"/>
             </li>
         </ul>
         <ul class="mui-table-view">
             <li class="mui-table-view-cell">
-                <a href="#picture"><b>取消</b></a>
+                <a href="#picture"  id="cancel"><b>取消</b></a>
             </li>
         </ul>
     </div>
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell" style="text-align: center;color:#e74f3a;">
+            <a id="upload">确认发布</a>
+        </li>
+    </ul>
 </body>
 <script type="text/javascript">
     $(".removeBtn").bind("click",function(){
@@ -122,8 +127,87 @@
         mui('#' + parent.id).popover('toggle');
         // info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
     })
+    mui.previewImage();
 </script>
 <script>
-    mui.previewImage();
+    var type_arr=[];
+    $("#file").on("change", function(e){
+        type_arr=[];
+        var btn=document.getElementById("cancel");
+        mui.trigger(btn,'tap');
+        // $("#picture").css("display","none");
+        // $(".mui-backdrop").removeClass("mui-active");
+        var file = e.target.files; //获取图片资源
+        // console.log(file.length);
+        for(var i=0; i< file.length; i++){
+            var type=file[i] .type;
+            type_arr.push(type);  
+            // if (!file[i].type.match('image.*')) {
+            //     return false;
+            // }//只选取图片文件
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file[i]); // 读取文件
+              // 渲染文件
+            reader.onload = function(arg) {
+                var img='<div class="deliverImg_">'+
+                            '<img src="' + arg.target.result + '" data-preview-src="" data-preview-group="1" class="commonImg">'+
+                            '<img src="../source/img/remove.png" alt="" class="removeBtn">'+
+                        '</div>'
+            // var img = '<img class="preview" src="' + arg.target.result + '" alt="preview"/>';
+                $(".deliverImg").prepend(img);
+            }
+        }
+    });
+    $("#upload").bind("click",function(){
+        if(type_arr.length){
+            console.log("success");
+            for(var i=0;i<type_arr.length;i++){
+                $.when(getImgUrl(type_arr[i])).done(function(data){
+                    console.log(data);
+                    if(data.state==0){
+                        var data=data.data;
+                        OSSAccessKeyId=data.OSSAccessKeyId;
+                        Signature=data.Signature;
+                        callback=data.callback;
+                        key=data.key;
+                        policy=data.policy;
+                    }
+                    var picFileList = $("#file").get(0).files;
+                    // var picFileList = $("#pic")[0].files;验证是否可行
+                    var formData = new FormData();
+                    for(var i=0; i< picFileList.length; i++){
+                        formData.append("OSSAccessKeyId",OSSAccessKeyId);
+                        formData.append("Signature",Signature);
+                        formData.append("callback",callback);
+                        formData.append("key",key);
+                        formData.append("policy",policy);
+                        formData.append("file" , picFileList[i]);
+
+                        $.ajax({
+                            url: 'http://xiyou-monitor.oss-cn-hangzhou.aliyuncs.com',
+                            type: 'POST',
+                            cache: false,
+                            data: formData,
+                            processData: false,
+                            contentType: false
+                        }).done(function(res) {
+                            if(res.state==0){
+                                alert("发布成功！");
+                            }
+                            else{
+                                alert("发布失败！");
+                            }
+                        }).fail(function(res) {
+                        });
+                    }
+                    // formData.append('file', $('#file')[0].files[0]);
+                })
+            }
+        }
+    })
+    function deliverActivity(){
+
+    }
 </script>
 </html>

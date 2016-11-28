@@ -85,17 +85,46 @@ function addAdmin(username,password,name,contact,competence){
 	});
 	return ajax;
 }
+//编辑管理员
+function editAdmin(id,password,name,contact,competence,enable){
+	var ajax = $.ajax({
+		url: "/createAdmin",
+		type: "POST",
+		data:{
+			"id": id,
+			"password": password,
+			'name':name,
+			'contact':contact,
+			"competence":competence,
+			"enable":enable,
+		},
+		// success: successHandle,
+		// error: errorHandle
+	});
+	return ajax;
+}
 function getUserInfo(competence){
 	var ajax = $.ajax({
 		url: "/model/get/User",
 		type: "POST",
-		trand
+		tranditional:true,
 		data:{
 			competence:competence,
-		}
+		},
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
-
+function deleteLabel(id){
+	var ajax = $.ajax({
+		url: "/model/delete/Label",
+		data:{
+			"id": id
+		},
+		type: "POST",
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}

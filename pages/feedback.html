@@ -23,11 +23,11 @@
     <div class="feedbackBox">
         <p class="tips">请留下您的宝贵意见</p>
         <p class="deliverBox_">
-            <textarea placeholder="感谢您百忙之中的用心反馈"></textarea>
+            <textarea placeholder="感谢您百忙之中的用心反馈" id="feedContent"></textarea>
         </p>
         <p class="tips">请留下您的联系方式</p>
         <p class="deliverBox_">
-            <input placeholder="以便我们联系您和您进一步的沟通和礼物赠送">
+            <input placeholder="以便我们联系您和您进一步的沟通和礼物赠送" id="telNum">
         </p>
     </div>
     <div class="mask"></div>
@@ -38,5 +38,14 @@
     </div>
 </body>
 <script type="text/javascript">
+    function excute(){
+        var text=$("#feedContent").val();
+        var contact=$("#telNum").val();
+        $.when(postFeedback(text,contact)).done(function(data){
+            if(data.state==0){
+                alert("发布成功！")
+            }
+        })
+    }
 </script>
 </html>

@@ -17,7 +17,7 @@
 			<table class="admin_ui_table">
 				<thead>
 					<tr>
-						<th>账户id</th>
+						<!-- <th>账户id</th> -->
 						<th>账户名称</th>
 						<th>联系方式</th>
 						<th>账户权限</th>
@@ -26,20 +26,20 @@
 					</tr>
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="show in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
-						<td>{{show.user_id}}</td>
-						<td>{{show.user_nick}}</td>
-						<td>{{show.like}}</td>
-						<td>{{show.comment}}</td>
+					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
+						<!-- <td>{{show.id}}</td> -->
+						<td>{{show.username}}</td>
+						<td>{{show.contact}}</td>
+						<td>{{show.competence}}</td>
 						<td>
-							<div @click="addShowImageAsBottomSlideImage($index)" class="admin_ui_button admin_ui_button_xs admin_ui_button_white">重置</div>
+							<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white">重置</div>
 						</td>
 						<td class="admin_ui_table_action">
-							<a href="#/articleManagementDetail.html?{{encodeURI(JSON.stringify(website))}}" class="iconButton checkIcon">
+							<a :href="getUrl(show.id)" class="iconButton checkIcon">
 								<i class="fa fa-pencil"></i>
 								修改
 							</a>
-							<div class="iconButton removeIcon" @click="removeWebsite($index)">
+							<div class="iconButton removeIcon">
 								<i class="fa fa-remove"></i>
 								启用
 							</div>
@@ -71,7 +71,7 @@ var vm = new Tvm({
 			self.dataSource_filter = [];
 			for(index in self.dataSource){
 				var _data = self.dataSource[index];
-				if(self.isContainKeyword([_data.id, _data.user_nick],self.keyword)){
+				if(self.isContainKeyword([_data.username, _data.contact,_data.competence],self.keyword)){
 					self.dataSource_filter.push(_data);
 				}
 			}
@@ -107,22 +107,28 @@ var vm = new Tvm({
 			    }
 			});
 		},
-		addShowImageAsBottomSlideImage: function(index){
-			var self = this;
-			var showId = self.dataSource_filter[index].id;
-			// 设为底部轮播图
-			$.when(addShowImageAsBottomSlideImage(showId)).done(function(data){
-				if(data.state == 0){
-					alert("设置成功！");
-				}
-			});
+		getUrl:function(val){
+			return '#/userDetail.html?id='+val;
 		}
+		// changeUserState: function(index){
+		// 	var self = this;
+		// 	if(confirm("您确定要删除该用户吗？")){
+		// 		$.when(deleteUser(self.dataSource_filter[index].id)).done(function(data){
+		// 			if(data.state == 0){
+		// 				alert("删除成功");
+		// 				self.dataSource_filter.splice(index,1);
+		// 				self.refreshTable();
+		// 			}
+		// 		});
+		// 	}
+		// }
+		//启用！未有api
 	},
 	created: function(){
 		var self = this;
 		$.when(getUserInfo(self.competence)).done(function(data){
 			if(data.state == 0){
-				self.dataSource = data.show;
+				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
 				self.refreshTable();
 			}

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/js/ajax_.js"></script>
     <script src="../source/mui/js/mui.js"></script>
 </head>
 <body>
@@ -84,7 +85,7 @@
     </div> -->
     <div class="workmates_ mui-content">
         <ul class="mui-table-view">
-            <li class="mui-table-view-cell">
+            <!-- <li class="mui-table-view-cell">
                 <img src="../source/img/q.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
                 <div class="mui-media-body">
                     <p class="rightPara">月风溪</p>
@@ -110,7 +111,7 @@
                        <img src="../source/img/uncheck.png" class="checkImg">
                     </p>
                 </div>
-            </li>
+            </li> -->
         </ul>
     </div>
 </body>
@@ -126,6 +127,22 @@
         else{
             $(this).attr("src","../source/img/checked.png");
             $(this).addClass("checkJudge");
+        }
+    })
+    $.when(getWorkmates()).done(function(data){
+        var data=data.data;
+        for(var i=0;i<data.length;i++){
+            var item=$('<li class="mui-table-view-cell">'+
+                '<img src="../source/img/q.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">'+
+                '<div class="mui-media-body">'+
+                    '<p class="rightPara">月风溪</p>'+
+                    '<p class="tips">'+
+                       '<img src="../source/img/uncheck.png" class="checkImg">'+
+                    '</p>'+
+                '</div>'+
+            '</li>');
+            item.find(".rightPara").text(data[i].name);
+            $(".mui-table-view").append(item);
         }
     })
 </script>

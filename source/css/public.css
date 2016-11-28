@@ -226,12 +226,27 @@ body {
   width: 100%;
 }
 .deliverBox .deliverImg .deliverImg_ {
-  display: block;
-  float: left;
   width: 31.3%;
   margin-right: 3%;
+  display: block;
+  float: left;
+  width: 31%;
+  margin-right: 2%;
   height: 75px;
   position: relative;
+  margin-bottom: 3%;
+}
+.deliverBox .deliverImg .deliverImg_ input {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  opacity: 0;
+  z-index: 1;
+  cursor: default;
 }
 .deliverBox .deliverImg .deliverImg_ .commonImg {
   display: block;
@@ -1498,4 +1513,40 @@ a .mui-table-view-cell:after {
 }
 .mui-poppicker-body {
   border-top: none;
+}
+.enterHide {
+  position: fixed;
+  bottom: -40px;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  z-index: 2;
+}
+.enterHide input {
+  margin: 0;
+  border: 1px solid #ddd;
+  border-left: none;
+  border-right: none;
+}
+.enterHide label {
+  position: absolute;
+  right: 0px;
+  width: auto;
+  color: #999;
+  background-color: #fff;
+  height: 25px;
+  top: 12px;
+  padding: 0 15px;
+}
+#picture input {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  opacity: 0;
+  z-index: 1;
+  cursor: default;
 }
