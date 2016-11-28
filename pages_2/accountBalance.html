@@ -8,9 +8,13 @@
     <title>视频监控</title>
     <link rel="stylesheet" href="../source/mui/css/mui.css">
     <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/vue.css">
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -21,8 +25,8 @@
     <div class="accountBalanceBox">
         <div class="topShow">
             <p class="para_1">可用余额</p>
-            <p class="para_2">￥&nbsp;6,000</p>
-            <p class="para_3">设备押金:&nbsp;&nbsp;￥&nbsp;4,000</p>
+            <p class="para_2">￥&nbsp;{{price}}</p>
+            <p class="para_3">设备押金:&nbsp;&nbsp;￥&nbsp;{{deposit}}</p>
             <p class="bottomBtn">
                 <a href="recharge_main.html">
                     <span class="recharge">充值</span>   
@@ -79,6 +83,40 @@
         </ul>
     </div>
 </body>
-<script type="text/javascript">
+<script>
+$(function() {
+ mui.init();
+ var vm = new Vue({
+        el: "body",
+        data: {
+            price: 0,
+            deposit: 0
+        },
+        computed: {
+            
+        },
+        methods: {
+            
+        },
+        created: function() {
+            var self = this;
+            $.when(b_getBusiness()).done(function(data){
+                if(data.state == 0){
+                    self.price = data.data[0].price;
+                    self.deposit = data.data[0].deposit;
+                }
+            });
+            $.when(b_getOrder()).done(function(data){
+                console.log(data)
+                if(data.state == 0){
+                    // console.
+                }
+            })
+        },
+        ready: function() {
+
+        }
+    })
+});
 </script>
 </html>

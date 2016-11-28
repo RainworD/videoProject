@@ -46,6 +46,9 @@ ul,
 li {
   list-style: none;
 }
+.mui-h5 {
+  color: #666;
+}
 body {
   background-color: #fff;
 }
