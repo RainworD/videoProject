@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
+
 </head>
 <style type="text/css">
     body{
@@ -19,21 +25,10 @@
 </style>
 <body>
     <div class="company_list_ mui-content">
-        <ul class="mui-table-view">
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right" href="company_activity.html">
-                    <span class="mui-h5">企业名称</span>
-                </a>
-            </li>
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right" href="company_activity.html">
-                    <span class="mui-h5">企业名称</span>
-                    <span class="mui-badge mui-badge-danger">45</span>
-                </a>
-            </li>
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right">
-                    <span class="mui-h5">企业名称</span>
+        <ul class="mui-table-view" v-if="children.length > 0">
+            <li class="mui-table-view-cell" v-for="child in children">
+                <a class="mui-navigate-right" href="company_activity.html?{{encodeObj({'id':child.id})}}">
+                    <span class="mui-h5">{{child.user}}</span>
                     <span class="mui-badge mui-badge-danger">2</span>
                 </a>
             </li>
@@ -41,5 +36,43 @@
     </div>
 </body>
 <script>
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            children: []
+        },
+        computed: {
+            link: function(){
+                console.log(this.children.user)
+                return "company_activity.html?"+encodeObj({"companyId": this.children.id});
+            }
+        },
+        methods: {
+            
+        },
+        created: function() {
+            var self = this;
+            $.when(b_getSubBussiness()).done(function(data){
+                console.log(data);
+                if(data.state == 0){
+                    self.children = data.data;
+                    self.children = [{
+                        user: "公司1",
+                        id: "5"
+                    },
+                    {
+                        user: "公司2",
+                        id: "9"
+                    }]
+                }
+            });
+        },
+        ready: function() {
+
+        }
+    })
+});
 </script>
 </html>

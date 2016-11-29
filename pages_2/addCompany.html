@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -20,48 +25,79 @@
 <body>
     <div class="addworkmates">
         <div class="mui-content">
-            <p class="topCode">邀请码:&nbsp;&nbsp;<span>JK001002</span></p>
-            <ul class="mui-table-view">
-                <li class="mui-table-view-cell">
-                    <div class="addContent">
-                        <span>企业名称</span>
-                        <input type="text" placeholder="请输入企业名称" class="inputInfo"> 
-                    </div>
-                </li>
-                <li class="mui-table-view-cell">
-                    <div class="addContent">
-                        <span>企业名称</span>
-                        <input type="text" placeholder="请输入联系人" class="inputInfo">
-                    </div>
-                </li>
-                <li class="mui-table-view-cell">
-                    <div class="addContent">
-                        <span>企业名称</span>
-                        <input type="text" placeholder="请输入联系电话" class="inputInfo">
-                    </div>
-                </li>
-            </ul>
+            <h5 class="mui-content-padded">邀请码:&nbsp;&nbsp;<span>{{code}}</span></h5>
+            <form class="mui-input-group">
+                <div class="mui-input-row">
+                    <label>企业名称</label>
+                    <input v-model="companyName" class="mui-text-right" type="text" placeholder="请输入企业名称">
+                </div>
+                <div class="mui-input-row">
+                    <label>联系人</label>
+                    <input v-model="companyContractName" class="mui-text-right" type="text" placeholder="请输入联系人">
+                </div>
+                <div class="mui-input-row">
+                    <label>联系电话</label>
+                    <input v-model="companyPhone" class="mui-text-right" type="text" placeholder="请输入联系电话">
+                </div>
+            </form>
         </div>
     </div>
-    <div class="mask"></div>
-    <div class="submitBox">
-        <p class="para_">确认退出该账号？</p>
-        <p class="para_bot"><span>取消</span><span>确认</span></p>
-    </div>
 </body>
-<script type="text/javascript">
-    mui.init({
-        swipeBack: true //启用右滑关闭功能
-    });
-    document.getElementById("alertBtn").addEventListener('tap', function() {
-        mui.alert(' ','新增成功',function() {
-           
-        });
-    });
-    document.getElementById("alertBtn").addEventListener('tap', function() {
-        mui.alert('请到”设置-隐私-通讯录“中开启联系人访问权限', '无法访问通讯录', function() {
-           
-        });
-    });
+<script>
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            code: "",
+            companyName: "",
+            companyContractName: "",
+            companyPhone: ""
+        },
+        computed: {
+            
+        },
+        methods: {
+            applyButton: function(){
+                var self = this;
+                if(checkEmpty(self.companyPhone)||checkEmpty(self.companyName)){
+                    mui.toast("请补全信息");
+                }
+                else if(!isRightPhoneNumber(self.companyPhone)){
+                    mui.toast("请输入合法的手机号");
+                }
+                else{
+                    mui.confirm("您确定邀请吗？",null,null,function(data){
+                        if(data.index == 1){
+                            $.when(b_createBCompanyParent(getB_Code(),self.companyPhone,self.companyName)).done(function(data){
+                                console.log(data);
+                            })
+                        }
+                    })
+                }
+            }
+        },
+        created: function() {
+            var self = this;
+            self.code = getB_Code();
+            window.applyButton = self.applyButton;
+        }
+    })
+});
+
 </script>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

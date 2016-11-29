@@ -90,6 +90,7 @@ body{
     text-align: center;
 }
 .listItem_name{
+	color: #666;
 	position:relative;
 	padding-bottom:10px;
 }
@@ -104,9 +105,25 @@ body{
 .no-padding-list .mui-table-view-cell{
 	padding:0;
 }
-.messageBox,.commentBox{
-	padding: 10px 15px;
-	border-bottom: 1px solid #ddd;
+.messageBox{
+	.leftImg{
+		float: left;
+		margin-right: 12px;
+		img{
+			display: block;
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+		}
+	}
+	.rightContent{
+		padding-left: 70px;
+		.tips{
+			margin-bottom: -10px;
+		}
+	}
+}
+.commentBox{
 	.leftImg{
 		float: left;
 		margin-right: 12px;
@@ -118,17 +135,23 @@ body{
 		}
 	}
 	.rightContent{
-		// float: left;
 		padding-left: 50px;
+	}
+}
+.messageBox,.commentBox{
+	padding: 10px 15px;
+	border-bottom: 1px solid #ddd;
+	.rightContent{
 		.rightTitle{
-			margin:10px 0;
+			margin:6px 0;
 			font-size: 16px;
 			color:#333;
 		}
 		.rightPara{
 			font-size: 14px;
-			color: #666;
-			margin-bottom: 10px;
+			color: #999;
+			margin-bottom: 5px;
+			line-height: 20px;
 		}
 		.articlePic{
 			display: block;
@@ -142,22 +165,18 @@ body{
 		}
 		.tips{
 			.leftTips{
-				font-size: 10px;
+				font-size: 8px;
 				color: #aaa;
-				float: left;
-				padding-top: 5px;
-				height: 20px;
+				height: 22px;
 			}
 			img{
 				display: block;
 			    width: 18px;
 			    height: 12px;
 			    float: right;
-			    margin-top: 7px;			
+			    margin-top: 5px;			
 			}
-			.after;
 		}
-		.after;
 	}
 	.after;
 }
@@ -169,15 +188,16 @@ body{
 		margin-bottom: 5px;
 	}
 	.rightContent{
-		padding-bottom:10px;
+		// padding-bottom:10px;
 		border-bottom: 1px solid #ddd;
 		.rightPara{
 			font-size: 12px;
-			color: #666;
 			padding-right: 15px;
+			line-height: 18px;
 			margin-bottom: 0;
 		}
 		.tips{
+			margin-bottom: 0;
 			.leftTips{
 				height: auto;
 				padding-top: 0;

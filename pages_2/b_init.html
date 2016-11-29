@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src="../source/js/jquery-1.11.1.min.js"></script>
+	<script src="../source/js/ajax_b.js"></script>
+	<script src="../source/js/public.js"></script>
+</head>
+<body>
+<script>
+$.when(b_getBusiness()).done(function(data){
+	if(data.state == 0){
+		var _data = data.data[0];
+		window.localStorage.setItem("b_code",_data.code);
+		window.localStorage.setItem("b_name",_data.name);
+		window.localStorage.setItem("b_phone",_data.phone);
+		window.localStorage.setItem("b_contact",_data.contact);
+		window.localStorage.setItem("b_deposit",_data.deposit);
+		window.localStorage.setItem("b_price",_data.price);
+		window.localStorage.setItem("b_id",_data.id);
+		window.location.href = getQueryData().url;
+	}
+});
+</script>
+</body>
+</html>

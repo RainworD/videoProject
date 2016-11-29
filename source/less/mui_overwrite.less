@@ -1,3 +1,75 @@
+@import url("init.less");
+.wordbreak{
+	word-break: break-all;
+}
+.fix7_5{
+	position: relative;
+	height: 0;
+	width: 100%;
+	padding-bottom: 71.4%;
+	&>*{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
+}
+.photoPreviewBox{
+	width: 100%;
+	margin-bottom: -4px;
+	.photo{
+		width: ~"calc(( 100% - 8px ) / 3)";
+		margin-bottom: 4px;
+	}
+}
+.flex{
+	display: -webkit-flex;
+    display:         flex;
+}
+.flex-space-between{
+	justify-content: space-between;
+}
+.flex-wrap{
+	flex-wrap: wrap;
+}
 .mui-h5{
 	color: #666;
 }
+.mui-segmented-control{
+	background-color: #fff;
+}
+.mui-badge.right-top{
+	position: absolute;
+	right: -10px;
+	top: -9px;
+}
+.mui-toast-container{
+	bottom: auto;
+	.veryCenter;
+}
+.imageIcon{
+	display: inline-block;
+	height: 18px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

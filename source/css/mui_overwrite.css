@@ -1,3 +1,106 @@
+.after:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.before:before {
+  display: block;
+  content: '';
+  clear: both;
+}
+.veryCenter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.verticalCenter {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  -webkit-transform: translate(0, -50%);
+}
+.horizontalCenter {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  -webkit-transform: translate(-50%, 0);
+}
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.full {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+ul,
+p {
+  margin: 0;
+  padding: 0;
+}
+ul,
+li {
+  list-style: none;
+}
+.wordbreak {
+  word-break: break-all;
+}
+.fix7_5 {
+  position: relative;
+  height: 0;
+  width: 100%;
+  padding-bottom: 71.4%;
+}
+.fix7_5 > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.photoPreviewBox {
+  width: 100%;
+  margin-bottom: -4px;
+}
+.photoPreviewBox .photo {
+  width: calc(( 100% - 8px ) / 3);
+  margin-bottom: 4px;
+}
+.flex {
+  display: -webkit-flex;
+  display: flex;
+}
+.flex-space-between {
+  justify-content: space-between;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
 .mui-h5 {
   color: #666;
+}
+.mui-segmented-control {
+  background-color: #fff;
+}
+.mui-badge.right-top {
+  position: absolute;
+  right: -10px;
+  top: -9px;
+}
+.mui-toast-container {
+  bottom: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.imageIcon {
+  display: inline-block;
+  height: 18px;
 }
