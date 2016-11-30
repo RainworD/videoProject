@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -18,77 +23,45 @@
     }
 </style>
 <body>
-    <div class="myworkmates">
-        <div class="mui-content">
-            <ul class="mui-table-view">
-                <li class="mui-table-view-cell goDetail">
-                    <div class="mui-slider-right mui-disabled">
-                        <a class="mui-btn mui-btn-grey grey" href="addCompany.html">编辑</a>
-                        <a class="mui-btn mui-btn-red red">停用</a>
-                        <a class="mui-btn mui-btn-green green">启用</a>
-                    </div>
-                    <div class="mui-slider-handle listContent">
-                        <span>企业名称</span>
-                        <span class="redColor" data-type="1">(停用)</span>
-                        <span class="commonNum"><span>4</span>/<span>5</span></span>
-                        <img src="../source/img/right.png" alt="" class="lookMore">                    
-                    </div>
-                </li>
-                <li class="mui-table-view-cell goDetail">
-                    <div class="mui-slider-right mui-disabled">
-                        <a class="mui-btn mui-btn-grey grey" href="addCompany.html">编辑</a>
-                        <a class="mui-btn mui-btn-red red">停用</a>
-                        <a class="mui-btn mui-btn-green green">启用</a>
-                    </div>
-                    <div class="mui-slider-handle listContent">
-                        <span>企业名称</span>
-                        <span class="redColor" data-type="0"></span>
-                        <span class="commonNum"><span>4</span>/<span>5</span></span>
-                        <img src="../source/img/right.png" alt="" class="lookMore">                    
-                    </div>  
-                </li>
-                <li class="mui-table-view-cell goDetail">
-                        <div class="mui-slider-right mui-disabled">
-                            <a class="mui-btn mui-btn-grey grey" href="addCompany.html">编辑</a>
-                            <a class="mui-btn mui-btn-red red">停用</a>
-                            <a class="mui-btn mui-btn-green green">启用</a>
-                        </div>
-                        <div class="mui-slider-handle listContent">
-                            <span>企业名称</span>
-                            <span class="redColor" data-type="0"></span>
-                            <span class="commonNum"><span>4</span>/<span>5</span></span>
-                            <img src="../source/img/right.png" alt="" class="lookMore">                    
-                        </div>
-                </li>
-            </ul>
-        </div>
+    <div class="mui-content">
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell" v-for="company in datalist">
+                <div class="mui-slider-right mui-disabled">
+                    <a class="mui-btn mui-btn-grey" href="addCompany.html">编辑</a>
+                    <a class="mui-btn mui-btn-green" v-if="!company.enable">启用</a>
+                    <a class="mui-btn mui-btn-red" v-else>停用</a>
+                </div>
+                <a href="company_device_detail.html" class="mui-slider-handle mui-navigate-right listContent">
+                    <span>{{company.name}}</span>
+                    <span class="colorred" v-if="!company.enable">(停用)</span>
+                    <span class="mui-pull-right color9" style="margin-right: 10px;">4/5</span>
+                </a>
+            </li>
+        </ul>
     </div>
 </body>
-<script type="text/javascript">
-     mui(".mui-table-view").on("tap",".red",function(){
-        $(this).removeClass("show").siblings(".green").addClass("show");
-        $(this).parent(".mui-slider-right").siblings('.listContent').children("span").eq(1).text("(停用)").addClass("redColor"); 
-    });
-    mui(".mui-table-view").on("tap",".green",function(){
-        $(this).removeClass("show").siblings(".red").addClass("show");
-        $(this).parent(".mui-slider-right").siblings('.listContent').children("span").eq(1).text("").addClass("redColor"); 
-    });
-    $(".mui-table-view .listContent").each(function(i){
-        var type=$(".listContent").eq(i).children("span").eq(1).attr("data-type");
-        if(type=="0"){
-            $(".listContent").eq(i).siblings(".mui-slider-right").children(".red").addClass("show").siblings(".green").removeClass("show");
-        }
-        else if(type=="1"){
-            $(".listContent").eq(i).siblings(".mui-slider-right").children(".green").addClass("show").siblings(".red").removeClass("show");
-        }
-        else{
-            $(".listContent").eq(i).siblings(".mui-slider-right").children("a").removeClass("show");
+<script>
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            datalist: []
+        },
+        computed: {
+            
+        },
+        methods: {
+        },
+        created: function() {
+            var self = this;
+            $.when(b_getAllCompany()).done(function(data){
+                if(data.state == 0){
+                    self.datalist = data.data;
+                }
+            })
         }
     })
-    $(".goDetail").bind("tap",function(){
-        mui.openWindow({
-            url:"company_detail.html"
-        })
-    })
+});
 </script>
 </html>

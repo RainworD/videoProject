@@ -23,23 +23,21 @@
     }
     .icon-img{
         width: 30px;
-        height: 30px !important;
+        height: 30px!important;
         margin-top: 5px;
     }
 </style>
 <body>
     <div class="mui-content messageShowBox">
         <ul class="mui-table-view">
-            <li class="mui-table-view-cell" v-for="announce in announces">
-                <a href="message_detail.html">
+            <li class="mui-table-view-cell mui-media" v-for="announce in announces">
+                <a class="mui-navigate-right" href="message_center.html">
                     <img :src="announce.image" class="mui-media-object mui-pull-left head-img icon-img">
                     <div class="mui-media-body">
                         {{announce.title}}
                         <p class="mui-ellipsis">{{announce.text}}</p>
-                        <div class="timeShow">
-                            {{stamp2formatTime(announce.in_time)}}
-                        </div>
                     </div>
+                    <span class="mui-badge mui-badge-danger">5</span>
                 </a>
             </li>
         </ul>
@@ -52,18 +50,33 @@ var dataList = [{
     text: "设备发生...",
     in_time: 0
 },{
-    image: "../source/img/warning.png",
-    title: "异常警告",
+    image: "../source/img/register.png",
+    title: "注册通知",
     text: "设备发生...",
     in_time: 0
 },{
-    image: "../source/img/warning.png",
-    title: "异常警告",
+    image: "../source/img/system.png",
+    title: "系统公告",
     text: "设备发生...",
     in_time: 0
 },{
-    image: "../source/img/warning.png",
-    title: "异常警告",
+    image: "../source/img/drawCash.png",
+    title: "提现提示",
+    text: "设备发生...",
+    in_time: 0
+},{
+    image: "../source/img/addCash.png",
+    title: "充值成功",
+    text: "设备发生...",
+    in_time: 0
+},{
+    image: "../source/img/deadline.png",
+    title: "设备到期",
+    text: "设备发生...",
+    in_time: 0
+},{
+    image: "../source/img/motivation_.png",
+    title: "动态更新",
     text: "设备发生...",
     in_time: 0
 }];
@@ -82,9 +95,9 @@ $(function() {
         created: function() {
             var self = this;
             self.announces = dataList;
-            // $.when(b_getNewestAnnounce()).done(function(data){
-
-            // })
+            $.when(b_getNewestAnnounce()).done(function(data){
+                console.log(data);
+            })
         }
     })
 });

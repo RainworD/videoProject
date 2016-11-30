@@ -15,7 +15,7 @@
     <script src="../source/js/vue.js"></script>
     <script src="../source/js/vue-tap.js"></script>
     <script src="../source/js/public.js"></script>
-    <script src="../source/js/public_b.js"></script>
+    <script src="../source/js/public_b.js?1"></script>
 </head>
 <style type="text/css">
     body{
@@ -25,7 +25,7 @@
 <body>
     <div class="addworkmates">
         <div class="mui-content">
-            <h5 class="mui-content-padded">邀请码:&nbsp;&nbsp;<span>{{code}}</span></h5>
+            <h6 class="mui-content-padded">邀请码:&nbsp;&nbsp;<span>{{code}}</span></h6>
             <form class="mui-input-group">
                 <div class="mui-input-row">
                     <label>企业名称</label>
@@ -52,24 +52,45 @@ $(function() {
             code: "",
             companyName: "",
             companyContractName: "",
-            companyPhone: ""
+            companyPhone: "",
+            queryData: {}
         },
         computed: {
             
         },
         methods: {
-            applyButton: function(){
-                var self = this;
+            formCheck: function(){
                 if(checkEmpty(self.companyPhone)||checkEmpty(self.companyName)){
                     mui.toast("请补全信息");
+                    return false;
                 }
                 else if(!isRightPhoneNumber(self.companyPhone)){
                     mui.toast("请输入合法的手机号");
+                    return false;
                 }
                 else{
-                    mui.confirm("您确定邀请吗？",null,null,function(data){
+                    return true;
+                }
+            },
+            addButton: function(){
+                var self = this;
+                if(formCheck()){
+                    mui.confirm("您确定新增吗？",null,null,function(data){
                         if(data.index == 1){
-                            $.when(b_createBCompanyParent(getB_Code(),self.companyPhone,self.companyName)).done(function(data){
+                            $.when(b_registerBCompanyParent(getB_Code(),self.companyPhone,self.companyName)).done(function(data){
+                                console.log(data);
+                            })
+                        }
+                    })
+                }
+            },
+            saveButton: function(){
+                var self = this;
+                if(formCheck()){
+                    mui.confirm("您确定保存修改吗？",null,null,function(data){
+                        if(data.index == 1){
+                            // id,name,contact,phone
+                            $.when(b_editCompany(self.queryData.id,self.companyName,self.companyContractName,self.companyPhone)).done(function(data){
                                 console.log(data);
                             })
                         }
@@ -80,7 +101,9 @@ $(function() {
         created: function() {
             var self = this;
             self.code = getB_Code();
-            window.applyButton = self.applyButton;
+            self.queryData = getQueryData();
+            window.addButton = self.addButton;
+            window.saveButton = self.saveButton;
         }
     })
 });

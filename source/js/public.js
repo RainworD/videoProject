@@ -26,8 +26,8 @@ function getQueryData (){
     }
     return parseURI;
 }
-// 时间戳转化为时间
-function stamp2time(stamp) {
+// 时间戳转化为日期对象
+function getTimeBy(stamp){
     var time = new Date(stamp);
     var year = time.getFullYear();
     var month = time.getMonth() - 0 + 1;
@@ -36,6 +36,25 @@ function stamp2time(stamp) {
     day = day < 10 ? "0" + day : day;
     var hour = time.getHours();
     var minute = time.getMinutes();
+    var second = time.getSeconds();
+    return {
+        "date": time,
+        "year": year,
+        "month": month,
+        "day": day,
+        "hour": hour,
+        "minute": minute,
+        "second": second
+    }
+}
+// 时间戳转化为yyyy-mm-dd hh-mm-ss
+function stamp2formatTime(stamp){
+    var time = getTimeBy(stamp);
+    return time.year+"-"+time.month+"-"+time.day+" "+time.hour+"-"+time.minute+"-"+time.second;
+}
+// 时间戳转化为"刚刚"等
+function stamp2time(stamp) {
+    var time = getTimeBy(stamp);
 
     var now = new Date();
     var nowyear = now.getFullYear();
@@ -45,27 +64,27 @@ function stamp2time(stamp) {
     var nowhour = now.getHours();
     var nowminute = now.getMinutes();
     var timeString = '';
-    if (year != nowyear) {
-        return year + "-" + month + "-" + day;
+    if (time.year != nowyear) {
+        return time.year + "-" + time.month + "-" + time.day;
     } else {
        // 今年
-       if (month == nowmonth && day == nowday) {
+       if (time.month == nowmonth && time.day == nowday) {
            // 说明是今天
-           if(hour == nowhour){
+           if(time.hour == nowhour){
                 // 说明是同一个小时
-                if(minute == nowminute){
+                if(time.minute == nowminute){
                     // 说明是同一分钟
                     return "刚刚";
                 }
                 else{
-                    return nowminute - minute + "分钟前";
+                    return nowminute - time.minute + "分钟前";
                 }
            }
            else{
-                return hour + ":" + minute;
+                return time.hour + ":" + time.minute;
            }
        } else {
-           return month + "-" + day;
+           return time.month + "-" + time.day;
        }
     }
 }
@@ -76,6 +95,7 @@ var Vue = Vue.extend({
     methods: {
         encodeObj: encodeObj,
         getQueryData: getQueryData,
-        stamp2time: stamp2time
+        stamp2time: stamp2time,
+        stamp2formatTime: stamp2formatTime
     }
 });

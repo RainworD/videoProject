@@ -18,7 +18,7 @@ function successHandle(data){
 function errorHandle(data){
 	mui.toast("网络异常");
 }
-// 获取企业用户基本信息
+// 获取用户基本信息
 function b_getBusiness(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Business",
@@ -27,6 +27,18 @@ function b_getBusiness(){
 		}
 	});
 	return ajax;
+}
+// 编辑企业资料
+function b_editCompany(id,name,contact,phone){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/save/Company",
+		data:{
+			"id": id,
+			"name": name,
+			"contact": contact,
+			"phone":phone
+		}
+	})
 }
 // 获取用户账单
 function b_getOrder(){
@@ -48,8 +60,18 @@ function b_getSubBussiness(){
 	});
 	return ajax;
 }
+// 获取自己的企业
+function b_getAllCompany(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Company",
+		data: {
+			
+		}
+	});
+	return ajax;
+}
 // 根据企业id获得特定企业的动态
-function b_getDynamicByBussinessId(id){
+function b_getDynamicByCompanyId(id){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Dynamic",
 		data: {
@@ -68,13 +90,13 @@ function b_getCommentByDynamicId(id){
 	});
 	return ajax;
 }
-// 创造一个企业管理员 c端管理员（企业端管理员,c母账户）
-function b_createBCompanyParent(code,phone,name){
+// 注册（新增）一个企业管理员 c端管理员（企业端管理员,c母账户）
+function b_registerBCompanyParent(code,phone,name){
 	return b_addOneRegister(code,phone,name,"企业管理员");
 }
 // 邀请一个同事
 function b_addColleague(code,phone){
-	return b_addOneRegister(code, phone, undefined,"代理商同事");
+	// return b_addOneRegister(code, phone, undefined,"代理商同事");
 }
 function b_addOneRegister(code, phone, name,competence){
 	var ajax = $.ajax({
@@ -88,7 +110,16 @@ function b_addOneRegister(code, phone, name,competence){
 	});
 	return ajax;
 }
-
+// 获得系统通告
+function b_getNewestAnnounce(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Comment",
+		data: {
+			
+		}
+	});
+	return ajax;
+}
 
 
 
