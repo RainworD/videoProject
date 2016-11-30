@@ -138,6 +138,20 @@ h5,
 .mui-input-group input {
   font-size: 14px;
 }
+.mui-segmented-control ~ .mui-control-content {
+  position: absolute;
+  top: 39px;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+}
+.mui-slider-handle > .mui-btn {
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
 body {
   background-color: #fff;
 }
@@ -221,7 +235,7 @@ body {
 .messageBox,
 .commentBox {
   padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .messageBox .rightContent .rightTitle,
 .commentBox .rightContent .rightTitle {
@@ -277,7 +291,7 @@ body {
   margin-bottom: 5px;
 }
 .commentBox .rightContent {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .commentBox .rightContent .rightPara {
   font-size: 12px;
@@ -293,7 +307,7 @@ body {
   padding-top: 0;
 }
 .comment {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .comment .commentBox {
   padding-bottom: 0;
@@ -426,7 +440,7 @@ body {
   line-height: 40px;
   font-size: 16px;
   color: #333;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
   text-align: center;
   background-color: #fff;
 }
@@ -461,7 +475,7 @@ body {
 }
 .workmates .workmatesList .workmateItems .rightContent {
   float: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
   width: 80%;
 }
 .workmates .workmatesList .workmateItems .rightContent .rightContent_1 {
@@ -587,7 +601,7 @@ body {
 }
 .userInfo .workmatesList a {
   display: block;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .userInfo .workmatesList .workmateItems {
   padding: 10px 15px;
@@ -672,7 +686,7 @@ body {
   width: 100%;
   background-color: #fff;
   border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .feedbackBox .deliverBox_ textarea {
   border: none;
@@ -762,7 +776,7 @@ body {
 }
 .aboutus .workmatesList a {
   display: block;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .aboutus .workmatesList .workmateItems {
   padding: 10px 15px;
@@ -840,7 +854,7 @@ body {
 }
 .flowSetting .workmatesList a {
   display: block;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .flowSetting .workmatesList .workmateItems {
   padding: 10px 15px;
@@ -1078,7 +1092,7 @@ body {
 }
 .messageShowBox {
   border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .messageShowBox a {
   display: block;
@@ -1116,7 +1130,7 @@ body {
   right: 10px;
 }
 .messageShowBox .messageShowContent .userTop .rightContent {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .messageShowBox .messageShowContent .userTop .rightContent .rightContent_1 {
   padding-bottom: 10px;
@@ -1212,7 +1226,7 @@ a .mui-table-view-cell:after {
 }
 .company_list .workmatesList a {
   display: block;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 .company_list .workmatesList .workmateItems {
   padding: 10px 15px;

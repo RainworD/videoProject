@@ -13,597 +13,170 @@
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/js/ajax_.js"></script>
     <script src="../source/mui/js/mui.js"></script>
-    <style>
-        .mui-card .mui-control-content {
-            padding: 10px;
-        }
-        .mui-control-content {
-            height: 150px;
-        }
-        .mui-scroll-wrapper{
-            overflow: visible;
-        }
-    </style>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
 </head>
 <body>
-    <!-- <div class="pageContainer">
-        <div class="topBar">
-            <ul class="topBarList">
-                <li class="list_item">
-                    <span class="listItem_name red">知会我的
-                    <span class="redCircle">1</span>
-                    </span>
-                </li>
-                <li class="list_item">
-                    <span class="listItem_name">我评论的
-                    <span class="redCircle">1</span>
-                    </span>
-                </li>
-                <li class="list_item">
-                    <span class="listItem_name">全部
-                    <span class="redCircle">1</span>
-                    </span>
+    <div class="mui-content">
+        <div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-negative">
+            <a class="mui-control-item mui-active" href="#item1">
+                <span class="listItem_name">知会我的
+                    <span class="mui-badge mui-badge-danger right-top">2</span>
+                </span>
+            </a>
+            <a class="mui-control-item" href="#item2">
+                <span class="listItem_name">我评论的
+                    <span class="mui-badge mui-badge-danger right-top">2</span>
+                </span>
+            </a>
+            <a class="mui-control-item" href="#item3">
+                <span class="listItem_name">全部
+                    <span class="mui-badge mui-badge-danger right-top">2</span>
+                </span>
+            </a>
+        </div>
+        <div id="item1" class="mui-control-content mui-active">
+            <div id="scroll" class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <ul class="mui-table-view no-padding-list">
+                        <li class="" v-for="dynamic in dynamicList">
+                            <div class="messageBox">
+                                <div class="leftImg">
+                                    <img :src="dynamic.user.photo">
+                                </div>
+                                <div class="rightContent">
+                                    <div class="rightContent_1">
+                                        <p class="rightTitle">{{dynamic.user.name}}</p>
+                                        <p class="rightPara wordbreak">{{dynamic.text}}</p>
+                                        <div class="photoPreviewBox flex flex-space-between flex-wrap">
+                                            <template v-for="photoUrl in dynamic.photo">
+                                            <div class="flex-item photo">
+                                                <div class="fix7_5">
+                                                    <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+                                                </div>
+                                            </div>
+                                            </template>
+                                        </div>
+                                        <div class="tips">
+                                            <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
+                                            <img src="../source/img/message.png">
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div class="comment">
+                                <div class="commentBox" v-for="cmt in dynamic.comment">
+                                    <div class="leftImg">
+                                        <img :src="cmt.user.photo">
+                                        <h6 class="mui-text-center">{{cmt.user.name}}</h6>
+                                    </div>
+                                    <div class="rightContent">
+                                        <div class="rightContent_1">
+                                            <p class="rightPara wordbreak">{{cmt.text}}</p>
+                                            <div class="tips">
+                                                <span class="leftTips">{{stamp2time(cmt.in_time)}}</span>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="item2" class="mui-control-content">
+            <ul class="mui-table-view no-padding-list">
+                <li class="" v-for="dynamic in dynamicList">
+                    <div class="messageBox">
+                        <div class="leftImg">
+                            <img :src="dynamic.user.photo">
+                        </div>
+                        <div class="rightContent">
+                            <div class="rightContent_1">
+                                <p class="rightTitle">{{dynamic.user.name}}</p>
+                                <p class="rightPara wordbreak">{{dynamic.text}}</p>
+                                <div class="photoPreviewBox flex flex-space-between flex-wrap">
+                                    <template v-for="photoUrl in dynamic.photo">
+                                    <div class="flex-item photo">
+                                        <div class="fix7_5">
+                                            <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+                                        </div>
+                                    </div>
+                                    </template>
+                                </div>
+                                <div class="tips">
+                                    <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
+                                    <img src="../source/img/message.png">
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="comment">
+                        <div class="commentBox" v-for="cmt in dynamic.comment">
+                            <div class="leftImg">
+                                <img :src="cmt.user.photo">
+                                <h6 class="mui-text-center">{{cmt.user.name}}</h6>
+                            </div>
+                            <div class="rightContent">
+                                <div class="rightContent_1">
+                                    <p class="rightPara wordbreak">{{cmt.text}}</p>
+                                    <div class="tips">
+                                        <span class="leftTips">{{stamp2time(cmt.in_time)}}</span>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
                 </li>
             </ul>
-        </div>
-        <div class="pageContent_1 pageContent show">
-            <div class="messageBox">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightTitle">月风溪</p>
-                        <p class="rightPara">用户发布的内容！</p>
-                        <img src="../source/img/0.png" alt="" data-preview-src="" data-preview-group="1" class="articlePic">
-                        <img src="../source/img/1.png" alt="" data-preview-src="" data-preview-group="1" class="articlePic">
-                        <img src="../source/img/2.png" alt="" data-preview-src="" data-preview-group="1" class="articlePic articlePic_">
-                        <p class="tips">
-                            <span class="leftTips">刚刚</span>
-                            <img src="../source/img/message.png" class="mesIcon">
-                        </p>
-                    </div> 
-                </div>
-            </div>
-            <div class="comment">
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-            <div class="messageBox">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightTitle">月风溪</p>
-                        <p class="rightPara">用户发布的内容！</p>
-                        <img src="../source/img/0.png" alt="" data-preview-src="" data-preview-group="2" class="articlePic">
-                        <img src="../source/img/1.png" alt="" data-preview-src="" data-preview-group="2" class="articlePic">
-                        <img src="../source/img/2.png" alt="" data-preview-src="" data-preview-group="2" class="articlePic articlePic_">
-                        <p class="tips">
-                            <span class="leftTips">刚刚</span>
-                            <img src="../source/img/message.png" class="mesIcon">
-                        </p>
-                    </div> 
-                </div>
-            </div>
-            <div class="comment">
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="pageContent_2 pageContent">
-            <div class="messageBox">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightTitle">月风溪</p>
-                        <p class="rightPara">用户发布的内容！</p>
-                        <img src="../source/img/0.png" alt="" class="articlePic">
-                        <img src="../source/img/1.png" alt="" class="articlePic">
-                        <img src="../source/img/2.png" alt="" class="articlePic articlePic_">
-                        <p class="tips">
-                            <span class="leftTips">刚刚</span>
-                            <img src="../source/img/message.png" class="mesIcon">
-                        </p>
-                    </div> 
-                </div>
-            </div>
-            <div class="comment">
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="pageContent_3 pageContent">
-            <div class="messageBox">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightTitle">月风溪</p>
-                        <p class="rightPara">用户发布的内容！</p>
-                        <img src="../source/img/0.png" alt="" class="articlePic">
-                        <img src="../source/img/1.png" alt="" class="articlePic">
-                        <img src="../source/img/2.png" alt="" class="articlePic articlePic_">
-                        <p class="tips">
-                            <span class="leftTips">刚刚</span>
-                            <img src="../source/img/message.png" class="mesIcon">
-                        </p>
-                    </div> 
-                </div>
-            </div>
-            <div class="comment">
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-            <div class="messageBox">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightTitle">月风溪</p>
-                        <p class="rightPara">用户发布的内容！</p>
-                        <img src="../source/img/0.png" alt="" class="articlePic">
-                        <img src="../source/img/1.png" alt="" class="articlePic">
-                        <img src="../source/img/2.png" alt="" class="articlePic articlePic_">
-                        <p class="tips">
-                            <span class="leftTips">刚刚</span>
-                            <img src="../source/img/message.png" class="mesIcon">
-                        </p>
-                    </div> 
-                </div>
-            </div>
-            <div class="comment">
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-            <div class="messageBox">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightTitle">月风溪</p>
-                        <p class="rightPara">用户发布的内容！</p>
-                        <img src="../source/img/0.png" alt="" class="articlePic">
-                        <img src="../source/img/1.png" alt="" class="articlePic">
-                        <img src="../source/img/2.png" alt="" class="articlePic articlePic_">
-                        <p class="tips">
-                            <span class="leftTips">刚刚</span>
-                            <img src="../source/img/message.png" class="mesIcon">
-                        </p>
-                    </div> 
-                </div>
-            </div>
-            <div class="comment">
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-            <div class="messageBox">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightTitle">月风溪</p>
-                        <p class="rightPara">用户发布的内容！</p>
-                        <img src="../source/img/0.png" alt="" class="articlePic">
-                        <img src="../source/img/1.png" alt="" class="articlePic">
-                        <img src="../source/img/2.png" alt="" class="articlePic articlePic_">
-                        <p class="tips">
-                            <span class="leftTips">刚刚</span>
-                            <img src="../source/img/message.png" class="mesIcon">
-                        </p>
-                    </div> 
-                </div>
-            </div>
-            <div class="comment">
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-                <div class="commentBox">
-                    <div class="leftImg">
-                        <img src="../source/img/q.png">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">用户发布的内容！</p>
-                            <p class="tips">
-                                <span class="leftTips">刚刚</span>
-                            </p>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <div class="mui-content">
-        <div style="background-color: #fff;">
-            <div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-negative">
-                <a class="mui-control-item mui-active" href="#item1">
-                    <span class="listItem_name">知会我的
-                        <span class="redCircle">1</span>
-                    </span>
-                </a>
-                <a class="mui-control-item" href="#item2">
-                    <span class="listItem_name">我评论的
-                        <span class="redCircle">1</span>
-                    </span>
-                </a>
-                <a class="mui-control-item" href="#item3">
-                    <span class="listItem_name">全部
-                        <span class="redCircle">1</span>
-                    </span>
-                </a>
-            </div>
-        </div> 
-        <div>
-            <div id="item1" class="mui-control-content mui-active">
-                <div id="scroll" class="mui-scroll-wrapper">
-                    <div class="mui-scroll">
-                        <ul class="mui-table-view no-padding-list">
-                            <li class="mui-table-view-cell">
-                                <div class="messageBox">
-                                    <div class="leftImg">
-                                        <img src="../source/img/q.png">
+        </div>  
+        <div id="item3" class="mui-control-content">
+            <ul class="mui-table-view no-padding-list">
+                <li class="" v-for="dynamic in dynamicList">
+                    <div class="messageBox">
+                        <div class="leftImg">
+                            <img :src="dynamic.user.photo">
+                        </div>
+                        <div class="rightContent">
+                            <div class="rightContent_1">
+                                <p class="rightTitle">{{dynamic.user.name}}</p>
+                                <p class="rightPara wordbreak">{{dynamic.text}}</p>
+                                <div class="photoPreviewBox flex flex-space-between flex-wrap">
+                                    <template v-for="photoUrl in dynamic.photo">
+                                    <div class="flex-item photo">
+                                        <div class="fix7_5">
+                                            <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+                                        </div>
                                     </div>
-                                    <div class="rightContent">
-                                        <div class="rightContent_1">
-                                            <p class="rightTitle">月风溪</p>
-                                            <p class="rightPara">用户发布的内容！</p>
-                                            <img src="../source/img/0.png" alt="" data-preview-src="" data-preview-group="4" class="articlePic">
-                                            <img src="../source/img/1.png" alt="" data-preview-src="" data-preview-group="4" class="articlePic">
-                                            <img src="../source/img/2.png" alt="" data-preview-src="" data-preview-group="4" class="articlePic articlePic_">
-                                            <p class="tips">
-                                                <span class="leftTips">刚刚</span>
-                                                <img src="../source/img/message.png" class="mesIcon">
-                                            </p>
-                                        </div> 
-                                    </div>
+                                    </template>
                                 </div>
-                                <div class="comment">
-                                    <div class="commentBox">
-                                        <div class="leftImg">
-                                            <img src="../source/img/q.png">
-                                        </div>
-                                        <div class="rightContent">
-                                            <div class="rightContent_1">
-                                                <p class="rightPara">用户发布的内容！</p>
-                                                <p class="tips">
-                                                    <span class="leftTips">刚刚</span>
-                                                </p>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                    <div class="commentBox">
-                                        <div class="leftImg">
-                                            <img src="../source/img/q.png">
-                                        </div>
-                                        <div class="rightContent">
-                                            <div class="rightContent_1">
-                                                <p class="rightPara">用户发布的内容！</p>
-                                                <p class="tips">
-                                                    <span class="leftTips">刚刚</span>
-                                                </p>
-                                            </div> 
-                                        </div>
-                                    </div>
+                                <div class="tips">
+                                    <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
+                                    <img src="../source/img/message.png">
                                 </div>
-                            </li>
-                            <li class="mui-table-view-cell">
-                                <div class="messageBox">
-                                    <div class="leftImg">
-                                        <img src="../source/img/q.png">
-                                    </div>
-                                    <div class="rightContent">
-                                        <div class="rightContent_1">
-                                            <p class="rightTitle">月风溪</p>
-                                            <p class="rightPara">用户发布的内容！</p>
-                                            <img src="../source/img/0.png" alt="" data-preview-src="" data-preview-group="1" class="articlePic">
-                                            <img src="../source/img/1.png" alt="" data-preview-src="" data-preview-group="1" class="articlePic">
-                                            <img src="../source/img/2.png" alt="" data-preview-src="" data-preview-group="1" class="articlePic articlePic_">
-                                            <p class="tips">
-                                                <span class="leftTips">刚刚</span>
-                                                <img src="../source/img/message.png" class="mesIcon">
-                                            </p>
-                                        </div> 
-                                    </div>
-                                </div>
-                                <div class="comment">
-                                    <div class="commentBox">
-                                        <div class="leftImg">
-                                            <img src="../source/img/q.png">
-                                        </div>
-                                        <div class="rightContent">
-                                            <div class="rightContent_1">
-                                                <p class="rightPara">用户发布的内容！</p>
-                                                <p class="tips">
-                                                    <span class="leftTips">刚刚</span>
-                                                </p>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                    <div class="commentBox">
-                                        <div class="leftImg">
-                                            <img src="../source/img/q.png">
-                                        </div>
-                                        <div class="rightContent">
-                                            <div class="rightContent_1">
-                                                <p class="rightPara">用户发布的内容！</p>
-                                                <p class="tips">
-                                                    <span class="leftTips">刚刚</span>
-                                                </p>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                            </div> 
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div id="item2" class="mui-control-content">
-                <ul class="mui-table-view no-padding-list"">
-                    <li class="mui-table-view-cell">
-                       <div class="messageBox">
+                    <div class="comment">
+                        <div class="commentBox" v-for="cmt in dynamic.comment">
                             <div class="leftImg">
-                                <img src="../source/img/q.png">
+                                <img :src="cmt.user.photo">
+                                <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                             </div>
                             <div class="rightContent">
                                 <div class="rightContent_1">
-                                    <p class="rightTitle">月风溪</p>
-                                    <p class="rightPara">用户发布的内容！</p>
-                                    <img src="../source/img/0.png" alt="" data-preview-src="" data-preview-group="2" class="articlePic">
-                                    <img src="../source/img/1.png" alt="" data-preview-src="" data-preview-group="2" class="articlePic">
-                                    <img src="../source/img/2.png" alt="" data-preview-src="" data-preview-group="2" class="articlePic articlePic_">
-                                    <p class="tips">
-                                        <span class="leftTips">刚刚</span>
-                                        <img src="../source/img/message.png" class="mesIcon">
-                                    </p>
+                                    <p class="rightPara wordbreak">{{cmt.text}}</p>
+                                    <div class="tips">
+                                        <span class="leftTips">{{stamp2time(cmt.in_time)}}</span>
+                                    </div>
                                 </div> 
                             </div>
                         </div>
-                        <div class="comment">
-                            <div class="commentBox">
-                                <div class="leftImg">
-                                    <img src="../source/img/q.png">
-                                </div>
-                                <div class="rightContent">
-                                    <div class="rightContent_1">
-                                        <p class="rightPara">用户发布的内容！</p>
-                                        <p class="tips">
-                                            <span class="leftTips">刚刚</span>
-                                        </p>
-                                    </div> 
-                                </div>
-                            </div>
-                            <div class="commentBox">
-                                <div class="leftImg">
-                                    <img src="../source/img/q.png">
-                                </div>
-                                <div class="rightContent">
-                                    <div class="rightContent_1">
-                                        <p class="rightPara">用户发布的内容！</p>
-                                        <p class="tips">
-                                            <span class="leftTips">刚刚</span>
-                                        </p>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div id="item3" class="mui-control-content">
-                <ul class="mui-table-view no-padding-list"">
-                    <li class="mui-table-view-cell">
-                       <div class="messageBox">
-                            <div class="leftImg">
-                                <img src="../source/img/q.png">
-                            </div>
-                            <div class="rightContent">
-                                <div class="rightContent_1">
-                                    <p class="rightTitle">月风溪</p>
-                                    <p class="rightPara">用户发布的内容！</p>
-                                    <img src="../source/img/0.png" alt="" data-preview-src="" data-preview-group="3" class="articlePic">
-                                    <img src="../source/img/1.png" alt="" data-preview-src="" data-preview-group="3" class="articlePic">
-                                    <img src="../source/img/2.png" alt="" data-preview-src="" data-preview-group="3" class="articlePic articlePic_">
-                                    <p class="tips">
-                                        <span class="leftTips">刚刚</span>
-                                        <img src="../source/img/message.png" class="mesIcon">
-                                    </p>
-                                </div> 
-                            </div>
-                        </div>
-                        <div class="comment">
-                            <div class="commentBox">
-                                <div class="leftImg">
-                                    <img src="../source/img/q.png">
-                                </div>
-                                <div class="rightContent">
-                                    <div class="rightContent_1">
-                                        <p class="rightPara">用户发布的内容！</p>
-                                        <p class="tips">
-                                            <span class="leftTips">刚刚</span>
-                                        </p>
-                                    </div> 
-                                </div>
-                            </div>
-                            <div class="commentBox">
-                                <div class="leftImg">
-                                    <img src="../source/img/q.png">
-                                </div>
-                                <div class="rightContent">
-                                    <div class="rightContent_1">
-                                        <p class="rightPara">用户发布的内容！</p>
-                                        <p class="tips">
-                                            <span class="leftTips">刚刚</span>
-                                        </p>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="mui-input-row enterHide">
@@ -611,114 +184,178 @@
         <label id="deliver">发送</label>
     </div>
 </body>
-<script type="text/javascript">
-</script>
-<script src="../source/mui/js/mui.min.js"></script>
 <script src="../source/mui/js/mui.zoom.js"></script>
 <script src="../source/mui/js/mui.previewimage.js"></script>
 <script>
+$(function() {
+    mui.init();
+    mui('#scroll').scroll({
+        indicators: true //是否显示滚动条
+    });
     mui.previewImage();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            dynamicList: []
+        },
+        computed: {
+            
+        },
+        methods: {
+            
+        },
+        created: function() {
+            var self = this;
+            var queryData = getQueryData();
+            // $.when(b_getDynamicByCompanyId(queryData.id)).done(function(data){
+                // if(data.state == 0){
+                    // self.dynamicList = data.data;
+                    self.dynamicList = [{
+                        id : 0,
+                        photo: ["../source/img/0.png","../source/img/1.png","../source/img/2.png"],
+                        user: {name:"王大庆",photo:"../source/img/q.png"},
+                        in_time: 0,
+                        title: "呵呵好",
+                        text: "此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景",
+                        comment: [{
+                            id: 0,
+                            in_time: 0,
+                            user:{name:"wqy",photo:"../source/img/q.png"},
+                            text: "123412344dcv4dcv12344dcv 12344dcv12344dcv12344dcv 12344dcv12344dcv12344dcv12344dcv"
+                        },{
+                            id: 1,
+                            in_time: 222,
+                            user:{name:"cdd",photo:"../source/img/q.png"},
+                            text: "呵呵，楼主厉害了😄"
+                        }]
+                    },{
+                        id : 0,
+                        photo: ["../source/img/0.png","../source/img/1.png","../source/img/2.png"],
+                        user: {name:"王大庆",photo:"../source/img/q.png"},
+                        in_time: 0,
+                        title: "呵呵好",
+                        text: "此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景",
+                        comment: [{
+                            id: 0,
+                            in_time: 0,
+                            user:{name:"wqy",photo:"../source/img/q.png"},
+                            text: "123412344dcv4dcv12344dcv 12344dcv12344dcv12344dcv 12344dcv12344dcv12344dcv12344dcv"
+                        },{
+                            id: 1,
+                            in_time: 222,
+                            user:{name:"cdd",photo:"../source/img/q.png"},
+                            text: "呵呵，楼主厉害了😄"
+                        }]
+                    }];
+                // }           
+            // });
+        },
+        ready: function() {
+
+        }
+    })
+});
 </script>
 <script>
-    mui.init({
-        swipeBack:true //启用右滑关闭功能
-    });
-    (function($) {
-        $('#scroll').scroll({
-            indicators: true //是否显示滚动条
-        });
-        var segmentedControl = document.getElementById('segmentedControl');
-        $('.mui-input-group').on('change', 'input', function() {
-            if (this.checked) {
-                var styleEl = document.querySelector('input[name="style"]:checked');
-                var colorEl = document.querySelector('input[name="color"]:checked');
-                if (styleEl && colorEl) {
-                    var style = styleEl.value;
-                    var color = colorEl.value;
-                    segmentedControl.className = 'mui-segmented-control' + (style ? (' mui-segmented-control-' + style) : '') + ' mui-segmented-control-' + color;
-                }
-            }
-        });
-    })(mui);
+    // mui.init({
+    //     swipeBack:true //启用右滑关闭功能
+    // });
+    // (function($) {
+    //     $('#scroll').scroll({
+    //         indicators: true //是否显示滚动条
+    //     });
+    //     var segmentedControl = document.getElementById('segmentedControl');
+    //     $('.mui-input-group').on('change', 'input', function() {
+    //         if (this.checked) {
+    //             var styleEl = document.querySelector('input[name="style"]:checked');
+    //             var colorEl = document.querySelector('input[name="color"]:checked');
+    //             if (styleEl && colorEl) {
+    //                 var style = styleEl.value;
+    //                 var color = colorEl.value;
+    //                 segmentedControl.className = 'mui-segmented-control' + (style ? (' mui-segmented-control-' + style) : '') + ' mui-segmented-control-' + color;
+    //             }
+    //         }
+    //     });
+    // })(mui);
 </script>
 <script type="text/javascript">
-    var obj={};
-    function getResults(data,seletor){
-        for(var i=0;i<data.length;i++){
-            var comment=data[i].comment;
-            var item=$(' <li class="mui-table-view-cell" data-object='+data[i]+'>'+
-                                '<div class="messageBox">'+
-                                    '<div class="leftImg">'+
-                                        '<img src="../source/img/q.png">'+
-                                    '</div>'+
-                                    '<div class="rightContent">'+
-                                        '<div class="rightContent_1">'+
-                                            '<p class="rightTitle">月风溪</p>'+
-                                            '<p class="rightPara">用户发布的内容！</p>'+
-                                            '<img src="../source/img/0.png" alt="" data-preview-src="" data-preview-group="4" class="articlePic">'+
-                                            '<img src="../source/img/1.png" alt="" data-preview-src="" data-preview-group="4" class="articlePic">'+
-                                            '<img src="../source/img/2.png" alt="" data-preview-src="" data-preview-group="4" class="articlePic articlePic_">'+
-                                            '<p class="tips">'+
-                                                '<span class="leftTips">刚刚</span>'+
-                                                '<img src="../source/img/message.png" class="mesIcon">'+
-                                            '</p>'+
-                                        '</div>'+ 
-                                    '</div>'+
-                                '</div>'+
-                                '<div class="comment">'+
-                                '</div>'+
-                            '</li>');
-            item.children(".messageBox").find(".rightTitle").val(data[i].user);
-            item.children(".messageBox").find(".rightPara").val(data[i].text);
-            for(var j=0;j<comment.length;j++){
-                var comment=$('<div class="commentBox">'+
-                            '<div class="leftImg">'+
-                                '<img src="../source/img/q.png">'+
-                            '</div>'+
-                            '<div class="rightContent">'+
-                                '<div class="rightContent_1">'+
-                                    '<p class="rightPara">用户发布的内容！</p>'+
-                                    '<p class="tips">'+
-                                        '<span class="leftTips"></span>'+
-                                    '</p>'+
-                                '</div>'+
-                            '</div>'+
-                        '</div>');
-                comment.find(".rightPara").text(comment[j].text);
-                comment.find(".leftTips").text(comment[j].in_time);
-                item.children(".comment").append(comment);
-            }
-            $(selector).children("ul").append(item);
-        }
-    }
-    $.when(getAllActicities()).done(function(data){
-        getResults(data,"#item3");
-    })
-    $.when(getCommentActivities()).done(function(data){
-        getResults(data,"#item2");
-    })
-    $.when(getInformActivities()).done(function(data){
-        getResults(data,"#item1");
-    })
-    $(".mui-control-content").on("tap",".mesIcon",function(){
-        // $(".enterHide").addClass("show");
-        obj={};
-        obj=$(this).parents(".mui-table-view-cell").attr("data-object");
-        $(".enterHide").children("input").focus();
-        $(".enterHide").animate({bottom:0},500);
-    })
-    $(".enterHide").one("tap","#deliver",function(){
-        var dynamic=obj;
-        var text=$("#enterContent").val();
-        $.when(deliverComment(text,dynamic)).done(function(data){
-            if(data.state==0){
-                alert("评论成功！");
-            }
-            else{
+    // var obj={};
+    // function getResults(data,seletor){
+    //     for(var i=0;i<data.length;i++){
+    //         var comment=data[i].comment;
+    //         var item=$(' <li class="mui-table-view-cell" data-object='+data[i]+'>'+
+    //                             '<div class="messageBox">'+
+    //                                 '<div class="leftImg">'+
+    //                                     '<img src="../source/img/q.png">'+
+    //                                 '</div>'+
+    //                                 '<div class="rightContent">'+
+    //                                     '<div class="rightContent_1">'+
+    //                                         '<p class="rightTitle">月风溪</p>'+
+    //                                         '<p class="rightPara">用户发布的内容！</p>'+
+    //                                         '<img src="../source/img/0.png" alt="" data-preview-src="" data-preview-group="4" class="articlePic">'+
+    //                                         '<img src="../source/img/1.png" alt="" data-preview-src="" data-preview-group="4" class="articlePic">'+
+    //                                         '<img src="../source/img/2.png" alt="" data-preview-src="" data-preview-group="4" class="articlePic articlePic_">'+
+    //                                         '<p class="tips">'+
+    //                                             '<span class="leftTips">刚刚</span>'+
+    //                                             '<img src="../source/img/message.png" class="mesIcon">'+
+    //                                         '</p>'+
+    //                                     '</div>'+ 
+    //                                 '</div>'+
+    //                             '</div>'+
+    //                             '<div class="comment">'+
+    //                             '</div>'+
+    //                         '</li>');
+    //         item.children(".messageBox").find(".rightTitle").val(data[i].user);
+    //         item.children(".messageBox").find(".rightPara").val(data[i].text);
+    //         for(var j=0;j<comment.length;j++){
+    //             var comment=$('<div class="commentBox">'+
+    //                         '<div class="leftImg">'+
+    //                             '<img src="../source/img/q.png">'+
+    //                         '</div>'+
+    //                         '<div class="rightContent">'+
+    //                             '<div class="rightContent_1">'+
+    //                                 '<p class="rightPara">用户发布的内容！</p>'+
+    //                                 '<p class="tips">'+
+    //                                     '<span class="leftTips"></span>'+
+    //                                 '</p>'+
+    //                             '</div>'+
+    //                         '</div>'+
+    //                     '</div>');
+    //             comment.find(".rightPara").text(comment[j].text);
+    //             comment.find(".leftTips").text(comment[j].in_time);
+    //             item.children(".comment").append(comment);
+    //         }
+    //         $(selector).children("ul").append(item);
+    //     }
+    // }
+    // $.when(getAllActicities()).done(function(data){
+    //     getResults(data,"#item3");
+    // })
+    // $.when(getCommentActivities()).done(function(data){
+    //     getResults(data,"#item2");
+    // })
+    // $.when(getInformActivities()).done(function(data){
+    //     getResults(data,"#item1");
+    // })
+    // $(".mui-control-content").on("tap",".mesIcon",function(){
+    //     // $(".enterHide").addClass("show");
+    //     obj={};
+    //     obj=$(this).parents(".mui-table-view-cell").attr("data-object");
+    //     $(".enterHide").children("input").focus();
+    //     $(".enterHide").animate({bottom:0},500);
+    // })
+    // $(".enterHide").one("tap","#deliver",function(){
+    //     var dynamic=obj;
+    //     var text=$("#enterContent").val();
+    //     $.when(deliverComment(text,dynamic)).done(function(data){
+    //         if(data.state==0){
+    //             alert("评论成功！");
+    //         }
+    //         else{
 
-            }
-            $(".enterHide").animate({bottom:'-40px'},500);
-        })
-    })
+    //         }
+    //         $(".enterHide").animate({bottom:'-40px'},500);
+    //     })
+    // })
 </script>
 </html>

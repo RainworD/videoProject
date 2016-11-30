@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -21,18 +26,17 @@
     <div class="myworkmates">
         <div class="mui-content">
             <ul class="mui-table-view">
-                <li class="mui-table-view-cell">
+                <li class="mui-table-view-cell" v-for="user in datalist">
                     <div class="mui-slider-right mui-disabled">
-                        <a class="mui-btn mui-btn-red red">停用</a>
-                        <a class="mui-btn mui-btn-green green">启用</a>
+                        <a class="mui-btn mui-btn-red" v-if="user.enable">停用</a>
+                        <a class="mui-btn mui-btn-green" v-else>启用</a>
                     </div>
                     <div class="mui-slider-handle listContent">
-                        <span>王富贵</span>
-                        <span class="redColor" data-type="1">(停用)</span>
-                        <span class="num_">13877790001</span>
+                        {{user.contact}}<span class="colorred" v-if="!user.enable">(停用)</span>
+                        <span class="mui-pull-right">{{user.username}}</span>
                     </div>
                 </li>
-                <li class="mui-table-view-cell">
+                <!-- <li class="mui-table-view-cell">
                     <div class="mui-slider-right mui-disabled">
                         <a class="mui-btn mui-btn-red red">停用</a>
                         <a class="mui-btn mui-btn-green green">启用</a>
@@ -49,31 +53,59 @@
                         <span class="greenColor" data-type="2">(未注册)</span>
                         <span class="num_">13877790001</span>
                     </div>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>
 </body>
-<script type="text/javascript">
-    mui(".mui-table-view").on("tap",".red",function(){
-        $(this).removeClass("show").siblings(".green").addClass("show");
-        $(this).parent(".mui-slider-right").siblings('.listContent').children("span").eq(1).text("(停用)").addClass("redColor"); 
-    });
-    mui(".mui-table-view").on("tap",".green",function(){
-        $(this).removeClass("show").siblings(".red").addClass("show");
-        $(this).parent(".mui-slider-right").siblings('.listContent').children("span").eq(1).text("").addClass("redColor"); 
-    });
-    $(".mui-table-view .listContent").each(function(i){
-        var type=$(".listContent").eq(i).children("span").eq(1).attr("data-type");
-        if(type=="0"){
-            $(".listContent").eq(i).siblings(".mui-slider-right").children(".red").addClass("show").siblings(".green").removeClass("show");
-        }
-        else if(type=="1"){
-            $(".listContent").eq(i).siblings(".mui-slider-right").children(".green").addClass("show").siblings(".red").removeClass("show");
-        }
-        else{
-            $(".listContent").eq(i).siblings(".mui-slider-right").children("a").removeClass("show");
+<script>
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            datalist: []
+        },
+        computed: {
+            
+        },
+        methods: {
+            
+        },
+        created: function() {
+            var self = this;
+            var qd = getQueryData();
+            $.when(b_getBColleague()).done(function(data){
+                console.log(data);
+                if(data.state == 0){
+                    self.datalist = data.data;
+                }
+            });
+            
         }
     })
+});
+</script>
+<script type="text/javascript">
+    // mui(".mui-table-view").on("tap",".red",function(){
+    //     $(this).removeClass("show").siblings(".green").addClass("show");
+    //     $(this).parent(".mui-slider-right").siblings('.listContent').children("span").eq(1).text("(停用)").addClass("redColor"); 
+    // });
+    // mui(".mui-table-view").on("tap",".green",function(){
+    //     $(this).removeClass("show").siblings(".red").addClass("show");
+    //     $(this).parent(".mui-slider-right").siblings('.listContent').children("span").eq(1).text("").addClass("redColor"); 
+    // });
+    // $(".mui-table-view .listContent").each(function(i){
+    //     var type=$(".listContent").eq(i).children("span").eq(1).attr("data-type");
+    //     if(type=="0"){
+    //         $(".listContent").eq(i).siblings(".mui-slider-right").children(".red").addClass("show").siblings(".green").removeClass("show");
+    //     }
+    //     else if(type=="1"){
+    //         $(".listContent").eq(i).siblings(".mui-slider-right").children(".green").addClass("show").siblings(".red").removeClass("show");
+    //     }
+    //     else{
+    //         $(".listContent").eq(i).siblings(".mui-slider-right").children("a").removeClass("show");
+    //     }
+    // })
 </script>
 </html>

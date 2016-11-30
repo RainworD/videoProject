@@ -50,7 +50,7 @@ function b_getOrder(){
 	});
 	return ajax;
 }
-// 获取子代理商
+// 获取子代理商(等于获得代理商同事)
 function b_getSubBussiness(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/SubBusiness",
@@ -65,7 +65,7 @@ function b_getAllCompany(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Company",
 		data: {
-			
+			"add_":"device"
 		}
 	});
 	return ajax;
@@ -96,7 +96,7 @@ function b_registerBCompanyParent(code,phone,name){
 }
 // 邀请一个同事
 function b_addColleague(code,phone){
-	// return b_addOneRegister(code, phone, undefined,"代理商同事");
+	return b_addOneRegister(code, phone, undefined,"代理商同事");
 }
 function b_addOneRegister(code, phone, name,competence){
 	var ajax = $.ajax({
@@ -120,8 +120,40 @@ function b_getNewestAnnounce(){
 	});
 	return ajax;
 }
-
-
+// 解绑设备到企业
+function b_unbindCompanyDeviceByDeviceId(id){
+	var ajax = $.ajax({
+		url: baseUrl + "/device/business/unbind",
+		data: {
+			"id": id
+		}
+	});
+	return ajax;
+}
+// 根据企业id获得设备列表
+function b_getDeviceListByCompanyId(id){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Device",
+		data: {
+			"company": id
+		}
+	});
+	return ajax;
+}
+// 获得用户
+function b_getAllUser(competence){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/User",
+		data: {
+			"competence": competence
+		}
+	});
+	return ajax;
+}
+// 获得b的同事
+function b_getBColleague(){
+	return b_getAllUser("代理商同事");
+}
 
 
 

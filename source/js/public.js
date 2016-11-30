@@ -12,7 +12,7 @@ function encodeObj(obj){
     return encodeURIComponent(JSON.stringify(obj));
 }
 // 获取url中的search，提取数据
-function getQueryData (){
+function getQueryData(){
     var searchUrl = window.location.search.split("?")[1];
     var URI = decodeURIComponent(searchUrl);
     var parseURI = URI;
@@ -51,6 +51,11 @@ function getTimeBy(stamp){
 function stamp2formatTime(stamp){
     var time = getTimeBy(stamp);
     return time.year+"-"+time.month+"-"+time.day+" "+time.hour+"-"+time.minute+"-"+time.second;
+}
+function stamp2formatDate(stamp){
+    var time = getTimeBy(stamp);
+    console.log(stamp)
+    return time.year+"-"+time.month+"-"+time.day;
 }
 // 时间戳转化为"刚刚"等
 function stamp2time(stamp) {
@@ -96,6 +101,7 @@ var Vue = Vue.extend({
         encodeObj: encodeObj,
         getQueryData: getQueryData,
         stamp2time: stamp2time,
-        stamp2formatTime: stamp2formatTime
+        stamp2formatTime: stamp2formatTime,
+        stamp2formatDate: stamp2formatDate
     }
 });

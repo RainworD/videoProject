@@ -31,10 +31,10 @@
                     <a class="mui-btn mui-btn-green" v-if="!company.enable">启用</a>
                     <a class="mui-btn mui-btn-red" v-else>停用</a>
                 </div>
-                <a href="company_device_detail.html" class="mui-slider-handle mui-navigate-right listContent">
+                <a href="company_device_detail.html?{{encodeObj({'companyId':company.id})}}" class="mui-slider-handle mui-navigate-right listContent">
                     <span>{{company.name}}</span>
                     <span class="colorred" v-if="!company.enable">(停用)</span>
-                    <span class="mui-pull-right color9" style="margin-right: 10px;">4/5</span>
+                    <span class="mui-pull-right color9" style="margin-right: 10px;">{{getAvailableDeviceLength(company.device)}}/{{company.device.length}}</span>
                 </a>
             </li>
         </ul>
@@ -52,6 +52,16 @@ $(function() {
             
         },
         methods: {
+            getAvailableDeviceLength: function(device){
+                var count = 0;
+                var now = new Date() - 0;
+                for(var i = 0, length = device.length; i < length ; i++){
+                    if(device[i].expire_time > now){
+                        count ++;
+                    }
+                }
+                return count;
+            }
         },
         created: function() {
             var self = this;

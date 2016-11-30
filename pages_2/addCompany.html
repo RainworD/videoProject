@@ -44,6 +44,10 @@
     </div>
 </body>
 <script>
+mui.alert("一开始就有的alert");
+function test(){
+    mui.alert("测试");
+}
 $(function() {
     mui.init();
     var vm = new Vue({
@@ -60,7 +64,8 @@ $(function() {
         },
         methods: {
             formCheck: function(){
-                if(checkEmpty(self.companyPhone)||checkEmpty(self.companyName)){
+                var self = this;
+                if(checkEmpty(self.companyContractName)||checkEmpty(self.companyName)){
                     mui.toast("请补全信息");
                     return false;
                 }
@@ -74,7 +79,7 @@ $(function() {
             },
             addButton: function(){
                 var self = this;
-                if(formCheck()){
+                if(self.formCheck()){
                     mui.confirm("您确定新增吗？",null,null,function(data){
                         if(data.index == 1){
                             $.when(b_registerBCompanyParent(getB_Code(),self.companyPhone,self.companyName)).done(function(data){
@@ -86,7 +91,7 @@ $(function() {
             },
             saveButton: function(){
                 var self = this;
-                if(formCheck()){
+                if(self.formCheck()){
                     mui.confirm("您确定保存修改吗？",null,null,function(data){
                         if(data.index == 1){
                             // id,name,contact,phone
