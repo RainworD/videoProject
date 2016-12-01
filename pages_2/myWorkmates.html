@@ -81,7 +81,9 @@ $(function() {
                     self.datalist = data.data;
                 }
             });
-            
+            $.when(b_getBColleague_unregister(getB_Id())).done(function(data){
+                console.log(data);
+            })
         }
     })
 });

@@ -15,7 +15,7 @@
     <script src="../source/js/vue.js"></script>
     <script src="../source/js/vue-tap.js"></script>
     <script src="../source/js/public.js"></script>
-    <script src="../source/js/public_b.js?1"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -44,10 +44,11 @@
     </div>
 </body>
 <script>
-mui.alert("一开始就有的alert");
+// mui.alert(window.addButton);
 function test(){
     mui.alert("测试");
 }
+
 $(function() {
     mui.init();
     var vm = new Vue({
@@ -110,7 +111,7 @@ $(function() {
             window.addButton = self.addButton;
             window.saveButton = self.saveButton;
         }
-    })
+    });
 });
 
 </script>

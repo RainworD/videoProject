@@ -6,11 +6,16 @@ $.ajaxSetup({
 	type: "POST",
 	success: successHandle,
 	error: errorHandle,
+	traditional: true,
 	xhrFields: {
       withCredentials: true
     }
 });
 function successHandle(data){
+	if(data.state == 10001){
+		// 未登录
+		window.location.href="h5action:error:10001";
+	}
 	if(data.state != 0){
 		mui.toast(data.msg);
 	}
@@ -19,11 +24,12 @@ function errorHandle(data){
 	mui.toast("网络异常");
 }
 // 获取用户基本信息
-function b_getBusiness(){
+function b_getSelf(){
 	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Business",
+		url: baseUrl + "/model/get/User",
 		data: {
-
+			"my":1,
+			"add_":["photo","business"]
 		}
 	});
 	return ajax;
@@ -154,11 +160,54 @@ function b_getAllUser(competence){
 function b_getBColleague(){
 	return b_getAllUser("代理商同事");
 }
+// 获得b的未注册同事
+function b_getBColleague_unregister(businessId){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Register",
+		data: {
+			"user": businessId,
+			"competence": "代理商同事",
+			"add_": "enable"
+		}
+	});
+	return ajax;
+}
 
+function b_getBusiness(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Business",
+		data: {
 
+		}
+	});
+	return ajax;
+}
+// 退出登陆
+function b_logout(){
+	var ajax = $.ajax({
+		url: baseUrl + "/auth/logout",
+		data: {
 
+		},
+		success: function(data){
+			if(data.state == 0){
+				window.localStorage.clear();
+			}
+		}
+	});
+	return ajax;
+}
 
+// 获得流水账统计
+function b_getStatistics(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Statistics",
+		data: {
 
+		}
+	});
+	return ajax;
+}
 
 
 

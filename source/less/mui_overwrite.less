@@ -1,4 +1,7 @@
 @import url("init.less");
+[v-cloak]{
+	opacity: 0;
+}
 .color3{
 	color: #333;
 }
@@ -98,10 +101,21 @@ h5, .mui-h5{
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
 }
-
-
-
-
+.mui-table-view-cell .mui-navigate-right>.mui-pull-right{
+	right: 35px;
+}
+.mui-table-view-chevron-35 .mui-table-view-cell{
+	padding-right: 35px;
+}
+.mui-table-view-chevron-35 .mui-table-view-cell > a:not(.mui-btn){
+	margin-right: -35px;
+}
+.vertical-align{
+	.verticalCenter;
+	&.mui-pull-right{
+		right: 15px;
+	}
+}
 
 
 

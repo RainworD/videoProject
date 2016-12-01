@@ -8,7 +8,6 @@
     <title>视频监控</title>
     <link rel="stylesheet" href="../source/mui/css/mui.css">
     <link rel="stylesheet" href="../source/css/init.css">
-    <link rel="stylesheet" href="../source/css/vue.css">
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
@@ -28,8 +27,8 @@
     <div class="accountBalanceBox">
         <div class="topShow">
             <p class="para_1">可用余额</p>
-            <p class="para_2">￥&nbsp;{{price}}</p>
-            <p class="para_3">设备押金:&nbsp;&nbsp;￥&nbsp;{{deposit}}</p>
+            <p class="para_2" v-cloak>￥&nbsp;{{price}}</p>
+            <p class="para_3" v-cloak>设备押金:&nbsp;&nbsp;￥&nbsp;{{deposit}}</p>
             <p class="bottomBtn">
                 <a href="recharge_main.html">
                     <span class="recharge">充值</span>   
@@ -39,50 +38,15 @@
                 </a>
             </p>
         </div>
-        <p class="listName">收支明细</p>
+        <h6 class="mui-content-padded">收支明细</h6>
         <ul class="mui-table-view">
-            <a href="withdraw.html">
-                <li class="mui-table-view-cell">
-                    <p class="para_">提现</p>
-                    <p class="date"><span>2016-07-01</span>&nbsp;&nbsp;<span>11:31:55</span></p>
-                    <p class="cashShow">-500.00</p>
-                </li>
-            </a>
-            <a href="recharge.html">
-                <li class="mui-table-view-cell">
-                    <p class="para_">充值</p>
-                    <p class="date"><span>2016-07-01</span>&nbsp;&nbsp;<span>11:31:55</span></p>
-                    <p class="cashShow">500.00</p>
-                </li>
-            </a>
-            <a href="consumption.html">
-                <li class="mui-table-view-cell">
-                    <p class="para_">消费</p>
-                    <p class="date"><span>2016-07-01</span>&nbsp;&nbsp;<span>11:31:55</span></p>
-                    <p class="cashShow">-200.00</p>
-                </li>
-            </a>
-            <a href="withdraw.html">
-                <li class="mui-table-view-cell">
-                    <p class="para_">提现</p>
-                    <p class="date"><span>2016-07-01</span>&nbsp;&nbsp;<span>11:31:55</span></p>
-                    <p class="cashShow">-500.00</p>
-                </li>
-            </a>
-            <a href="withdraw.html">
-                <li class="mui-table-view-cell">
-                    <p class="para_">提现</p>
-                    <p class="date"><span>2016-07-01</span>&nbsp;&nbsp;<span>11:31:55</span></p>
-                    <p class="cashShow">-500.00</p>
-                </li>
-            </a>
-            <a href="withdraw.html">
-                <li class="mui-table-view-cell">
-                    <p class="para_">提现</p>
-                    <p class="date"><span>2016-07-01</span>&nbsp;&nbsp;<span>11:31:55</span></p>
-                    <p class="cashShow">-500.00</p>
-                </li>
-            </a>
+            <li class="mui-table-view-cell" v-for="order in orderList">
+                <a href="withdraw.html">
+                    <span class="mui-h5">{{order.type}}</span>
+                    <p class="mui-ellipsis">{{stamp2formatTime(order.in_time)}}</p>
+                    <span class="mui-pull-right vertical-align">-500.00</span>
+                </a>
+            </li>
         </ul>
     </div>
 </body>
@@ -93,7 +57,8 @@ $(function() {
         el: "body",
         data: {
             price: 0,
-            deposit: 0
+            deposit: 0,
+            orderList: []
         },
         computed: {
             
@@ -110,9 +75,8 @@ $(function() {
                 }
             });
             $.when(b_getOrder()).done(function(data){
-                console.log(data)
                 if(data.state == 0){
-                    // console.
+                    self.orderList = data.data;
                 }
             })
         },

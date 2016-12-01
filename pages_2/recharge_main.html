@@ -11,23 +11,26 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
         background-color: #f3f3f3;
     }
+    .bottomBtn{
+        font-size: 16px;
+    }
 </style>
 <body>
     <div class="rechargeBox">
-        <p class="topPara">选择充值金额</p>
+        <h6 class="mui-content-padded">选择充值金额</h6>
         <div class="cashBox">
             <div class="cashContent">
-                <p class="cashItem">1,000元</p>
-                <p class="cashItem blue">2,000元</p>
-                <p class="cashItem">3,000元</p>
-                <p class="cashItem">5,000元</p>
-                <p class="cashItem">10,000元</p>
-                <p class="cashItem">20,000元</p>
+                <p class="cashItem" v-for="item in itemList" :class="{blue:checkedIndex == $index}" @tap="checkIt($index)">{{item.text}}</p>
             </div>
         </div>
         <h6 class="mui-content-padded">选择支付方式</h6>
@@ -38,18 +41,80 @@
                 <span class="payPara">支付宝支付</span>
             </div>
         </div>
-            
-        <p class="bottomBtn" id="bottomBtn">充值</p>
+        <p class="bottomBtn" @tap="requestPayment()">充值</p>
     </div>
 </body>
-<script type="text/javascript">
-    $(".cashItem").bind("click",function(){
-        $(this).addClass("blue").siblings(".cashItem").removeClass("blue");
+<script>
+var itemList = [{
+    "text":"1,000元",
+    "value": "1000"
+},{
+    "text":"2,000元",
+    "value": "2000"
+},{
+    "text":"3,000元",
+    "value": "3000"
+},{
+    "text":"4,000元",
+    "value": "4000"
+},{
+    "text":"5,000元",
+    "value": "5000"
+},{
+    "text":"6,000元",
+    "value": "6000"
+}];
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            checkedIndex: 1,
+            itemList: []
+        },
+        computed: {
+            
+        },
+        methods: {
+            checkIt: function(index){
+                var self = this;
+                self.checkedIndex = index;
+            },
+            requestPayment: function(){
+                var self = this;
+                window.location.href="h5action:requestPayment:value="+self.itemList[self.checkedIndex].value;
+            },
+            paySuccessCallback: function(){
+                mui.alert("","充值成功",["确认"],function(data){
+                    // mui.back();
+                })
+            },
+            payErrorCallback: function(errorText){
+                mui.alert(errorText,"充值失败",["确认"],function(data){
+
+                })
+            }
+        },
+        created: function() {
+            var self = this;
+            self.itemList = itemList;
+            window.paySuccessCallback = self.paySuccessCallback;
+            window.payErrorCallback = self.payErrorCallback;
+        },
+        ready: function() {
+
+        }
     })
-    document.getElementById("bottomBtn").addEventListener('tap', function() {
-        mui.alert('','充值成功',function() {
+});
+</script>
+<script type="text/javascript">
+    // $(".cashItem").bind("click",function(){
+    //     $(this).addClass("blue").siblings(".cashItem").removeClass("blue");
+    // })
+    // document.getElementById("bottomBtn").addEventListener('tap', function() {
+    //     mui.alert('','充值成功',function() {
            
-        });
-    });
+    //     });
+    // });
 </script>
 </html>

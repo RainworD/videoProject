@@ -3,23 +3,34 @@
 <head>
 	<meta charset="UTF-8">
 	<title></title>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
 	<script src="../source/js/jquery-1.11.1.min.js"></script>
+	<script src="../source/mui/js/mui.js"></script>
 	<script src="../source/js/ajax_b.js"></script>
 	<script src="../source/js/vue.js"></script>
 	<script src="../source/js/public.js"></script>
 </head>
 <body>
 <script>
-$.when(b_getBusiness()).done(function(data){
+$.when(b_getSelf()).done(function(data){
 	if(data.state == 0){
 		var _data = data.data[0];
 		window.localStorage.setItem("b_code",_data.code);
 		window.localStorage.setItem("b_name",_data.name);
-		window.localStorage.setItem("b_phone",_data.phone);
-		window.localStorage.setItem("b_contact",_data.contact);
-		window.localStorage.setItem("b_deposit",_data.deposit);
-		window.localStorage.setItem("b_price",_data.price);
+		window.localStorage.setItem("b_username",_data.username);
+		window.localStorage.setItem("b_competence",_data.competence);
+		window.localStorage.setItem("b_phone",_data.contact);
+		// 所属b端余额情况
+		window.localStorage.setItem("b_deposit",_data.business.deposit);
+		window.localStorage.setItem("b_price",_data.business.price);
 		window.localStorage.setItem("b_id",_data.id);
+		debugger;
 		window.location.href = getQueryData().url;
 	}
 });
