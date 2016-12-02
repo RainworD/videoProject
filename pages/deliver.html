@@ -14,66 +14,61 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/js/ajax_.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/mui/js/mui.zoom.js"></script>
+    <script src="../source/mui/js/mui.previewimage.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
+
 </head>
 <style type="text/css">
     body{
         background-color: #f3f3f3;
     }
+    .photo{
+        position: relative;
+    }
+    .removeBtn{
+        display: block;
+        position: absolute;
+        top: -4px !important;
+        right: -4px !important;
+        left: auto !important;
+        width: 18px;
+        height: 18px;
+        color: #f33;
+    }
 </style>
 <body>
     <div class="deliverBox">
         <p class="deliverBox_">
-            <textarea placeholder="输入文本，请少于200字" id="textArea"></textarea>
+            <textarea placeholder="输入文本，请少于200字"></textarea>
         </p>
-        <div class="deliverImg">
-            <!-- <div class="deliverImg_">
-                <img src="../source/img/0.png" data-preview-src="" data-preview-group="1" class="commonImg">
-                <img src="../source/img/remove.png" alt="" class="removeBtn">
+        <div class="photoPreviewBox">
+            <div class="photo" v-for="image in selectedImageList" track-by="$index">
+                <div class="fix7_5">
+                    <img :src="image" alt="" data-preview-src="" data-preview-group="1">
+                </div>
+                <img src="../source/img/remove.png" alt="" class="removeBtn" @tap="removeImage($index);">
             </div>
-            <div class="deliverImg_">
-                <img src="../source/img/0.png" data-preview-src="" data-preview-group="1" class="commonImg">
-                <img src="../source/img/remove.png" alt="" class="removeBtn">
-            </div> -->
-           <!--  <div class="deliverImg_ deliverImg_1 plusMoreImg" id="uploadForm">
-                <a href="#picture">
-                    <input id="file" type="file"  multiple="multiple"/>
-                    <img src="../source/img/plus.png" alt="" class="commonImg">
-                </a>
-                <button id="upload" type="button">导入excel</button>
-            </div> -->
-            <div class="deliverImg_ deliverImg_1 plusMoreImg">
-                <a href="#picture"><img src="../source/img/plus.png" alt="" class="commonImg"></a>
+            <div class="photo" @tap="pickImage();" style="z-index: 0;" v-show="selectedImageList.length < 9">
+                <div class="fix7_5">
+                    <img src="../source/img/plus.png">
+                </div>
             </div>
         </div>
     </div>
     <div class="notice">
         <p class="topPara">知会同事&nbsp;<span>(再次点击头像可删除)</span></p>
         <div class="userIcon">
-            <img src="../source/img/q.png" class="userPic">
-            <img src="../source/img/q.png" class="userPic">
-            <img src="../source/img/q.png" class="userPic">
-            <img src="../source/img/q.png" class="userPic">
-            <img src="../source/img/q.png" class="userPic">
-            <img src="../source/img/q.png" class="userPic">
-            <img src="../source/img/userPlus.png" class="userPlus">
+            <template v-for="workmate in workmates">
+                <img :src="workmate.photo||'../source/img/q.png'" class="userPic">
+            </template>
+            <img src="../source/img/userPlus.png" class="userPlus" @tap="chooseWorkmates()">
         </div>
-    </div>
-    <div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
-        <ul class="mui-table-view">
-            <li class="mui-table-view-cell">
-                <a href="#">拍照</a>
-            </li>
-            <li class="mui-table-view-cell" id="uploadForm">
-                <a>相册
-                </a>
-                <input id="file" type="file"  multiple="multiple"/>
-            </li>
-        </ul>
-        <ul class="mui-table-view">
-            <li class="mui-table-view-cell">
-                <a href="#picture"  id="cancel"><b>取消</b></a>
-            </li>
-        </ul>
     </div>
     <ul class="mui-table-view">
         <li class="mui-table-view-cell" style="text-align: center;color:#e74f3a;">
@@ -81,126 +76,204 @@
         </li>
     </ul>
 </body>
-<script type="text/javascript">
-    $(".removeBtn").bind("click",function(){
-        $(this).parents(".deliverImg_").remove();
-    })
-    $(".userPic").bind("click",function(){
-        $(this).remove();
-    })
-    $(".plusMoreImg").bind("click",function(){
-        $(".mask").addClass("show");
-        $(".addPhoto").addClass("show");
-    })
-    $(".cancelBtn").bind("click",function(){
-        $(".mask").removeClass("show");
-        $(".addPhoto").removeClass("show");
-    })
-    $(".userPlus").bind("click",function(){
-        window.location.href="workmatesList.html"
-    })
-</script>
-<script src="../source/mui/js/mui.min.js"></script>
-<script src="../source/mui/js/mui.zoom.js"></script>
-<script src="../source/mui/js/mui.previewimage.js"></script>
 <script>
-    mui.init({
-        swipeBack:true //启用右滑关闭功能
-    });
-    mui('body').on('shown', '.mui-popover', function(e) {
-        //console.log('shown', e.detail.id);//detail为当前popover元素
-    });
-    mui('body').on('hidden', '.mui-popover', function(e) {
-        //console.log('hidden', e.detail.id);//detail为当前popover元素
-    });
-    // var info = document.getElementById("info");
-    mui('body').on('tap', '.mui-popover-action li>a', function() {
-        var a = this,
-            parent;
-        //根据点击按钮，反推当前是哪个actionsheet
-        for (parent = a.parentNode; parent != document.body; parent = parent.parentNode) {
-            if (parent.classList.contains('mui-popover-action')) {
-                break;
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            selectedImageList: [],
+            workmates:[]
+        },
+        computed: {
+            
+        },
+        methods: {
+            pickImage: function(){
+                var self = this;
+                var fileInput = document.createElement("input");
+                fileInput.type = "file";
+                fileInput.multiple = "multiple";
+                fileInput.accept = "image/*";
+                fileInput.click();
+                window.fileInput = fileInput;
+                fileInput.onchange = function(e){
+                    self.fileIndex = 0;
+                    var files = e.target.files;
+                    if(files.length + self.selectedImageList.length > 9){
+                        mui.alert("您最多只能选择9张");
+                    }
+                    else{
+                        console.log("126: fileInput onchange")
+                        self.readerOnload(files); 
+                    }
+                }
+            },
+            readerOnload: function(files){
+                var self = this;
+                var file = files[self.fileIndex]
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(event) {
+                    console.log("137: reader onload")
+                    self.selectedImageList.push(event.target.result);
+                    self.fileIndex++;
+                    if(self.fileIndex < files.length){
+                        self.readerOnload(files);
+                    }
+                }
+                reader.onerror = function(error){
+                    console.log(error)
+                }
+            },
+            removeImage: function(index){
+                var self = this;
+                self.selectedImageList.splice(index,1);
+            },
+            chooseWorkmates: function(){
+                var self = this;
+                window.location.href="open:workmatesList.html?"+encodeObj({"choosenWorkmates":self.workmates})+",navigatorRightButton:确定,navigatorRightButtonCallback:finishChoose(),navigatorTitle:所有同事";
+                // 代办：在选择界面我要把选好的用户传递给app，app再调用我这里的方法把用户写入
+
+            },
+            writeWorkmates: function(string){
+                var self = this;
+                self.workmates = decodeURIComponent(string).choosenWorkmates;
+
             }
+        },
+        created: function() {
+            var self = this;
+            var qd = getQueryData();
+        },
+        ready: function() {
+            var self = this;
+            window.writeWorkmates = self.writeWorkmates;
         }
-        //关闭actionsheet
-        mui('#' + parent.id).popover('toggle');
-        // info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
     })
+});
+// function writeWorkmates(string){
+//     mui.alert(string);
+// }
+</script>
+<script type="text/javascript">
+    // $(".removeBtn").bind("click",function(){
+    //     $(this).parents(".deliverImg_").remove();
+    // })
+    // $(".userPic").bind("click",function(){
+    //     $(this).remove();
+    // })
+    // $(".plusMoreImg").bind("click",function(){
+    //     $(".mask").addClass("show");
+    //     $(".addPhoto").addClass("show");
+    // })
+    // $(".cancelBtn").bind("click",function(){
+    //     $(".mask").removeClass("show");
+    //     $(".addPhoto").removeClass("show");
+    // })
+    // $(".userPlus").bind("click",function(){
+    //     window.location.href="workmatesList.html"
+    // })
+</script>
+
+<script>
+    // mui.init({
+    //     swipeBack:true //启用右滑关闭功能
+    // });
+    // mui('body').on('shown', '.mui-popover', function(e) {
+    //     //console.log('shown', e.detail.id);//detail为当前popover元素
+    // });
+    // mui('body').on('hidden', '.mui-popover', function(e) {
+    //     //console.log('hidden', e.detail.id);//detail为当前popover元素
+    // });
+    // // var info = document.getElementById("info");
+    // mui('body').on('tap', '.mui-popover-action li>a', function() {
+    //     var a = this,
+    //         parent;
+    //     //根据点击按钮，反推当前是哪个actionsheet
+    //     for (parent = a.parentNode; parent != document.body; parent = parent.parentNode) {
+    //         if (parent.classList.contains('mui-popover-action')) {
+    //             break;
+    //         }
+    //     }
+    //     //关闭actionsheet
+    //     mui('#' + parent.id).popover('toggle');
+    //     // info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
+    // })
     mui.previewImage();
 </script>
 <script>
-    var type_arr=[];
-    $("#file").on("change", function(e){
-        type_arr=[];
-        var btn=document.getElementById("cancel");
-        mui.trigger(btn,'tap');
-        // $("#picture").css("display","none");
-        // $(".mui-backdrop").removeClass("mui-active");
-        var file = e.target.files; //获取图片资源
-        // console.log(file.length);
-        for(var i=0; i< file.length; i++){
-            var type=file[i] .type;
-            type_arr.push(type);  
-            // if (!file[i].type.match('image.*')) {
-            //     return false;
-            // }//只选取图片文件
-            var reader = new FileReader();
+    // var type_arr=[];
+    // $("#file").on("change", function(e){
+    //     type_arr=[];
+    //     var btn=document.getElementById("cancel");
+    //     mui.trigger(btn,'tap');
+    //     // $("#picture").css("display","none");
+    //     // $(".mui-backdrop").removeClass("mui-active");
+    //     var file = e.target.files; //获取图片资源
+    //     // console.log(file.length);
+    //     for(var i=0; i< file.length; i++){
+    //         var type=file[i] .type;
+    //         type_arr.push(type);  
+    //         // if (!file[i].type.match('image.*')) {
+    //         //     return false;
+    //         // }//只选取图片文件
+            // var reader = new FileReader();
 
-            reader.readAsDataURL(file[i]); // 读取文件
-              // 渲染文件
-            reader.onload = function(arg) {
-                var img='<div class="deliverImg_">'+
-                            '<img src="' + arg.target.result + '" data-preview-src="" data-preview-group="1" class="commonImg">'+
-                            '<img src="../source/img/remove.png" alt="" class="removeBtn">'+
-                        '</div>'
-            // var img = '<img class="preview" src="' + arg.target.result + '" alt="preview"/>';
-                $(".deliverImg").prepend(img);
-            }
-        }
-    });
-    $("#upload").bind("click",function(){
-        var photo_arr=[];
-        if(type_arr.length){
-            console.log("success");
-            for(var i=0;i<type_arr.length;i++){
-                $.when(getImgUrl(type_arr[i])).done(function(data){
-                    console.log(data);
-                    if(data.state==0){
-                        var data=data.data;
-                        OSSAccessKeyId=data.OSSAccessKeyId;
-                        Signature=data.Signature;
-                        callback=data.callback;
-                        key=data.key;
-                        policy=data.policy;
-                    }
-                    var picFileList = $("#file").get(0).files;
-                    // var picFileList = $("#pic")[0].files;验证是否可行
-                    var formData = new FormData();
-                    for(var i=0; i< picFileList.length; i++){
-                        formData.append("OSSAccessKeyId",OSSAccessKeyId);
-                        formData.append("Signature",Signature);
-                        formData.append("callback",callback);
-                        formData.append("key",key);
-                        formData.append("policy",policy);
-                        formData.append("file" , picFileList[i]);
-                        $.when(uploadImg(formData)).done(function(data){
-                            alert("2222");
-                            photo_arr.push(data.id);
-                            var title;
-                            var text=$("#textArea").val();
-                            informed=[];
-                            $.when(deliverActivity(title,text,photo_arr,informed)).done(function(data){
-                                if(data.state==0){
-                                    alert("发布成功！")
-                                }
-                            })
-                        })
-                    }
-                    // formData.append('file', $('#file')[0].files[0]);
-                })
-            }
-        }
-    })
+            // reader.readAsDataURL(file[i]); // 读取文件
+            //   // 渲染文件
+            // reader.onload = function(arg) {
+            //     var img='<div class="deliverImg_">'+
+            //                 '<img src="' + arg.target.result + '" data-preview-src="" data-preview-group="1" class="commonImg">'+
+            //                 '<img src="../source/img/remove.png" alt="" class="removeBtn">'+
+            //             '</div>'
+            // // var img = '<img class="preview" src="' + arg.target.result + '" alt="preview"/>';
+            //     $(".deliverImg").prepend(img);
+            // }
+    //     }
+    // });
+    // $("#upload").bind("click",function(){
+    //     var photo_arr=[];
+    //     if(type_arr.length){
+    //         console.log("success");
+    //         for(var i=0;i<type_arr.length;i++){
+    //             $.when(getImgUrl(type_arr[i])).done(function(data){
+    //                 console.log(data);
+    //                 if(data.state==0){
+    //                     var data=data.data;
+    //                     OSSAccessKeyId=data.OSSAccessKeyId;
+    //                     Signature=data.Signature;
+    //                     callback=data.callback;
+    //                     key=data.key;
+    //                     policy=data.policy;
+    //                 }
+    //                 var picFileList = $("#file").get(0).files;
+    //                 // var picFileList = $("#pic")[0].files;验证是否可行
+    //                 var formData = new FormData();
+    //                 for(var i=0; i< picFileList.length; i++){
+    //                     formData.append("OSSAccessKeyId",OSSAccessKeyId);
+    //                     formData.append("Signature",Signature);
+    //                     formData.append("callback",callback);
+    //                     formData.append("key",key);
+    //                     formData.append("policy",policy);
+    //                     formData.append("file" , picFileList[i]);
+    //                     $.when(uploadImg(formData)).done(function(data){
+    //                         alert("2222");
+    //                         photo_arr.push(data.id);
+    //                         var title;
+    //                         var text=$("#textArea").val();
+    //                         informed=[];
+    //                         $.when(deliverActivity(title,text,photo_arr,informed)).done(function(data){
+    //                             if(data.state==0){
+    //                                 alert("发布成功！")
+    //                             }
+    //                         })
+    //                     })
+    //                 }
+    //                 // formData.append('file', $('#file')[0].files[0]);
+    //             })
+    //         }
+    //     }
+    // })
 </script>
 </html>

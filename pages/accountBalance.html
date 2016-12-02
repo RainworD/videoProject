@@ -1,0 +1,89 @@
+<!DOCTYPE html>  
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频监控</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
+
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+</style>
+<body>
+    <div class="accountBalanceBox">
+        <div class="topShow">
+            <p class="para_1">可用余额</p>
+            <p class="para_2" v-cloak>￥&nbsp;{{price}}</p>
+            <p class="para_3" v-cloak>设备押金:&nbsp;&nbsp;￥&nbsp;{{deposit}}</p>
+            <p class="bottomBtn">
+                <a href="recharge_main.html">
+                    <span class="recharge">充值</span>   
+                </a>
+                <a href="withdraw_main.html">
+                    <span class="withdraw">提现</span>
+                </a>
+            </p>
+        </div>
+        <h6 class="mui-content-padded">收支明细</h6>
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell" v-for="order in orderList">
+                <a href="withdraw.html">
+                    <span class="mui-h5">{{order.type}}</span>
+                    <p class="mui-ellipsis">{{stamp2formatTime(order.in_time)}}</p>
+                    <span class="mui-pull-right vertical-align">-500.00</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+$(function() {
+ mui.init();
+ var vm = new Vue({
+        el: "body",
+        data: {
+            price: 0,
+            deposit: 0,
+            orderList: []
+        },
+        computed: {
+            
+        },
+        methods: {
+            
+        },
+        created: function() {
+            var self = this;
+            $.when(b_getBusiness()).done(function(data){
+                if(data.state == 0){
+                    self.price = data.data[0].price;
+                    self.deposit = data.data[0].deposit;
+                }
+            });
+            $.when(b_getOrder()).done(function(data){
+                if(data.state == 0){
+                    self.orderList = data.data;
+                }
+            })
+        },
+        ready: function() {
+
+        }
+    })
+});
+</script>
+</html>

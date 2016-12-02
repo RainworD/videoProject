@@ -10,140 +10,103 @@
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
-    <script src="../source/js/ajax_.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <body>
-    <!-- <div class="workmates">
-        <ul class="workmatesList">
-            <li class="workmateItems">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightPara">月风溪</p>
-                        <p class="tips">
-                           <img src="../source/img/uncheck.png" class="checkImg">
-                        </p>
-                    </div> 
-                </div>
-            </li>
-            <li class="workmateItems">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightPara">月风溪</p>
-                        <p class="tips">
-                           <img src="../source/img/uncheck.png" class="checkImg">
-                        </p>
-                    </div> 
-                </div>
-            </li>
-            <li class="workmateItems">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightPara">月风溪</p>
-                        <p class="tips">
-                           <img src="../source/img/uncheck.png" class="checkImg">
-                        </p>
-                    </div> 
-                </div>
-            </li>
-            <li class="workmateItems">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightPara">月风溪</p>
-                        <p class="tips">
-                           <img src="../source/img/uncheck.png" class="checkImg">
-                        </p>
-                    </div> 
-                </div>
-            </li>
-            <li class="workmateItems">
-                <div class="leftImg">
-                    <img src="../source/img/q.png">
-                </div>
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightPara">月风溪</p>
-                        <p class="tips">
-                           <img src="../source/img/uncheck.png" class="checkImg">
-                        </p>
-                    </div> 
-                </div>
-            </li>
-        </ul>
-    </div> -->
-    <div class="workmates_ mui-content">
+    <div class="mui-content">
         <ul class="mui-table-view">
-            <!-- <li class="mui-table-view-cell">
-                <img src="../source/img/q.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
-                <div class="mui-media-body">
-                    <p class="rightPara">月风溪</p>
-                    <p class="tips">
-                       <img src="../source/img/uncheck.png" class="checkImg">
-                    </p>
-                </div>
+            <li class="mui-table-view-cell mui-checkbox mui-right" v-for="user in datalist">
+                <input class="vertical-align" name="checkbox1" type="checkbox" value="{{user.id}}" v-model="checkedUsersId">
+                <img src="../source/img/q.png" class="mui-media-object mui-pull-left media-object-50">
+                <span class="vertical-align mui-h5">{{user.username}}</span>
             </li>
-            <li class="mui-table-view-cell">
-                <img src="../source/img/a.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
-                <div class="mui-media-body">
-                    <p class="rightPara">月风溪</p>
-                    <p class="tips">
-                       <img src="../source/img/uncheck.png" class="checkImg">
-                    </p>
-                </div>
-            </li>
-            <li class="mui-table-view-cell">
-                <img src="../source/img/q.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
-                <div class="mui-media-body">
-                    <p class="rightPara">月风溪</p>
-                    <p class="tips">
-                       <img src="../source/img/uncheck.png" class="checkImg">
-                    </p>
-                </div>
-            </li> -->
         </ul>
     </div>
 </body>
+<script>
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            datalist: [],
+            checkedUsersId: []
+        },
+        computed: {
+            
+        },
+        methods: {
+            finishChoose: function(){
+                var self = this;
+                var choosenWorkmates = [];
+                for(var i = 0, length = self.checkedUsersId.length; i < length; i++){
+                    console.log(self.checkedUsersId);
+                    var checkedId = self.checkedUsersId[i];
+                    for(var j = 0, jlength = self.datalist.length; j<jlength; j++ ){
+                        console.log(checkedId, self.datalist[j].id)
+                        if(checkedId == self.datalist[j].id){
+                            choosenWorkmates.push(self.datalist[j]);
+                        }
+                    }
+                }
+                // console.log("diliver.html?"+encodeObj({"choosenWorkmates":choosenWorkmates}))
+                window.location.href="backto:deliver.html,javascript:writeWorkmates('"+encodeObj({"choosenWorkmates":choosenWorkmates})+"')";
+            }
+        },
+        created: function() {
+            var self = this;
+            var qd = getQueryData();
+            if(qd&&qd.choosenWorkmates){
+                for(var i = 0, length = qd.choosenWorkmates.length; i < length; i++){
+                    self.checkedUsersId.push(qd.choosenWorkmates[i].id);
+                }
+            }
+            $.when(getAllUser("企业同事")).done(function(data){
+                if(data.state == 0){
+                    self.datalist = data.data;
+                }
+            });
+        },
+        ready: function() {
+            window.finishChoose = this.finishChoose;
+        }
+    })
+});
+</script>
 <script type="text/javascript">
-    $(".checkImg").bind("click",function(){
-        var class_=$(this).attr("class");
-        var array=class_.split(" ");
-        console.log(class_);
-        if(array.length>1){
-            $(this).attr("src","../source/img/uncheck.png");
-            $(this).removeClass("checkJudge");
-        }
-        else{
-            $(this).attr("src","../source/img/checked.png");
-            $(this).addClass("checkJudge");
-        }
-    })
-    $.when(getWorkmates()).done(function(data){
-        var data=data.data;
-        for(var i=0;i<data.length;i++){
-            var item=$('<li class="mui-table-view-cell">'+
-                '<img src="../source/img/q.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">'+
-                '<div class="mui-media-body">'+
-                    '<p class="rightPara">月风溪</p>'+
-                    '<p class="tips">'+
-                       '<img src="../source/img/uncheck.png" class="checkImg">'+
-                    '</p>'+
-                '</div>'+
-            '</li>');
-            item.find(".rightPara").text(data[i].name);
-            $(".mui-table-view").append(item);
-        }
-    })
+    // $(".checkImg").bind("click",function(){
+    //     var class_=$(this).attr("class");
+    //     var array=class_.split(" ");
+    //     console.log(class_);
+    //     if(array.length>1){
+    //         $(this).attr("src","../source/img/uncheck.png");
+    //         $(this).removeClass("checkJudge");
+    //     }
+    //     else{
+    //         $(this).attr("src","../source/img/checked.png");
+    //         $(this).addClass("checkJudge");
+    //     }
+    // })
+    // $.when(getWorkmates()).done(function(data){
+    //     var data=data.data;
+    //     for(var i=0;i<data.length;i++){
+    //         var item=$('<li class="mui-table-view-cell">'+
+    //             '<img src="../source/img/q.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">'+
+    //             '<div class="mui-media-body">'+
+    //                 '<p class="rightPara">月风溪</p>'+
+    //                 '<p class="tips">'+
+    //                    '<img src="../source/img/uncheck.png" class="checkImg">'+
+    //                 '</p>'+
+    //             '</div>'+
+    //         '</li>');
+    //         item.find(".rightPara").text(data[i].name);
+    //         $(".mui-table-view").append(item);
+    //     }
+    // })
 </script>
 </html>

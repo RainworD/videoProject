@@ -16,10 +16,10 @@
   -webkit-transform: translate(-50%, -50%);
 }
 .verticalCenter {
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  -webkit-transform: translate(0, -50%);
+  position: absolute !important;
+  top: 50% !important;
+  transform: translate(0, -50%) !important;
+  -webkit-transform: translate(0, -50%) !important;
 }
 .horizontalCenter {
   position: absolute;
@@ -64,6 +64,9 @@ li {
 .colorred {
   color: #f33;
 }
+.colorgreen {
+  color: #4cd964;
+}
 .mui-btn-negative,
 .mui-btn-danger,
 .mui-btn-red {
@@ -77,28 +80,6 @@ p {
 }
 .wordbreak {
   word-break: break-all;
-}
-.fix7_5 {
-  position: relative;
-  height: 0;
-  width: 100%;
-  padding-bottom: 71.4%;
-}
-.fix7_5 > * {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-.photoPreviewBox {
-  width: 100%;
-  margin-bottom: -4px;
-}
-.photoPreviewBox .photo {
-  width: calc(( 100% - 8px ) / 3);
-  margin-bottom: 4px;
 }
 .flex {
   display: -webkit-flex;
@@ -165,11 +146,20 @@ h5,
   margin-right: -35px;
 }
 .vertical-align {
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  -webkit-transform: translate(0, -50%);
+  position: absolute !important;
+  top: 50% !important;
+  transform: translate(0, -50%) !important;
+  -webkit-transform: translate(0, -50%) !important;
 }
 .vertical-align.mui-pull-right {
   right: 15px;
+}
+.mui-table-view .media-object-50 {
+  line-height: 50px;
+  max-width: 50px;
+  height: 50px;
+}
+.mui-radio input[type='radio']:checked:before,
+.mui-checkbox input[type='checkbox']:checked:before {
+  color: #fe3824;
 }

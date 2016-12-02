@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>邀请企业</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+</style>
+<body>
+    <div class="addworkmates">
+        <div class="mui-content">
+            <h6 class="mui-content-padded">邀请码:&nbsp;&nbsp;<span>{{code}}</span></h6>
+            <form class="mui-input-group">
+                <div class="mui-input-row">
+                    <label>企业名称</label>
+                    <input v-model="companyName" class="mui-text-right" type="text" placeholder="请输入企业名称">
+                </div>
+                <div class="mui-input-row">
+                    <label>联系人</label>
+                    <input v-model="companyContractName" class="mui-text-right" type="text" placeholder="请输入联系人">
+                </div>
+                <div class="mui-input-row">
+                    <label>联系电话</label>
+                    <input v-model="companyPhone" class="mui-text-right" type="text" placeholder="请输入联系电话">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+// mui.alert(window.addButton);
+function test(){
+    mui.alert("测试");
+}
+
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            code: getUser_Code(),
+            companyName: "",
+            companyContractName: "",
+            companyPhone: "",
+            queryData: {}
+        },
+        computed: {
+            
+        },
+        methods: {
+            formCheck: function(){
+                var self = this;
+                if(checkEmpty(self.companyContractName)||checkEmpty(self.companyName)){
+                    mui.toast("请补全信息");
+                    return false;
+                }
+                else if(!isRightPhoneNumber(self.companyPhone)){
+                    mui.toast("请输入合法的手机号");
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            },
+            addButton: function(){
+                var self = this;
+                if(self.formCheck()){
+                    mui.confirm("您确定新增吗？",null,null,function(data){
+                        if(data.index == 1){
+                            $.when(b_registerBCompanyParent(getB_Code(),self.companyPhone,self.companyName)).done(function(data){
+                                console.log(data);
+                            })
+                        }
+                    })
+                }
+            },
+            saveButton: function(){
+                var self = this;
+                if(self.formCheck()){
+                    mui.confirm("您确定保存修改吗？",null,null,function(data){
+                        if(data.index == 1){
+                            // id,name,contact,phone
+                            $.when(b_editCompany(self.queryData.id,self.companyName,self.companyContractName,self.companyPhone)).done(function(data){
+                                console.log(data);
+                            })
+                        }
+                    })
+                }
+            }
+        },
+        created: function() {
+            var self = this;
+            self.queryData = getQueryData();
+            window.addButton = self.addButton;
+            window.saveButton = self.saveButton;
+        }
+    });
+});
+
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

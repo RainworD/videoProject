@@ -7,45 +7,126 @@
     <meta name="format-detection" content="telephone=no">
     <title>视频监控</title>
     <link rel="stylesheet" href="../source/mui/css/mui.css">
-    <link rel="stylesheet" type="text/css" href="../source/Font-Awesome-3.2.1/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../source/Font-Awesome-3.2.1/css/font-awesome-ie7.min.css">
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
-    body{
-        background-color: #f3f3f3;
-    }
+body{
+    background-color: #f3f3f3;
+}
+.feedback input,
+.feedback textarea {
+    border: none !important;
+    font-size: 12px;
+}
+.feedback textarea {
+    height: 100px;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+.feedback .row {
+    width: 100%;
+    background-color: #fff;
+}
+.mui-content-padded{
+    padding-top: 5px;
+}
 </style>
 <body>
-    <div class="feedbackBox">
-        <p class="tips">请留下您的宝贵意见</p>
-        <p class="deliverBox_">
-            <textarea placeholder="感谢您百忙之中的用心反馈" id="feedContent"></textarea>
-        </p>
-        <p class="tips">请留下您的联系方式</p>
-        <p class="deliverBox_">
-            <input placeholder="以便我们联系您和您进一步的沟通和礼物赠送" id="telNum">
-        </p>
-    </div>
-    <div class="mask"></div>
-    <div class="submitBox">
-        <p class="para_1">谢谢</p>
-        <p class="para_2">您的支持就是我们改进的动力</p>
-        <p class="para_bot">确认</p>
+    <div class="mui-content feedback">
+        <h6 class="mui-content-padded">请留下您的宝贵意见</h6>
+        <div class="row mui-input-row">
+            <textarea v-model="text" class="mui-input-clear question" placeholder="感谢您百忙之中的用心反馈"></textarea>
+        </div>
+        <h6 class="mui-content-padded">请留下您的联系方式</h6>
+        <div class="mui-input-row">
+            <input v-model="contact" type="text" class="mui-input-clear contact" placeholder="以便我们联系您和您进一步的沟通和礼物赠送" data-input-clear="2"><span class="mui-icon mui-icon-clear mui-hidden"></span>
+        </div>
     </div>
 </body>
-<script type="text/javascript">
-    function excute(){
-        var text=$("#feedContent").val();
-        var contact=$("#telNum").val();
-        $.when(postFeedback(text,contact)).done(function(data){
-            if(data.state==0){
-                alert("发布成功！")
+<script>
+    
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            datalist: [],
+            checkedUsersId: [],
+            text: "",
+            contact: ""
+        },
+        computed: {
+            
+        },
+        methods: {
+            finishChoose: function(){
+                var self = this;
+                var choosenWorkmates = [];
+                for(var i = 0, length = self.checkedUsersId.length; i < length; i++){
+                    var checkedId = self.checkedUsersId[i];
+                    for(var j = 0, jlength = self.datalist.length; j<jlength; j++ ){
+                        if(checkedId == self.datalist[j].id){
+                            choosenWorkmates.push(self.datalist[j]);
+                        }
+                    }
+                }
+                // console.log("diliver.html?"+encodeObj({"choosenWorkmates":choosenWorkmates}))
+                window.location.href="backto:deliver.html,javascript:writeWorkmates('"+encodeObj({"choosenWorkmates":choosenWorkmates})+"')";
+            },
+            applyButton: function(){
+                var self = this;
+                if(checkEmpty(self.text)){
+                    mui.toast('请输入您的反馈');
+                }
+                else{
+                    $.when(postFeedback(self.text,self.contact)).done(function(data){
+                        if(data.state==0){
+                            mui.alert("您的支持就是我们改进的动力！","谢谢",["确认"],function(data){
+                                window.location.href = "backto:userInfo.html";
+                            })
+                        }
+                    });
+                }
+                    
             }
-        })
-    }
+        },
+        created: function() {
+            var self = this;
+            var qd = getQueryData();
+            if(qd&&qd.choosenWorkmates){
+                for(var i = 0, length = qd.choosenWorkmates.length; i < length; i++){
+                    self.checkedUsersId.push(qd.choosenWorkmates[i].id);
+                }
+            }
+            $.when(getAllUser("企业同事")).done(function(data){
+                if(data.state == 0){
+                    self.datalist = data.data;
+                }
+            });
+        },
+        ready: function() {
+            window.applyButton = this.applyButton;
+        }
+    })
+});
+</script>
+<script type="text/javascript">
+    // function excute(){
+    //     var text=$("#feedContent").val();
+    //     var contact=$("#telNum").val();
+        // $.when(postFeedback(text,contact)).done(function(data){
+        //     if(data.state==0){
+        //         alert("发布成功！")
+        //     }
+        // })
+    // }
 </script>
 </html>

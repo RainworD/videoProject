@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频监控</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+    .icon-img{
+        width: 30px;
+        height: 30px !important;
+        margin-top: 5px;
+    }
+</style>
+<body>
+    <div class="mui-content messageShowBox">
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell" v-for="announce in announces">
+                <a href="message_detail.html">
+                    <img :src="announce.image" class="mui-media-object mui-pull-left head-img icon-img">
+                    <div class="mui-media-body">
+                        {{announce.title}}
+                        <p class="mui-ellipsis">{{announce.text}}</p>
+                        <div class="timeShow">
+                            {{stamp2formatTime(announce.in_time)}}
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+var dataList = [{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "设备发生...",
+    in_time: 0
+},{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "设备发生...",
+    in_time: 0
+},{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "设备发生...",
+    in_time: 0
+},{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "设备发生...",
+    in_time: 0
+}];
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            announces: []
+        },
+        computed: {
+            
+        },
+        methods: {
+        },
+        created: function() {
+            var self = this;
+            self.announces = dataList;
+            // $.when(b_getNewestAnnounce()).done(function(data){
+
+            // })
+        }
+    })
+});
+</script>
+</html>

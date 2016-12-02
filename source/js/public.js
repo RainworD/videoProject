@@ -1,4 +1,4 @@
-// 检查输入是否为空
+// 检查输入是否为空，空的话返回true
 function checkEmpty(str){
     return !$.trim(str);
 }
@@ -93,6 +93,15 @@ function stamp2time(stamp) {
        }
     }
 }
+function getBase64Image(img) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    var dataURL = canvas.toDataURL("image/png");
+    return dataURL;
+}
 var Vue = Vue.extend({
     data: function(){
         return {JSON: JSON}
@@ -105,3 +114,6 @@ var Vue = Vue.extend({
         stamp2formatDate: stamp2formatDate
     }
 });
+function cclear(){
+    window.localStorage.clear();
+}

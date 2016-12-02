@@ -11,58 +11,80 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
         background-color: #f3f3f3;
     }
-    .phone{
-        position: absolute;
-        top: 0;
-        right:0;
-    }
 </style>
 <body>
     <div class="addworkmates">
         <div class="mui-content">
-            <p class="topCode">邀请码:&nbsp;&nbsp;<span>JK001002</span></p>
-            <ul class="mui-table-view">
-                <li class="mui-table-view-cell">
-                    <div class="addContent">
-                        <span>手机号</span>
-                        <input type="text" id="telNum">
-                        <img src="../source/img/phone.png" class="phone">
-                    </div>
-                </li>
-            </ul>
+            <h5 class="mui-content-padded">邀请码:&nbsp;&nbsp;<span>{{code}}</span></h5>
+            <form class="mui-input-group">
+                <div class="mui-input-row">
+                    <label>手机号</label>
+                    <input v-model="phone" type="text">
+                    <img class="imageIcon" style="position: absolute;right: 10px; top: 10px;" src="../source/img/phone.png" @tap="getAddressBook()">
+                </div>
+            </form>
         </div>
     </div>
 </body>
-<script type="text/javascript">
-    mui.init({
-        swipeBack: true //启用右滑关闭功能
-    });
-    function inviteMethod(){
-        var code=$(".topCode").children("span").val();
-        var phone=$("#telNum").val();
-        var competence;
-        $.when(getUserInfo()).done(function(data){
-            if(data.state==0){
-                competence=data.competence;
-            }
-            $.when(inviteColleague(text,contact,competence)).done(function(data){
-                if(data.state==0){
-                    mui.alert(' ','新增成功',function() {
-           
-                    });
+<script>
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            code: getUser_Code(),
+            phone: ""
+        },
+        computed: {
+            
+        },
+        methods: {
+            applyButton: function(){
+                var self = this;
+                if(!isRightPhoneNumber(self.phone)){
+                    mui.toast("请输入合法的手机号");
                 }
                 else{
-                    mui.alert('请到”设置-隐私-通讯录“中开启联系人访问权限', '无法访问通讯录', function() {
-           
-                    });
+                    mui.confirm("您确定邀请吗？",null,null,function(result){
+                        if(result.index == 1){
+                            $.when(b_addColleague(getB_Code(),self.phone)).done(function(data){
+                                if(data.state == 0){
+                                    mui.toast("邀请成功");
+                                    self.phone = "";
+                                }
+                            });
+                        }
+                    })
                 }
-            })
-        })
-    }
+            },
+            setPhoneNumber: function(number){
+                var self = this;
+                self.phone = number;
+            },
+            getAddressBook: function(){
+                window.location.href="h5action:getAddressBook";
+            }
+        },
+        created: function() {
+            var self = this;
+            window.applyButton = self.applyButton;
+            window.setPhoneNumber = self.setPhoneNumber;
+        }
+    })
+});
 </script>
 </html>
+
+
+
+

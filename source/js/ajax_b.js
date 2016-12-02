@@ -24,7 +24,7 @@ function errorHandle(data){
 	mui.toast("网络异常");
 }
 // 获取用户基本信息
-function b_getSelf(){
+function getSelf(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/User",
 		data: {
@@ -72,26 +72,6 @@ function b_getAllCompany(){
 		url: baseUrl + "/model/get/Company",
 		data: {
 			"add_":"device"
-		}
-	});
-	return ajax;
-}
-// 根据企业id获得特定企业的动态
-function b_getDynamicByCompanyId(id){
-	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Dynamic",
-		data: {
-			"company": id
-		}
-	});
-	return ajax;
-}
-// 根据动态id获得动态评论
-function b_getCommentByDynamicId(id){
-	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Comment",
-		data: {
-			"company": id
 		}
 	});
 	return ajax;
@@ -146,33 +126,50 @@ function b_getDeviceListByCompanyId(id){
 	});
 	return ajax;
 }
-// 获得用户
-function b_getAllUser(competence){
+// 获得特定类型的用户
+function getAllUser(competence){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/User",
 		data: {
-			"competence": competence
+			"competence": competence,
+			"add_": "photo"
 		}
 	});
 	return ajax;
 }
-// 获得b的同事
-function b_getBColleague(){
-	return b_getAllUser("代理商同事");
-}
-// 获得b的未注册同事
-function b_getBColleague_unregister(businessId){
+// 获得未注册同事
+function getColleague_unregister(businessId,competence){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Register",
 		data: {
 			"user": businessId,
-			"competence": "代理商同事",
-			"add_": "enable"
+			"competence": competence,
+			"add_": ["enable","name","concat"]
 		}
 	});
 	return ajax;
 }
-
+// 禁用自己的同事
+function disableColleagueByColleagueId(colleagueId){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/save/User",
+		data: {
+			"id":colleagueId,
+			"enable": false
+		}
+	});
+	return ajax;
+}
+function enableColleagueByColleagueId(colleagueId){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/save/User",
+		data: {
+			"id":colleagueId,
+			"enable": true
+		}
+	});
+	return ajax;
+}
 function b_getBusiness(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Business",
@@ -208,8 +205,59 @@ function b_getStatistics(){
 	});
 	return ajax;
 }
-
-
+// 根据企业id获得特定企业的动态
+function b_getDynamicByCompanyId(id){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		data: {
+			"company": id,
+			"_add":"comment"
+		}
+	});
+	return ajax;
+}
+// 根据动态id获得动态评论
+function b_getCommentByDynamicId(id){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Comment",
+		data: {
+			"company": id
+		}
+	});
+	return ajax;
+}
+// 给动态评论
+function commentDynamicByDynamicId(dynamicId,text){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/save/Comment",
+		data: {
+			"dynamic": dynamicId,
+			"text": text
+		}
+	});
+	return ajax;
+}
+// 获得所有企业的动态
+function getAllCompanyDynamic(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		data: {
+			"_add":"comment"
+		}
+	});
+	return ajax;
+}
+// 提交反馈信息
+function postFeedback(text,contact){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Feedback",
+		data:{
+			text:text,
+			contact:contact
+		}
+	});
+	return ajax;
+}
 
 
 

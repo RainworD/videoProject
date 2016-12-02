@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+	<script src="../source/js/jquery-1.11.1.min.js"></script>
+	<script src="../source/mui/js/mui.js"></script>
+	<script src="../source/js/ajax_b.js"></script>
+	<script src="../source/js/vue.js"></script>
+	<script src="../source/js/public.js"></script>
+</head>
+<body>
+<script>
+$.when(getSelf()).done(function(data){
+	if(data.state == 0){
+		var _data = data.data[0];
+		window.localStorage.setItem("user_code",_data.code);
+		window.localStorage.setItem("user_name",_data.name);
+		window.localStorage.setItem("user_username",_data.username);
+		window.localStorage.setItem("user_competence",_data.competence);
+		window.localStorage.setItem("user_phone",_data.contact);
+		
+		debugger;
+		// b端情况
+		if(_data.business){
+
+			window.localStorage.setItem("b_deposit",_data.business.deposit);
+			window.localStorage.setItem("b_price",_data.business.price);
+		}
+		window.localStorage.setItem("user_id",_data.id);
+		window.location.href = getQueryData().url;
+	}
+});
+</script>
+</body>
+</html>

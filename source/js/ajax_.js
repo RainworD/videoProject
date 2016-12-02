@@ -47,17 +47,6 @@ function getInformActivities(){//获得知会动态
 	});
 	return ajax;
 }
-function postFeedback(text,contact){//反馈信息
-	var ajax = $.ajax({
-		url: "/model/save/Feedback",
-		type: "POST",
-		data:{
-			text:text,
-			contact:contact
-		}
-	});
-	return ajax;
-}
 function inviteColleague(text,contact,competence){//邀请同事
 	var ajax = $.ajax({
 		url: "/model/save/Register",

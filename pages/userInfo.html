@@ -11,112 +11,22 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
         background-color: #f3f3f3;
     }
-   /* html,
-    body {
-        background-color: #efeff4;
-    }*/
-    .mui-views,
-    .mui-view,
-    .mui-pages,
-    .mui-page,
-    .mui-page-content {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #efeff4;
-    }
-    .mui-pages {
-        top: 46px;
-        height: auto;
-    }
-    .mui-scroll-wrapper,
-    .mui-scroll {
-        background-color: #efeff4;
-    }
-    .mui-page.mui-transitioning {
-        -webkit-transition: -webkit-transform 300ms ease;
-        transition: transform 300ms ease;
-    }
-    .mui-page-left {
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }
-    .mui-ios .mui-page-left {
-        -webkit-transform: translate3d(-20%, 0, 0);
-        transform: translate3d(-20%, 0, 0);
-    }
-    .mui-navbar {
-        position: fixed;
-        right: 0;
-        left: 0;
-        z-index: 10;
-        height: 44px;
-        background-color: #f7f7f8;
-    }
-    .mui-navbar .mui-bar {
-        position: absolute;
-        background: transparent;
-        text-align: center;
-    }
-    .mui-android .mui-navbar-inner.mui-navbar-left {
-        opacity: 0;
-    }
-    .mui-ios .mui-navbar-left .mui-left,
-    .mui-ios .mui-navbar-left .mui-center,
-    .mui-ios .mui-navbar-left .mui-right {
-        opacity: 0;
-    }
-    .mui-navbar .mui-btn-nav {
-        -webkit-transition: none;
-        transition: none;
-        -webkit-transition-duration: .0s;
-        transition-duration: .0s;
-    }
-    .mui-navbar .mui-bar .mui-title {
-        display: inline-block;
-        width: auto;
-    }
-    .mui-page-shadow {
-        position: absolute;
-        right: 100%;
-        top: 0;
-        width: 16px;
-        height: 100%;
-        z-index: -1;
-        content: '';
-    }
-    .mui-page-shadow {
-        background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
-        background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
-    }
-    .mui-navbar-inner.mui-transitioning,
-    .mui-navbar-inner .mui-transitioning {
-        -webkit-transition: opacity 300ms ease, -webkit-transform 300ms ease;
-        transition: opacity 300ms ease, transform 300ms ease;
-    }
-    .mui-page {
-        display: none;
-    }
-    .mui-pages .mui-page {
-        display: block;
-    }
-    .mui-page .mui-table-view:first-child {
-        margin-top: 15px;
-    }
-    .mui-page .mui-table-view:last-child {
-        margin-bottom: 30px;
-    }
+    
     .mui-table-view {
         margin-top: 20px;
+    }
+    .mui-table-view-cell{
+        font-size: 16px;
     }
     
     .mui-table-view span.mui-pull-right {
@@ -130,71 +40,26 @@
     .mui-table-view-divider:after {
         height: 0;
     }
-    .head {
-        height: 40px;
-    }
-    #head {
-        line-height: 40px;
-    }
+    
     .head-img {
         max-width: 60px!important;
         height: 60px!important;
         display: block;
         width: 60px!important;
     }
-    #head-img1 {
-        position: absolute;
-        bottom: 10px;
-        right: 40px;
-        width: 40px;
-        height: 40px;
-    }
-    .update {
-        font-style: normal;
-        color: #999999;
-        margin-right: -25px;
-        font-size: 15px
-    }
-    .mui-fullscreen {
-        position: fixed;
-        z-index: 20;
-        background-color: #000;
-    }
-    .mui-ios .mui-navbar .mui-bar .mui-title {
-        position: static;
-    }
-    /*问题反馈在setting页面单独的css*/
-    #feedback .mui-popover{
-        position: fixed;
-    }
-    #feedback .mui-table-view:last-child {
-        margin-bottom: 0px;
-    }
-    #feedback .mui-table-view:first-child {
-        margin-top: 0px;
-    }
+    
     .icon-img{
         display: inline-block;
         width: 20px;
         height: 20px;
         vertical-align: middle;
         margin-top: -4px;
-        margin-right: 6px;
+        margin-right: 3px;
     }
     .mui-media-body{
         height: 60px;
         line-height: 29px;
     }
-    .rightTitle{
-        color: #666;
-        font-size: 14px;
-        span{
-            color:#333;
-            font-size: 14px;
-        }
-    } 
-    /*问题反馈在setting页面单独的css==end*/
-        
 </style>
 <body>
    <!--  <div class="userInfo">
@@ -286,11 +151,11 @@
             <div class="mui-scroll">
                 <ul class="mui-table-view mui-table-view-chevron">
                     <li class="mui-table-view-cell mui-media">
-                        <a class="mui-navigate-right" href="deliver.html">
+                        <a class="mui-navigate-right" href="addCompany.html">
                             <img class="mui-media-object mui-pull-left head-img" id="head-img" src="../source/img/a.png">
-                            <div class="mui-media-body">
-                                <p class="rightTitle">真实姓名：<span>未设置</span></p>
-                                <p class="rightTitle">手机号码：<span>13890002000</span></p>
+                            <div class="mui-media-body" v-cloak>
+                                <p class="mui-h5">真实姓名：{{name}}</p>
+                                <p class="mui-h5">手机号码：{{phone}}</p>
                             </div>
                         </a>
                     </li>
@@ -315,45 +180,77 @@
                     </li>
                 </ul>
                 <ul class="mui-table-view">
-                    <li class="mui-table-view-cell" style="text-align: center;color:#e74f3a;">
-                        <a id="confirmBtn">退出登录</a>
+                    <li class="mui-table-view-cell" style="text-align: center;color:#e74f3a;" @tap="logout()">
+                        退出帐号
                     </li>
                 </ul>
             </div>
         </div>
     </div>
 </body>
+<script>
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            price: 0,
+            phone: getUser_Phone(),
+            name: getUser_Name()
+        },
+        computed: {
+            
+        },
+        methods: {
+            logout: function(){
+                mui.confirm("","确认退出该账号？",null,function(result){
+                    if(result.index == 1){
+                        $.when(b_logout()).done(function(data){
+                            if(data.state == 0){
+                                window.location.href="h5action:logout";
+                            }
+                        })
+                    }
+                });
+            }
+        },
+        created: function() {
+            var self = this;
+        }
+    })
+});
+</script>
 <script type="text/javascript">
-    document.getElementById("confirmBtn").addEventListener('tap', function() {
-        var btnArray = ['否', '是'];
-        mui.confirm('', '确认退出该账号？', btnArray, function(e) {
-            // if (e.index == 1) {
-            //     info.innerText = '你刚确认MUI是个好框架';
-            // } else {
-            //     info.innerText = 'MUI没有得到你的认可，继续加油'
-            // }
-        })
-    });
-    $(".checkImg").bind("click",function(){
-        var class_=$(this).attr("class");
-        var array=class_.split(" ");
-        console.log(class_);
-        if(array.length>1){
-            $(this).attr("src","../source/img/uncheck.png");
-            $(this).removeClass("checkJudge");
-        }
-        else{
-            $(this).attr("src","../source/img/checked.png");
-            $(this).addClass("checkJudge");
-        }
-    })
-    $(".quitBtn").bind("click",function(){
-        $(".mask").addClass("show");
-        $(".submitBox").addClass("show");
-    })
-    $(".para_bot span").bind("click",function(){
-        $(".mask").removeClass("show");
-        $(".submitBox").removeClass("show");
-    })
+    // document.getElementById("confirmBtn").addEventListener('tap', function() {
+    //     var btnArray = ['否', '是'];
+    //     mui.confirm('', '确认退出该账号？', btnArray, function(e) {
+    //         // if (e.index == 1) {
+    //         //     info.innerText = '你刚确认MUI是个好框架';
+    //         // } else {
+    //         //     info.innerText = 'MUI没有得到你的认可，继续加油'
+    //         // }
+    //     })
+    // });
+    // $(".checkImg").bind("click",function(){
+    //     var class_=$(this).attr("class");
+    //     var array=class_.split(" ");
+    //     console.log(class_);
+    //     if(array.length>1){
+    //         $(this).attr("src","../source/img/uncheck.png");
+    //         $(this).removeClass("checkJudge");
+    //     }
+    //     else{
+    //         $(this).attr("src","../source/img/checked.png");
+    //         $(this).addClass("checkJudge");
+    //     }
+    // })
+    // $(".quitBtn").bind("click",function(){
+    //     $(".mask").addClass("show");
+    //     $(".submitBox").addClass("show");
+    // })
+    // $(".para_bot span").bind("click",function(){
+    //     $(".mask").removeClass("show");
+    //     $(".submitBox").removeClass("show");
+    // })
 </script>
 </html>
