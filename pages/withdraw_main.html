@@ -59,7 +59,28 @@ $(function() {
         },
         methods: {
             withdraw: function(){
-                
+                var self = this;
+                if(checkEmpty(self.account)){
+                    mui.toast("请输入支付宝账号");
+                }
+                else if(isNaN(self.value)){
+                    mui.toast("提现金额必须为数字");
+                }
+                else{
+                    $.when(applyWithdraw(self.account, self.value)).done(function(data){
+                        if(data.state == 0){
+                            mui.alert("客服人员将与您联系","提现成功",null,function(){
+
+                            })
+                        }
+                        else if(data.state == 30004){
+                            mui.alert("账户余额不足","提现失败",null,function(){
+
+                            })
+                        }
+                    });
+                }
+                    
             }
         },
         created: function() {

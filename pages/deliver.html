@@ -45,7 +45,7 @@
 <body>
     <div class="deliverBox">
         <p class="deliverBox_">
-            <textarea placeholder="输入文本，请少于200字"></textarea>
+            <textarea v-model="text" placeholder="输入文本，请少于200字"></textarea>
         </p>
         <div class="photoPreviewBox">
             <div class="photo" v-for="image in selectedImageList" track-by="$index">
@@ -70,11 +70,11 @@
             <img src="../source/img/userPlus.png" class="userPlus" @tap="chooseWorkmates()">
         </div>
     </div>
-    <ul class="mui-table-view">
+    <!-- <ul class="mui-table-view">
         <li class="mui-table-view-cell" style="text-align: center;color:#e74f3a;">
             <a id="upload">确认发布</a>
         </li>
-    </ul>
+    </ul> -->
 </body>
 <script>
 $(function() {
@@ -83,7 +83,8 @@ $(function() {
         el: "body",
         data: {
             selectedImageList: [],
-            workmates:[]
+            workmates:[],
+            text: ""
         },
         computed: {
             
@@ -133,13 +134,20 @@ $(function() {
             chooseWorkmates: function(){
                 var self = this;
                 window.location.href="open:workmatesList.html?"+encodeObj({"choosenWorkmates":self.workmates})+",navigatorRightButton:确定,navigatorRightButtonCallback:finishChoose(),navigatorTitle:所有同事";
-                // 代办：在选择界面我要把选好的用户传递给app，app再调用我这里的方法把用户写入
-
             },
             writeWorkmates: function(string){
                 var self = this;
-                self.workmates = decodeURIComponent(string).choosenWorkmates;
+                var choosenWorkmates = JSON.parse(decodeURIComponent(string)).choosenWorkmates;
+                if(choosenWorkmates){
+                    self.workmates = choosenWorkmates;
+                }
+            },
+            applyButton: function(){
+                var self = this;
+                var photo = informed = undefined;
+                $.when(saveDynamic(self.text,photo,informed)).done(function(data){
 
+                });
             }
         },
         created: function() {
@@ -149,12 +157,10 @@ $(function() {
         ready: function() {
             var self = this;
             window.writeWorkmates = self.writeWorkmates;
+            window.applyButton = self.applyButton;
         }
     })
 });
-// function writeWorkmates(string){
-//     mui.alert(string);
-// }
 </script>
 <script type="text/javascript">
     // $(".removeBtn").bind("click",function(){

@@ -45,10 +45,8 @@ $(function() {
                 var self = this;
                 var choosenWorkmates = [];
                 for(var i = 0, length = self.checkedUsersId.length; i < length; i++){
-                    console.log(self.checkedUsersId);
                     var checkedId = self.checkedUsersId[i];
                     for(var j = 0, jlength = self.datalist.length; j<jlength; j++ ){
-                        console.log(checkedId, self.datalist[j].id)
                         if(checkedId == self.datalist[j].id){
                             choosenWorkmates.push(self.datalist[j]);
                         }
@@ -62,8 +60,10 @@ $(function() {
             var self = this;
             var qd = getQueryData();
             if(qd&&qd.choosenWorkmates){
+
                 for(var i = 0, length = qd.choosenWorkmates.length; i < length; i++){
-                    self.checkedUsersId.push(qd.choosenWorkmates[i].id);
+                    mui.alert(qd.choosenWorkmates[i].id+"")
+                    self.checkedUsersId.push(qd.choosenWorkmates[i].id+"");
                 }
             }
             $.when(getAllUser("企业同事")).done(function(data){

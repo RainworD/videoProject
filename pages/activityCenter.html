@@ -40,7 +40,7 @@
             <div id="scroll" class="mui-scroll-wrapper">
                 <div class="mui-scroll">
                     <ul class="mui-table-view no-padding-list">
-                        <li class="" v-for="dynamic in dynamicList">
+                        <li class="" v-for="dynamic in informedDynamicList">
                             <div class="messageBox">
                                 <div class="leftImg">
                                     <img :src="dynamic.user.photo">
@@ -60,12 +60,12 @@
                                         </div>
                                         <div class="tips">
                                             <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
-                                            <img @tap="beginComment(dynamic.id);" src="../source/img/message.png">
+                                            <img @tap="beginComment(dynamic);" src="../source/img/message.png">
                                         </div>
                                     </div> 
                                 </div>
                             </div>
-                            <div class="comment">
+                            <div class="comment" v-if="dynamic.comment.length > 0">
                                 <div class="commentBox" v-for="cmt in dynamic.comment">
                                     <div class="leftImg">
                                         <img :src="cmt.user.photo">
@@ -88,7 +88,7 @@
         </div>
         <div id="item2" class="mui-control-content">
             <ul class="mui-table-view no-padding-list">
-                <li class="" v-for="dynamic in dynamicList">
+                <li class="" v-for="dynamic in commentDynamicList">
                     <div class="messageBox">
                         <div class="leftImg">
                             <img :src="dynamic.user.photo">
@@ -108,12 +108,12 @@
                                 </div>
                                 <div class="tips">
                                     <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
-                                    <img src="../source/img/message.png">
+                                    <img @tap="beginComment(dynamic);" src="../source/img/message.png">
                                 </div>
                             </div> 
                         </div>
                     </div>
-                    <div class="comment">
+                    <div class="comment" v-if="dynamic.comment.length > 0">
                         <div class="commentBox" v-for="cmt in dynamic.comment">
                             <div class="leftImg">
                                 <img :src="cmt.user.photo">
@@ -154,12 +154,12 @@
                                 </div>
                                 <div class="tips">
                                     <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
-                                    <img src="../source/img/message.png">
+                                    <img @tap="beginComment(dynamic);" src="../source/img/message.png">
                                 </div>
                             </div> 
                         </div>
                     </div>
-                    <div class="comment">
+                    <div class="comment" v-if="dynamic.comment.length > 0">
                         <div class="commentBox" v-for="cmt in dynamic.comment">
                             <div class="leftImg">
                                 <img :src="cmt.user.photo">
@@ -196,27 +196,36 @@ $(function() {
     var vm = new Vue({
         el: "body",
         data: {
-            dynamicList: [],
             showInput: false,
             focusDynamicId: 0,
-            commentValue: ""
+            commentValue: "",
+            dynamicList: [],
+            informedDynamicList: [],
+            commentDynamicList: []
         },
         computed: {
             
         },
         methods: {
-            beginComment: function(dynamicId){
+            beginComment: function(dynamic){
                 var self = this;
                 self.showInput = true;
-                self.focusDynamicId = dynamicId;
+                self.focusDynamic = dynamic;
             },
             sendComment: function(){
                 var self = this;
-                $.when(commentDynamicByDynamicId(self.focusDynamicId,self.commentValue)).done(function(data){
+                $.when(commentDynamicByDynamicId(self.focusDynamic.id,self.commentValue)).done(function(data){
                     if(data.state == 0){
-
+                        self.refreshDynamicById(self.focusDynamic);
                     }
                 });
+            },
+            refreshDynamicById: function(dynamic){
+                $.when(getDynamicById(dynamic.id)).done(function(data){
+                    if(data.state == 0){
+                        dynamic.comment = data.data.comment;
+                    }
+                })
             }
         },
         created: function() {
@@ -225,48 +234,20 @@ $(function() {
             $.when(getAllCompanyDynamic()).done(function(data){
                 if(data.state == 0){
                     self.dynamicList = data.data;
-                    // self.dynamicList = [{
-                    //     id : 0,
-                    //     photo: ["../source/img/0.png","../source/img/1.png","../source/img/2.png"],
-                    //     user: {name:"王大庆",photo:"../source/img/q.png"},
-                    //     in_time: 0,
-                    //     title: "呵呵好",
-                    //     text: "此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景",
-                    //     comment: [{
-                    //         id: 0,
-                    //         in_time: 0,
-                    //         user:{name:"wqy",photo:"../source/img/q.png"},
-                    //         text: "123412344dcv4dcv12344dcv 12344dcv12344dcv12344dcv 12344dcv12344dcv12344dcv12344dcv"
-                    //     },{
-                    //         id: 1,
-                    //         in_time: 222,
-                    //         user:{name:"cdd",photo:"../source/img/q.png"},
-                    //         text: "呵呵，楼主厉害了😄"
-                    //     }]
-                    // },{
-                    //     id : 0,
-                    //     photo: ["../source/img/0.png","../source/img/1.png","../source/img/2.png"],
-                    //     user: {name:"王大庆",photo:"../source/img/q.png"},
-                    //     in_time: 0,
-                    //     title: "呵呵好",
-                    //     text: "此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景此刻 v 富豪榜 v 好风景",
-                    //     comment: [{
-                    //         id: 0,
-                    //         in_time: 0,
-                    //         user:{name:"wqy",photo:"../source/img/q.png"},
-                    //         text: "123412344dcv4dcv12344dcv 12344dcv12344dcv12344dcv 12344dcv12344dcv12344dcv12344dcv"
-                    //     },{
-                    //         id: 1,
-                    //         in_time: 222,
-                    //         user:{name:"cdd",photo:"../source/img/q.png"},
-                    //         text: "呵呵，楼主厉害了😄"
-                    //     }]
-                    // }];
                 }
             });
+            $.when(getInformedDynamic()).done(function(data){
+                if(data.state == 0){
+                    self.informedDynamicList = data.data;
+                }
+            });
+            $.when(getCommentDynamic()).done(function(data){
+                if(data.state == 0){
+                    self.commentDynamicList = data.data;
+                }
+            })
         },
         ready: function() {
-
         }
     })
 });

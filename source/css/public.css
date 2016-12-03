@@ -163,17 +163,31 @@ h5,
 .mui-checkbox input[type='checkbox']:checked:before {
   color: #fe3824;
 }
+.mui-segmented-control.mui-segmented-control-inverted {
+  border-bottom: 1px solid #ddd;
+}
 body {
   background-color: #fff;
+}
+.mui-segmented-control {
+  overflow: visible;
 }
 .mui-segmented-control-negative.mui-segmented-control-inverted .mui-control-item.mui-active {
   color: #e74f3a;
   border: none;
   background: none;
+  overflow: visible;
 }
 .mui-segmented-control-negative.mui-segmented-control-inverted .mui-control-item.mui-active .listItem_name {
   color: #e74f3a;
-  border-bottom: 2px solid #e74f3a;
+  border-bottom: 1px solid #e74f3a;
+}
+.listItem_name {
+  color: #666;
+  position: relative;
+  padding-bottom: 10px;
+  bottom: -1px;
+  z-index: 1;
 }
 .redNum {
   height: 18px;
@@ -201,11 +215,6 @@ body {
   color: #fff;
   font-size: 12px;
   text-align: center;
-}
-.listItem_name {
-  color: #666;
-  position: relative;
-  padding-bottom: 10px;
 }
 .red {
   color: #e74f3a;
@@ -339,7 +348,7 @@ body {
   border: none;
   font-size: 14px;
   padding: 0;
-  color: #999;
+  color: #333;
   min-height: 100px;
 }
 .deliverBox .deliverImg {
