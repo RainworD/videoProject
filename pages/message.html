@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>视频监控</title>
+    <title>b端系统消息</title>
     <link rel="stylesheet" href="../source/mui/css/mui.css">
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
@@ -95,7 +95,7 @@ $(function() {
         created: function() {
             var self = this;
             self.announces = dataList;
-            $.when(b_getNewestAnnounce()).done(function(data){
+            $.when(getMessage()).done(function(data){
                 console.log(data);
             })
         }

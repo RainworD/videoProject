@@ -97,9 +97,19 @@ function b_addOneRegister(code, phone, name,competence){
 	return ajax;
 }
 // 获得系统通告
-function b_getNewestAnnounce(){
+function getNewestAnnounce(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Comment",
+		data: {
+			
+		}
+	});
+	return ajax;
+}
+// 获得系统消息
+function getMessage(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Message",
 		data: {
 			
 		}
@@ -205,13 +215,12 @@ function b_getStatistics(){
 	});
 	return ajax;
 }
-// 根据企业id获得特定企业的动态
-function b_getDynamicByCompanyId(id){
+// 获得企业的动态
+function getCompanyDynamic(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Dynamic",
 		data: {
-			"company": id,
-			"_add":"comment"
+			"add_":["comment","user","comment.user"]
 		}
 	});
 	return ajax;
@@ -242,7 +251,53 @@ function getAllCompanyDynamic(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Dynamic",
 		data: {
-			"_add":"comment"
+			"add_":["comment","user","comment.user"],
+		}
+	});
+	return ajax;
+}
+// 获得知会我的企业动态
+function getInformedDynamic(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		data: {
+			"add_":["comment","user","comment.user"],
+			"informed": 1
+		}
+	});
+	return ajax;
+}
+// 获得知会我评论的
+function getCommentDynamic(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		data: {
+			"add_":["comment","user","comment.user"],
+			"comment": 1
+		}
+	});
+	return ajax;
+}
+// 根据动态id获得动态
+function getDynamicById(dynamicId){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		data: {
+			"add_":["comment","user","comment.user"],
+			"id": dynamicId
+		}
+	});
+	return ajax;
+}
+// 发布动态
+function saveDynamic(text,photo,informed){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/save/Dynamic",
+		data: {
+			"title": "xykj",
+			"photo": photo,
+			"text": text,
+			"informed":informed
 		}
 	});
 	return ajax;
@@ -258,11 +313,22 @@ function postFeedback(text,contact){
 	});
 	return ajax;
 }
-
 function getAnnounce () {
 	var ajax = $.ajax({
 		// url: baseUrl+"/model/get/Message",
 		url: "../announce.json",
+	});
+	return ajax;
+}
+// 申请提现
+function applyWithdraw(alipay,value){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Order",
+		data:{
+			"type": "提现",
+			"alipay": alipay,
+			"value": value
+		}
 	});
 	return ajax;
 }

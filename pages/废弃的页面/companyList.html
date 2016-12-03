@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>b端－监控tab页－废弃</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+</style>
+<body>
+    <div class="company_list_ mui-content">
+        <ul class="mui-table-view mui-table-view-chevron mui-table-view-chevron-35">
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right" href="company_activity.html">
+                   企业名称
+                   <span class="mui-pull-right mui-h5">2</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            code: getUser_Code(),
+            phone: ""
+        },
+        computed: {
+            
+        },
+        methods: {
+            applyButton: function(){
+                var self = this;
+                if(!isRightPhoneNumber(self.phone)){
+                    mui.toast("请输入合法的手机号");
+                }
+                else{
+                    mui.confirm("您确定邀请吗？",null,null,function(result){
+                        if(result.index == 1){
+                            $.when(b_addColleague(getB_Code(),self.phone)).done(function(data){
+                                if(data.state == 0){
+                                    mui.toast("邀请成功");
+                                    self.phone = "";
+                                }
+                            });
+                        }
+                    })
+                }
+            },
+            setPhoneNumber: function(number){
+                var self = this;
+                self.phone = number;
+            },
+            getAddressBook: function(){
+                window.location.href="h5action:getAddressBook";
+            }
+        },
+        created: function() {
+            var self = this;
+            $.when(b_getAllCompany()).done(function(data){
+                console.log(data);
+            })
+            window.applyButton = self.applyButton;
+            window.setPhoneNumber = self.setPhoneNumber;
+        }
+    })
+});
+</script>
+</html>
