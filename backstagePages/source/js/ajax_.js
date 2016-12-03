@@ -1,3 +1,4 @@
+var baseUrl = "http://monitor.xiyoukeji.com"
 function errorHandle(){
 	alert("网络异常");
 }
@@ -14,7 +15,7 @@ function successHandle(data){
 //获取个人信息
 function getMyInfo(){
 	var ajax = $.ajax({
-		url: "/model/get/User",
+		url: baseUrl + "/model/get/User",
 		type: "POST",
 		success: successHandle,
 		error: errorHandle
@@ -23,7 +24,16 @@ function getMyInfo(){
 }
 function getLabel(){//获得标签列表
 	var ajax = $.ajax({
-		url: "/model/get/Label",
+		url: baseUrl + "/model/get/Label",
+		type: "POST",
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getBusiness(){//获得代理商列表
+	var ajax = $.ajax({
+		url:"/model/get/Business",
 		type: "POST",
 		success: successHandle,
 		error: errorHandle
@@ -33,7 +43,7 @@ function getLabel(){//获得标签列表
 //登入
 function loginApi(username,password){
 	var ajax = $.ajax({
-		url: "/auth/login",
+		url: baseUrl + "/auth/login",
 		type: "POST",
 		data: {
 			"username":username,
@@ -48,7 +58,7 @@ function loginApi(username,password){
 //登出
 function logoutApi(){
 	var ajax = $.ajax({
-		url: "/auth/logout",
+		url: baseUrl + "/auth/logout",
 		success: successHandle,
 		error: errorHandle
 	});
@@ -57,7 +67,7 @@ function logoutApi(){
 // 修改密码
 function changePassword(oldPassword,newPassword){
 	var ajax = $.ajax({
-		url: "/api/change_password",
+		url: baseUrl + "/api/change_password",
 		type: "POST",
 		data: {
 			"old_password": oldPassword,
@@ -71,7 +81,7 @@ function changePassword(oldPassword,newPassword){
 //新增管理员
 function addAdmin(username,password,name,contact,competence){
 	var ajax = $.ajax({
-		url: "/createAdmin",
+		url: baseUrl + "/createAdmin",
 		type: "POST",
 		data:{
 			"username": username,
@@ -88,7 +98,7 @@ function addAdmin(username,password,name,contact,competence){
 //编辑管理员
 function editAdmin(id,password,name,contact,competence,enable){
 	var ajax = $.ajax({
-		url: "/createAdmin",
+		url: baseUrl + "/createAdmin",
 		type: "POST",
 		data:{
 			"id": id,
@@ -105,7 +115,7 @@ function editAdmin(id,password,name,contact,competence,enable){
 }
 function getUserInfo(competence){
 	var ajax = $.ajax({
-		url: "/model/get/User",
+		url: baseUrl + "/model/get/User",
 		type: "POST",
 		tranditional:true,
 		data:{
@@ -118,9 +128,44 @@ function getUserInfo(competence){
 }
 function deleteLabel(id){
 	var ajax = $.ajax({
-		url: "/model/delete/Label",
+		url: baseUrl + "/model/delete/Label",
 		data:{
 			"id": id
+		},
+		type: "POST",
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getArticle(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Article",
+		data:{
+		},
+		type: "POST",
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getPush(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Announce?add_=business",
+		type: "POST",
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function sendArticle(title,text,label,top){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/save/Article",
+		data:{
+			title:title,
+			text:text,
+			label:label,
+			top:top,
 		},
 		type: "POST",
 		success: successHandle,
