@@ -1,0 +1,10 @@
+{
+	"state": 0,
+	"data":[{
+		"id": 1,
+	    "in_time": 0,
+	    "title": "异常警告1",
+	    "text": "设备发生...",
+	    "business": "A"
+	}]
+}

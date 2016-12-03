@@ -259,8 +259,23 @@ function postFeedback(text,contact){
 	return ajax;
 }
 
+function getAnnounce () {
+	var ajax = $.ajax({
+		// url: baseUrl+"/model/get/Message",
+		url: "../announce.json",
+	});
+	return ajax;
+}
 
-
+function getDetail (sid) {
+	var ajax = $.ajax({
+		url: '../detail.json',
+		data: {
+			id: sid
+		}
+	});
+	return ajax;
+}
 
 
 

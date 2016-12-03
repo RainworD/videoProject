@@ -31,7 +31,7 @@
     <div class="mui-content messageShowBox">
         <ul class="mui-table-view">
             <li class="mui-table-view-cell" v-for="announce in announces">
-                <a href="message_detail.html">
+                <a href="{{'message_detail.html?'+encodeObj({'id':announce.id})}}">
                     <img :src="announce.image" class="mui-media-object mui-pull-left head-img icon-img">
                     <div class="mui-media-body">
                         {{announce.title}}
@@ -81,10 +81,10 @@ $(function() {
         },
         created: function() {
             var self = this;
-            self.announces = dataList;
-            // $.when(b_getNewestAnnounce()).done(function(data){
-
-            // })
+            
+            $.when(getAnnounce ()).done(function(data){
+                self.announces = data.data;
+            })
         }
     })
 });

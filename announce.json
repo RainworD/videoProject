@@ -1,0 +1,16 @@
+{
+	"state": 0,
+	"data":[{
+		"id": 1,
+	    "image": "../source/img/warning.png",
+	    "title": "异常警告",
+	    "text": "设备发生...",
+	    "in_time": 0
+	},{
+		"id": 2,
+	    "image": "../source/img/warning.png",
+	    "title": "异常警告",
+	    "text": "设备发生...",
+	    "in_time": 0
+	}]
+}

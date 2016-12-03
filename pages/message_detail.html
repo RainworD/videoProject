@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -19,14 +24,29 @@
 </style>
 <body>
     <div class="detailBox">
-        <p class="topTitle">系统通知</p>
-        <p class="date">2016-09-26</p>
+        <p class="topTitle">{{detail.title}}</p>
+        <p class="date">{{stamp2formatTime(detail.in_time)}}</p>
         <div class="para">
-            <img src="../source/img/b.png" alt="" class="innerPic">
-            <p class="innerPara">有后台发起的内容展示展示展示...</p>
+            <!-- <img src="../source/img/b.png" alt="" class="innerPic">
+            <p class="innerPara">有后台发起的内容展示展示展示...</p> -->
+            {{detail.text}}
         </div>
     </div>
 </body>
 <script type="text/javascript">
+    var vm = new Vue({
+        el: "body",
+        data: {
+            detail: {},
+            id: getQueryData().id
+        },
+        created: function() {
+            var self = this;
+
+            $.when(getDetail (self.id)).done(function(data){
+                self.detail = data.data[0];
+            })
+        }
+    })
 </script>
 </html>
