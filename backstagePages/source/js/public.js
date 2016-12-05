@@ -28,10 +28,10 @@ function eventBind(){
     $(window).bind('click', function(){
         $("[data-hideWhenBlur]").hide();
     });
-    $('body').on('click','[data-urlback]',function(){
-        console.log(1);
-        window.history.back();
-    });
+    // $('body').on('click','[data-urlback]',function(){
+    //     console.log(1);
+    //     window.history.back();
+    // });
 	$(ADMIN_CONFIG.headerSelector+" .client").bind("click",function(e){
         if($("#admin_ui_dropdown_menu").is(":hidden")){
           	$("#admin_ui_dropdown_menu").show();

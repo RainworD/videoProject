@@ -40,6 +40,21 @@ function getBusiness(){//获得代理商列表
 	});
 	return ajax;
 }
+function sendMessage(title,text,business){//获得代理商列表
+	var ajax = $.ajax({
+		url:"/model/save/Announce",
+		type: "POST",
+		traditional:true,
+		data:{
+			title:title,
+			text:text,
+			business:business,
+		},
+		success: successHandle,
+		error: errorHandle,
+	});
+	return ajax;
+}
 //登入
 function loginApi(username,password){
 	var ajax = $.ajax({

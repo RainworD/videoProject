@@ -33,14 +33,14 @@
 						<td>{{show.in_time}}</td>
 						<td style="width:136px;">
 							<div class="admin_ui_select">
-							<select v-model="show._top" @change="topShowButton($index)">
-								<option :value="true">是</option>
-								<option :value="false">否</option>
-							</select>
+								<select v-model="show._top" @change="topShowButton($index)">
+									<option :value="true">是</option>
+									<option :value="false">否</option>
+								</select>
 							</div>
 						</td>
 						<td class="admin_ui_table_action">
-							<a href="#/articleManagementDetail.html" class="iconButton checkIcon">
+							<a class="iconButton checkIcon" @click="goSomewhere(show.id)">
 								<i class="fa fa-pencil"></i>
 								编辑
 							</a>
@@ -138,6 +138,9 @@ var vm = new Tvm({
 				});
 			}
 		},
+		goSomewhere:function(index){
+			window.location.href='#/articleManagementDetail.html?id='+index;
+		}
 	},
 	created: function(){
 		var self = this;

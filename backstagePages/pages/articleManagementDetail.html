@@ -20,10 +20,10 @@
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name">是否置顶：<label for="up"><input type="radio" name=selName"" id="up" style="margin:5px;"><span>是</span></label><label for="down"><input type="radio" name=selName"" id="down" style="margin:5px;"><span>否</span></label></div>
+					<div class="admin_ui_name">是否置顶：<label for="up"><input type="radio" name="selName" id="up" style="margin:5px;"><span class="judge">是</span></label><label for="down"><input type="radio" name="selName" id="down" style="margin:5px;"><span class="judge">否</span></label></div>
 				</div>
 				<!-- <div class="admin_ui_cont"> -->
-					<textarea id="tinymce" style="display: none;"></textarea>
+					<textarea id="tinymce"></textarea>
 				<!-- </div> -->
 			</div>
 		</div>
@@ -31,13 +31,14 @@
 </div>
 <div class="admin_ui_cont_bottomFixed">
 	<div class="admin_ui_button_group" style="float: right">
-		<div class="admin_ui_button admin_ui_button_green" data-urlback>
+		<div class="admin_ui_button admin_ui_button_green" data-urlback id="saveButton">
 			发布
 		</div>
 	</div>
 </div>
 <script>
 	var editor =  new tinymce.Editor('tinymce', {
+		selector: '#tinymce',
 	    height: 500,
 		theme: 'modern',
 		language: 'zh_CN',
@@ -89,9 +90,6 @@
 	    var dataURL = canvas.toDataURL("image/png");
 	    return dataURL;
 	}
-	$("#tinymce").show();
-	editor.render();
-
 	var vm=new Vue({
 		el:"#admin_content_innerBox",
 		data:{
@@ -125,13 +123,18 @@
 					self.refreshTable();
 				}
 			});
+		},
+		mounted: function(){
+			editor.render()
 		}
 	})
 	$("#saveButton").bind('click',function(data){
 		var text = $(editor.getContent());
 		var label = $("input[name='label']:checked").next(".themeContent").text();
 		var title=$(".ar-title").val();
-		var top = $("input[name='selName']:checked").next("span").text();
+		var top = $("input[name='selName']:checked").next(".judge").text();
+		console.log(text);
+		console.log(top);
 		$.when(sendArticle(title,text,label,top)).done(function(){
 			if(data.state==0){
 				alert("新增成功！")
