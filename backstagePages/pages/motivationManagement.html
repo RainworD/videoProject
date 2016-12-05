@@ -24,22 +24,26 @@
 					</tr>
 				</thead>
 				<tbody id="commentManagement_commentData" class="admin_ui_table_hoverEffect">
-					<tr v-for="comment in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+					<tr v-for="comment in dataSource_filter">
 						<td>{{comment.id}}</td>
 						<td>
-							{{comment.value}}
+							{{comment.text}}
 						</td>
-						<td>{{comment.user_nick}}</td>
+						<td>{{comment.user.username}}</td>
 						<td>
 							{{stamp2time(comment.in_time)}}
 						</td>
+						<td></td>
+						<td></td>
 						<td class="admin_ui_table_action">
 							<div class="iconButton removeIcon deleteCommentButton" @click="deleteCommentButton($index)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
 						</td>
+
 					</tr>
+
 				</tbody>
 			</table>
 			<div class="admin_ui_pagination">
@@ -116,9 +120,9 @@ var vm = new Tvm({
 	},
 	created: function(){
 		var self = this;
-		$.when(getComments()).done(function(data){
+		$.when(getDynamic()).done(function(data){
 			if(data.state == 0){
-				self.dataSource = data.comment;
+				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
 				self.refreshTable();
 			}

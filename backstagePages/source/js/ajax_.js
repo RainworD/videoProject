@@ -1,3 +1,12 @@
+$.ajaxSetup({
+	type: "POST",
+	success: successHandle,
+	error: errorHandle,
+	traditional: true,
+	xhrFields: {
+      withCredentials: true
+    }
+});
 var baseUrl = "http://monitor.xiyoukeji.com"
 function errorHandle(){
 	alert("网络异常");
@@ -183,6 +192,19 @@ function sendArticle(title,text,label,top){
 			top:top,
 		},
 		type: "POST",
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+function getDynamic(){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		type: "POST",
+		data:{
+			"add_":"user"
+		},
 		success: successHandle,
 		error: errorHandle
 	});
