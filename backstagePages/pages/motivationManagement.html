@@ -33,7 +33,7 @@
 						<td>
 							{{stamp2time(comment.in_time)}}
 						</td>
-						<td></td>
+						<td>{{comment.user.company.name}}</td>
 						<td></td>
 						<td class="admin_ui_table_action">
 							<div class="iconButton removeIcon deleteCommentButton" @click="deleteCommentButton($index)">

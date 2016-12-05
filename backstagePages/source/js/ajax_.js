@@ -203,7 +203,7 @@ function getDynamic(){
 		url: baseUrl + "/model/get/Dynamic",
 		type: "POST",
 		data:{
-			"add_":"user"
+			"add_":["user","user.business","user.company"]
 		},
 		success: successHandle,
 		error: errorHandle
