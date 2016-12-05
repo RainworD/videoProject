@@ -16,6 +16,7 @@
     <script src="../source/js/vue.js"></script>
     <script src="../source/js/vue-tap.js"></script>
     <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <body>
     <div class="mui-content">
@@ -39,7 +40,7 @@
         <div id="item1" class="mui-control-content mui-active">
             <div id="scroll" class="mui-scroll-wrapper">
                 <div class="mui-scroll">
-                    <ul class="mui-table-view no-padding-list">
+                    <ul class="mui-table-view">
                         <li class="" v-for="dynamic in informedDynamicList">
                             <div class="messageBox">
                                 <div class="leftImg">
@@ -87,96 +88,104 @@
             </div>
         </div>
         <div id="item2" class="mui-control-content">
-            <ul class="mui-table-view no-padding-list">
-                <li class="" v-for="dynamic in commentDynamicList">
-                    <div class="messageBox">
-                        <div class="leftImg">
-                            <img :src="dynamic.user.photo">
-                        </div>
-                        <div class="rightContent">
-                            <div class="rightContent_1">
-                                <p class="rightTitle">{{dynamic.user.name}}</p>
-                                <p class="rightPara wordbreak">{{dynamic.text}}</p>
-                                <div class="photoPreviewBox flex flex-space-between flex-wrap">
-                                    <template v-for="photoUrl in dynamic.photo">
-                                    <div class="flex-item photo">
-                                        <div class="fix7_5">
-                                            <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+            <div id="scroll2" class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <ul class="mui-table-view">
+                        <li class="" v-for="dynamic in commentDynamicList">
+                            <div class="messageBox">
+                                <div class="leftImg">
+                                    <img :src="dynamic.user.photo">
+                                </div>
+                                <div class="rightContent">
+                                    <div class="rightContent_1">
+                                        <p class="rightTitle">{{dynamic.user.name}}</p>
+                                        <p class="rightPara wordbreak">{{dynamic.text}}</p>
+                                        <div class="photoPreviewBox flex flex-space-between flex-wrap">
+                                            <template v-for="photoUrl in dynamic.photo">
+                                            <div class="flex-item photo">
+                                                <div class="fix7_5">
+                                                    <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+                                                </div>
+                                            </div>
+                                            </template>
                                         </div>
-                                    </div>
-                                    </template>
+                                        <div class="tips">
+                                            <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
+                                            <img @tap="beginComment(dynamic);" src="../source/img/message.png">
+                                        </div>
+                                    </div> 
                                 </div>
-                                <div class="tips">
-                                    <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
-                                    <img @tap="beginComment(dynamic);" src="../source/img/message.png">
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="comment" v-if="dynamic.comment.length > 0">
-                        <div class="commentBox" v-for="cmt in dynamic.comment">
-                            <div class="leftImg">
-                                <img :src="cmt.user.photo">
-                                <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                             </div>
-                            <div class="rightContent">
-                                <div class="rightContent_1">
-                                    <p class="rightPara wordbreak">{{cmt.text}}</p>
-                                    <div class="tips">
-                                        <span class="leftTips">{{stamp2time(cmt.in_time)}}</span>
+                            <div class="comment" v-if="dynamic.comment.length > 0">
+                                <div class="commentBox" v-for="cmt in dynamic.comment">
+                                    <div class="leftImg">
+                                        <img :src="cmt.user.photo">
+                                        <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                                     </div>
-                                </div> 
+                                    <div class="rightContent">
+                                        <div class="rightContent_1">
+                                            <p class="rightPara wordbreak">{{cmt.text}}</p>
+                                            <div class="tips">
+                                                <span class="leftTips">{{stamp2time(cmt.in_time)}}</span>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+                        </li>
+                    </ul>
+                <div>
+            </div>
         </div>  
         <div id="item3" class="mui-control-content">
-            <ul class="mui-table-view no-padding-list">
-                <li class="" v-for="dynamic in dynamicList">
-                    <div class="messageBox">
-                        <div class="leftImg">
-                            <img :src="dynamic.user.photo">
-                        </div>
-                        <div class="rightContent">
-                            <div class="rightContent_1">
-                                <p class="rightTitle">{{dynamic.user.name}}</p>
-                                <p class="rightPara wordbreak">{{dynamic.text}}</p>
-                                <div class="photoPreviewBox">
-                                    <template v-for="photoUrl in dynamic.photo">
-                                    <div class="photo">
-                                        <div class="fix7_5">
-                                            <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+            <div id="scroll3" class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <ul class="mui-table-view">
+                        <li class="" v-for="dynamic in dynamicList">
+                            <div class="messageBox">
+                                <div class="leftImg">
+                                    <img :src="dynamic.user.photo">
+                                </div>
+                                <div class="rightContent">
+                                    <div class="rightContent_1">
+                                        <p class="rightTitle">{{dynamic.user.name}}</p>
+                                        <p class="rightPara wordbreak">{{dynamic.text}}</p>
+                                        <div class="photoPreviewBox">
+                                            <template v-for="photoUrl in dynamic.photo">
+                                            <div class="photo">
+                                                <div class="fix7_5">
+                                                    <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+                                                </div>
+                                            </div>
+                                            </template>
                                         </div>
-                                    </div>
-                                    </template>
+                                        <div class="tips">
+                                            <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
+                                            <img @tap="beginComment(dynamic);" src="../source/img/message.png">
+                                        </div>
+                                    </div> 
                                 </div>
-                                <div class="tips">
-                                    <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
-                                    <img @tap="beginComment(dynamic);" src="../source/img/message.png">
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="comment" v-if="dynamic.comment.length > 0">
-                        <div class="commentBox" v-for="cmt in dynamic.comment">
-                            <div class="leftImg">
-                                <img :src="cmt.user.photo">
-                                <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                             </div>
-                            <div class="rightContent">
-                                <div class="rightContent_1">
-                                    <p class="rightPara wordbreak">{{cmt.text}}</p>
-                                    <div class="tips">
-                                        <span class="leftTips">{{stamp2time(cmt.in_time)}}</span>
+                            <div class="comment" v-if="dynamic.comment.length > 0">
+                                <div class="commentBox" v-for="cmt in dynamic.comment">
+                                    <div class="leftImg">
+                                        <img :src="cmt.user.photo">
+                                        <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                                     </div>
-                                </div> 
+                                    <div class="rightContent">
+                                        <div class="rightContent_1">
+                                            <p class="rightPara wordbreak">{{cmt.text}}</p>
+                                            <div class="tips">
+                                                <span class="leftTips">{{stamp2time(cmt.in_time)}}</span>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <div class="mui-input-row enterHide" v-show="showInput">
@@ -248,6 +257,22 @@ $(function() {
             })
         },
         ready: function() {
+            // mui.init({
+            //     pullRefresh: {
+            //         container: '.pullrefresh',
+            //         down: {
+            //             callback: self.getNewestCompanyDynamic
+            //         },
+            //         up: {
+            //             contentrefresh: '正在加载...',
+            //             callback: self.getMoreCompanyDynamic
+            //         }
+            //     }
+            // });
+            // mui.ready(function() {
+            //     mui.previewImage();
+            //     mui('#pullrefresh').pullRefresh().pullupLoading();
+            // });
         }
     })
 });

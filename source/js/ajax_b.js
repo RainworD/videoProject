@@ -216,10 +216,37 @@ function b_getStatistics(){
 	return ajax;
 }
 // 获得企业的动态
-function getCompanyDynamic(){
+function getAllCompanyDynamic(start, rows){
+	if(!start){
+		start = 0;
+	}
+	if(!rows){
+		rows = 0;
+	}
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Dynamic",
 		data: {
+			"start_": start,
+			"rows_": rows,
+			"add_":["comment","user","comment.user"]
+		}
+	});
+	return ajax;
+}
+// 获得知会我的动态
+function getMyDynamic(start, rows){
+	if(!start){
+		start = 0;
+	}
+	if(!rows){
+		rows = 0;
+	}
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		data: {
+			"start_": start,
+			"rows_": rows,
+			"user": getUser_Id(),
 			"add_":["comment","user","comment.user"]
 		}
 	});
@@ -247,15 +274,15 @@ function commentDynamicByDynamicId(dynamicId,text){
 	return ajax;
 }
 // 获得所有企业的动态
-function getAllCompanyDynamic(){
-	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Dynamic",
-		data: {
-			"add_":["comment","user","comment.user"],
-		}
-	});
-	return ajax;
-}
+// function getAllCompanyDynamic(){
+// 	var ajax = $.ajax({
+// 		url: baseUrl + "/model/get/Dynamic",
+// 		data: {
+// 			"add_":["comment","user","comment.user"],
+// 		}
+// 	});
+// 	return ajax;
+// }
 // 获得知会我的企业动态
 function getInformedDynamic(){
 	var ajax = $.ajax({
