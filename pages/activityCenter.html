@@ -21,40 +21,43 @@
 <body>
     <div class="mui-content">
         <div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-negative">
-            <a class="mui-control-item mui-active" href="#item1">
-                <span class="listItem_name">知会我的
+            <a class="mui-control-item" href="#item1" :class="{'mui-active': activeIndex == 0}">
+                <span class="listItem_name">
+                    知会我的
                     <span class="mui-badge mui-badge-danger right-top">2</span>
                 </span>
             </a>
-            <a class="mui-control-item" href="#item2">
-                <span class="listItem_name">我评论的
+            <a class="mui-control-item" href="#item2" :class="{'mui-active': activeIndex == 1}">
+                <span class="listItem_name">
+                    我评论的
                     <span class="mui-badge mui-badge-danger right-top">2</span>
                 </span>
             </a>
-            <a class="mui-control-item" href="#item3">
-                <span class="listItem_name">全部
+            <a class="mui-control-item" href="#item3" :class="{'mui-active': activeIndex == 2}">
+                <span class="listItem_name">
+                    全部
                     <span class="mui-badge mui-badge-danger right-top">2</span>
                 </span>
             </a>
         </div>
-        <div id="item1" class="mui-control-content mui-active">
-            <div id="scroll" class="mui-scroll-wrapper">
+        <div id="item1" class="mui-control-content" :class="{'mui-active': activeIndex == 0}">
+            <div id="scroll1" class="mui-scroll-wrapper">
                 <div class="mui-scroll">
                     <ul class="mui-table-view">
                         <li class="" v-for="dynamic in informedDynamicList">
                             <div class="messageBox">
                                 <div class="leftImg">
-                                    <img :src="dynamic.user.photo">
+                                    <img :src="getResourceById(dynamic.user.photo.id)">
                                 </div>
                                 <div class="rightContent">
                                     <div class="rightContent_1">
                                         <p class="rightTitle">{{dynamic.user.name}}</p>
                                         <p class="rightPara wordbreak">{{dynamic.text}}</p>
-                                        <div class="photoPreviewBox flex flex-space-between flex-wrap">
+                                        <div class="photoPreviewBox">
                                             <template v-for="photoUrl in dynamic.photo">
-                                            <div class="flex-item photo">
-                                                <div class="fix7_5">
-                                                    <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+                                            <div class="photo">
+                                                <div class="fix7_5" :style="{backgroundImage: 'url('+getMinifiedImage(photoUrl.id)+')'}">
+                                                    <img src="" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'informed_'+dynamic.id}}">
                                                 </div>
                                             </div>
                                             </template>
@@ -69,7 +72,7 @@
                             <div class="comment" v-if="dynamic.comment.length > 0">
                                 <div class="commentBox" v-for="cmt in dynamic.comment">
                                     <div class="leftImg">
-                                        <img :src="cmt.user.photo">
+                                        <img :src="getResourceById(cmt.user.photo.id)">
                                         <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                                     </div>
                                     <div class="rightContent">
@@ -87,24 +90,24 @@
                 </div>
             </div>
         </div>
-        <div id="item2" class="mui-control-content">
+        <div id="item2" class="mui-control-content" :class="{'mui-active': activeIndex == 1}">
             <div id="scroll2" class="mui-scroll-wrapper">
                 <div class="mui-scroll">
                     <ul class="mui-table-view">
                         <li class="" v-for="dynamic in commentDynamicList">
                             <div class="messageBox">
                                 <div class="leftImg">
-                                    <img :src="dynamic.user.photo">
+                                    <img :src="getResourceById(dynamic.user.photo.id)">
                                 </div>
                                 <div class="rightContent">
                                     <div class="rightContent_1">
                                         <p class="rightTitle">{{dynamic.user.name}}</p>
                                         <p class="rightPara wordbreak">{{dynamic.text}}</p>
-                                        <div class="photoPreviewBox flex flex-space-between flex-wrap">
+                                        <div class="photoPreviewBox">
                                             <template v-for="photoUrl in dynamic.photo">
-                                            <div class="flex-item photo">
-                                                <div class="fix7_5">
-                                                    <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+                                            <div class="photo">
+                                                <div class="fix7_5" :style="{backgroundImage: 'url('+getMinifiedImage(photoUrl.id)+')'}">
+                                                    <img src="" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'comment_'+dynamic.id}}">
                                                 </div>
                                             </div>
                                             </template>
@@ -119,7 +122,7 @@
                             <div class="comment" v-if="dynamic.comment.length > 0">
                                 <div class="commentBox" v-for="cmt in dynamic.comment">
                                     <div class="leftImg">
-                                        <img :src="cmt.user.photo">
+                                        <img :src="getResourceById(cmt.user.photo.id)">
                                         <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                                     </div>
                                     <div class="rightContent">
@@ -134,17 +137,17 @@
                             </div>
                         </li>
                     </ul>
-                <div>
+                </div>
             </div>
-        </div>  
-        <div id="item3" class="mui-control-content">
+        </div>
+        <div id="item3" class="mui-control-content" :class="{'mui-active': activeIndex == 2}">
             <div id="scroll3" class="mui-scroll-wrapper">
                 <div class="mui-scroll">
                     <ul class="mui-table-view">
                         <li class="" v-for="dynamic in dynamicList">
                             <div class="messageBox">
                                 <div class="leftImg">
-                                    <img :src="dynamic.user.photo">
+                                    <img :src="getResourceById(dynamic.user.photo.id)">
                                 </div>
                                 <div class="rightContent">
                                     <div class="rightContent_1">
@@ -153,8 +156,8 @@
                                         <div class="photoPreviewBox">
                                             <template v-for="photoUrl in dynamic.photo">
                                             <div class="photo">
-                                                <div class="fix7_5">
-                                                    <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+                                                <div class="fix7_5" :style="{backgroundImage: 'url('+getMinifiedImage(photoUrl.id)+')'}">
+                                                    <img src="" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'all'+dynamic.id}}">
                                                 </div>
                                             </div>
                                             </template>
@@ -169,7 +172,7 @@
                             <div class="comment" v-if="dynamic.comment.length > 0">
                                 <div class="commentBox" v-for="cmt in dynamic.comment">
                                     <div class="leftImg">
-                                        <img :src="cmt.user.photo">
+                                        <img :src="getResourceById(cmt.user.photo.id)">
                                         <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                                     </div>
                                     <div class="rightContent">
@@ -197,10 +200,10 @@
 <script src="../source/mui/js/mui.previewimage.js"></script>
 <script>
 $(function() {
-    mui.init();
-    mui('#scroll').scroll({
-        indicators: true //是否显示滚动条
-    });
+    // mui.init();
+    // mui('#scroll').scroll({
+    //     indicators: true //是否显示滚动条
+    // });
     mui.previewImage();
     var vm = new Vue({
         el: "body",
@@ -210,7 +213,12 @@ $(function() {
             commentValue: "",
             dynamicList: [],
             informedDynamicList: [],
-            commentDynamicList: []
+            commentDynamicList: [],
+            dynamicListStart: 0,
+            informedDynamicListStart: 0,
+            commentDynamicListStart: 0,
+            activeIndex: 0,
+            minifiedWidth: 89
         },
         computed: {
             
@@ -235,49 +243,150 @@ $(function() {
                         dynamic.comment = data.data.comment;
                     }
                 })
+            },
+            getNewestInformedDynamic: function(){
+                var self = this;
+                $.when(getInformedDynamic(0,20)).done(function(data){
+                    if(data.state == 0){
+                        self.informedDynamicList = data.data;
+                        self.informedDynamicListStart ++;
+                        mui('#scroll1').pullRefresh().endPulldownToRefresh();
+                        if(data.data.length < 20){
+                            mui('#scroll1').pullRefresh().endPullupToRefresh(true);
+                        }
+                    }                
+                });
+            },
+            getMoreInformedDynamic: function(){
+                var self = this;
+                $.when(getInformedDynamic(self.informedDynamicListStart,20)).done(function(data){
+                    if(data.state == 0){
+                        self.informedDynamicList = self.informedDynamicList.concat(data.data);
+                        self.informedDynamicListStart ++;
+                        if(data.data.length < 20){
+                            mui('#scroll1').pullRefresh().endPullupToRefresh(true);
+                        }
+                    }
+                })
+            },
+            getNewestCommentDynamic: function(){
+                var self = this;
+                $.when(getCommentDynamic(0,20)).done(function(data){
+                    if(data.state == 0){
+                        self.commentDynamicList = data.data;
+                        self.commentDynamicListStart ++;
+                        mui('#scroll2').pullRefresh().endPulldownToRefresh();
+                        if(data.data.length < 20){
+                            mui('#scroll2').pullRefresh().endPullupToRefresh(true);
+                        }
+                    }                
+                });
+            },
+            getMoreCommentDynamic: function(){
+                var self = this;
+                $.when(getCommentDynamic(self.commentDynamicListStart,20)).done(function(data){
+                    if(data.state == 0){
+                        self.commentDynamicList = self.commentDynamicList.concat(data.data);
+                        self.commentDynamicListStart ++;
+                        if(data.data.length < 20){
+                            mui('#scroll2').pullRefresh().endPullupToRefresh(true);
+                        }
+                    }
+                })
+            },
+            getNewestAllDynamic: function(){
+                var self = this;
+                $.when(getAllCompanyDynamic(0,20)).done(function(data){
+                    if(data.state == 0){
+                        self.dynamicList = data.data;
+                        self.dynamicListStart ++;
+                        mui('#scroll3').pullRefresh().endPulldownToRefresh();
+                        if(data.data.length < 20){
+                            mui('#scroll3').pullRefresh().endPullupToRefresh(true);
+                        }
+                    }                
+                });
+            },
+            getMoreAllDynamic: function(){
+                var self = this;
+                $.when(getAllCompanyDynamic(self.dynamicListStart,20)).done(function(data){
+                    if(data.state == 0){
+                        self.dynamicList = self.dynamicList.concat(data.data);
+                        self.dynamicListStart ++;
+                        if(data.data.length < 20){
+                            mui('#scroll3').pullRefresh().endPullupToRefresh(true);
+                        }
+                    }
+                })
+            },
+            positionTo: function(index){
+                var self = this;
+                self.activeIndex = index;
             }
         },
         created: function() {
             var self = this;
             var queryData = getQueryData();
-            $.when(getAllCompanyDynamic()).done(function(data){
-                if(data.state == 0){
-                    self.dynamicList = data.data;
-                }
-            });
-            $.when(getInformedDynamic()).done(function(data){
-                if(data.state == 0){
-                    self.informedDynamicList = data.data;
-                }
-            });
-            $.when(getCommentDynamic()).done(function(data){
-                if(data.state == 0){
-                    self.commentDynamicList = data.data;
-                }
-            })
         },
         ready: function() {
-            // mui.init({
-            //     pullRefresh: {
-            //         container: '.pullrefresh',
-            //         down: {
-            //             callback: self.getNewestCompanyDynamic
-            //         },
-            //         up: {
-            //             contentrefresh: '正在加载...',
-            //             callback: self.getMoreCompanyDynamic
-            //         }
-            //     }
-            // });
-            // mui.ready(function() {
-            //     mui.previewImage();
-            //     mui('#pullrefresh').pullRefresh().pullupLoading();
-            // });
+            var self = this;            
+            mui.init();
+            mui.ready(function(){
+                mui("#scroll1").pullRefresh({
+                    down : {
+                        contentnomore: '没有更多动态了',
+                        callback : function(data){
+                            auto: true,//可选,默认false.自动下拉刷新一次
+                            self.getNewestInformedDynamic();
+                        }
+                    },
+                    up: {
+                        contentnomore: '没有更多动态了',
+                        callback : function(data){
+                            self.getMoreInformedDynamic();
+                        }
+                    }
+                }).pullupLoading();
+                mui("#scroll2").pullRefresh({
+                    down : {
+                        contentnomore: '没有更多动态了',
+                        callback : function(data){
+                            auto: true,//可选,默认false.自动下拉刷新一次
+                            self.getNewestCommentDynamic();
+                        }
+                    },
+                    up: {
+                        contentnomore: '没有更多动态了',
+                        callback : function(data){
+                            self.getMoreCommentDynamic();
+                        }
+                    }
+                }).pullupLoading();
+                mui("#scroll3").pullRefresh({
+                    down : {
+                        height:50,//可选,默认50.触发下拉刷新拖动距离,
+                        contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+                        contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+                        contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+                        contentnomore: '没有更多动态了',
+                        callback : function(data){
+                            self.getNewestAllDynamic();
+                        }
+                    },
+                    up: {
+                        contentnomore: '没有更多动态了',
+                        callback : function(data){
+                            self.getMoreAllDynamic();
+                        }
+                    }
+                }).pullupLoading();
+            });
+            window.positionTo = self.positionTo;
         }
     })
 });
 </script>
-<script type="text/javascript">
+<script>
     // var obj={};
     // function getResults(data,seletor){
     //     for(var i=0;i<data.length;i++){

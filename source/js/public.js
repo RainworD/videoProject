@@ -102,16 +102,37 @@ function getBase64Image(img) {
     var dataURL = canvas.toDataURL("image/png");
     return dataURL;
 }
+function getResourceById(id){
+    return baseUrl + "/resources/"+id
+}
+function getMinifiedImage(id,width,height){
+    return getResourceById(id) + "?x-oss-process=image/resize,m_fill,w_"+width+",h_"+height
+
+}
 var Vue = Vue.extend({
     data: function(){
-        return {JSON: JSON}
+        return {
+            JSON: JSON,
+            minifiedWidth: 100
+        }
     },
     methods: {
         encodeObj: encodeObj,
         getQueryData: getQueryData,
         stamp2time: stamp2time,
         stamp2formatTime: stamp2formatTime,
-        stamp2formatDate: stamp2formatDate
+        stamp2formatDate: stamp2formatDate,
+        getResourceById: getResourceById,
+        getMinifiedImage: function(id){
+            var self = this;
+            var width = self.minifiedWidth,
+                height = self.minifiedHeight;
+            console.log(self.minifiedWidth)
+            if(!height){
+                height = parseInt(5*width/7);
+            }
+            return getMinifiedImage(id, width, height);
+        }
     }
 });
 function cclear(){

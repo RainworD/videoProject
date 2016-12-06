@@ -1669,8 +1669,14 @@ a .mui-table-view-cell:after {
   height: 0;
   width: 100%;
   padding-bottom: 71.4%;
+  background-position: center;
+  background-size: cover;
 }
-.fix7_5 > * {
+.fix7_5.nobackground > img {
+  opacity: 1;
+}
+.fix7_5 > img {
+  opacity: 0;
   position: absolute;
   top: 0;
   left: 0;
@@ -1680,7 +1686,7 @@ a .mui-table-view-cell:after {
 }
 .photoPreviewBox {
   width: 100%;
-  margin-bottom: -4px;
+  margin-bottom: 0px;
 }
 .photoPreviewBox .photo {
   width: calc(( 100% - 8px ) / 3);
