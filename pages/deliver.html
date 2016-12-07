@@ -49,13 +49,13 @@
         </p>
         <div class="photoPreviewBox">
             <div class="photo" v-for="image in selectedImageList" track-by="$index">
-                <div class="fix7_5">
+                <div class="fix7_5" :style="{backgroundImage: 'url('+image+')'}">
                     <img :src="image" alt="" data-preview-src="" data-preview-group="1">
                 </div>
                 <img src="../source/img/remove.png" alt="" class="removeBtn" @tap="removeImage($index);">
             </div>
-            <div class="photo" @tap="pickImage();" style="z-index: 0;" v-show="selectedImageList.length < 9">
-                <div class="fix7_5">
+            <div class="photo" @tap="pickImage();" style="z-index: 0;" v-show="selectedImageList.length < 3">
+                <div class="fix7_5 nobackground">
                     <img src="../source/img/plus.png">
                 </div>
             </div>
@@ -83,11 +83,18 @@ $(function() {
         el: "body",
         data: {
             selectedImageList: [],
+            imageFileList: [],
             workmates:[],
             text: ""
         },
         computed: {
-            
+            workmateIdList: function(){
+                var list = [];
+                for(var i = 0, length = workmates.length; i < length; i++){
+                    list.push(workmates[i].id);
+                }
+                return list;
+            }
         },
         methods: {
             pickImage: function(){
@@ -101,12 +108,15 @@ $(function() {
                 fileInput.onchange = function(e){
                     self.fileIndex = 0;
                     var files = e.target.files;
-                    if(files.length + self.selectedImageList.length > 9){
-                        mui.alert("您最多只能选择9张");
+                    if(files.length + self.selectedImageList.length > 3){
+                        mui.alert("您最多只能选择3张");
                     }
                     else{
                         console.log("126: fileInput onchange")
-                        self.readerOnload(files); 
+                        self.readerOnload(files);
+                        for(var i = 0, length = files.length; i < length; i++){
+                            self.imageFileList.push(files[i]);
+                        }
                     }
                 }
             },
@@ -144,15 +154,24 @@ $(function() {
             },
             applyButton: function(){
                 var self = this;
-                var photo = informed = undefined;
-                $.when(saveDynamic(self.text,photo,informed)).done(function(data){
-
+                $.when(uploadImageFileListAndGetIdArray(self.imageFileList)).done(function(data){
+                    var photo = data.idList;
+                    $.when(saveDynamic(self.text,photo,self.workmateIdList)).done(function(data){
+                        if(data.state == 0){
+                            window.location.href="backto:activityCenter.html,javascript:positionTo(2)";
+                        }
+                    });
                 });
+                // $.when(uploadImageAndGetId(self.imageFileList[0])).done(function(){
+                //     152
+                // });
+                
             }
         },
         created: function() {
             var self = this;
             var qd = getQueryData();
+
         },
         ready: function() {
             var self = this;

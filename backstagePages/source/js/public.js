@@ -1,5 +1,5 @@
 var ADMIN_CONFIG = {
-	"homePage": "userManagement.html",
+	"homePage": "user.html",
 	"mainBodySelector": "#admin_body",
 	"headerSelector": "#admin_header",
 	"contentSelector": "#admin_content",
@@ -29,7 +29,6 @@ function eventBind(){
         $("[data-hideWhenBlur]").hide();
     });
     $('body').on('click','[data-urlback]',function(){
-        console.log(1);
         window.history.back();
     });
 	$(ADMIN_CONFIG.headerSelector+" .client").bind("click",function(e){

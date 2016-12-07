@@ -10,7 +10,7 @@
 					<a href="#/user.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">返回</a>
 				</div>
 				<div style="float:right;height:30px;">
-					<a style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;" class="submitBtn">保存</a>
+					<a style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;" class="submitBtn" data-urlback>保存</a>
 				</div>
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
@@ -26,12 +26,14 @@
 						</select>
 					</div>
 				</div>
-				<div class="admin_ui_form_field">
+				<div class="admin_ui_form_field" id="contact_">
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="contact" v-model="number"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="contact"></div>
 				</div>
-				<div class="admin_ui_name"><span style="width: 100px;display: inline-block;" class="account">登录账号：</span><span>{{number}}</span></div>
+				<div class="admin_ui_name" id="username_1"><span style="width: 100px;display: inline-block;" class="account account_1">登录账号：</span><span>{{number}}</span></div>
+				<div class="admin_ui_name" id="username_2"><span style="width: 100px;display: inline-block;" class="account account_2">登录账号：</span><span></span></div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">登录密码：</span><input style="width: 88%;height: 30px;padding:0 10px" type="password" name="" class="pw"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;" id="resetpw">登录密码：</span><input style="width: 88%;height: 30px;padding:0 10px" type="password" name="" class="pw"></div>
 				</div>
 			</div>
 		</div>
@@ -48,16 +50,33 @@
 	var id_=id_array.split("=");
 	var id=id_[1];
 	if(id){
-		when
+		$("#contact_").children("div").first().hide();
+		$("#contact_").children("div").eq(1).show();
+		$("#username_1").hide();
+		$("#username_2").show();
+		$.when(getSingleUser(id)).done(function(data){
+			if(data.state == 0){
+				var data=data.data[0];
+				$(".userName").val(data.name);
+				$(".userType").val(data.competence);
+				$(".contact").val(data.contact);
+				$(".account").next("span").text(data.username);
+			}
+		});
 	}
 	else{
-		$(".submitBtn").bind("click",function(){
-			var username=$(".userName").val();
-			var password=$(".pw").val();
-			var competence=$(".userType").val();
-			var contact=$(".contact").val();
-			var name=contact;
-			console.log(username);
+		$("#contact_").children("div").first().show();
+		$("#contact_").children("div").eq(1).hide();
+		$("#username_1").show();
+		$("#username_2").hide();
+	}
+	$(".submitBtn").bind("click",function(){
+		var name=$(".userName").val();
+		var password=$(".pw").val();
+		var competence=$(".userType").val();
+		var contact=$(".contact").val();
+		var username=$(".account_1").next("span").text();
+		if(password&&!id){
 			$.when(addAdmin(username,password,name,contact,competence)).done(function(data){
 				if(data.state == 0){
 					alert("新增用户成功！")
@@ -66,8 +85,31 @@
 					alert(data.msg)
 				}
 			});
-		})
-	}
+		}
+		else if(!password&&id){
+			$.when(editAdmin_(id,name,contact,competence)).done(function(data){
+				if(data.state == 0){
+					alert("修改用户成功！")
+				}
+				else{
+					alert(data.msg)
+				}
+			});
+		}
+		else if(password&&id){
+			$.when(editAdmin(id,password,name,contact,competence,enable)).done(function(data){
+				if(data.state == 0){
+					alert("修改用户成功！")
+				}
+				else{
+					alert(data.msg)
+				}
+			});
+		}
+		else{
+			alert("密码输入不能为空！");
+		}
+	})
 </script>
 
 

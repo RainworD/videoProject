@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>视频监控</title>
+    <title>c端－我的动态</title>
     <link rel="stylesheet" href="../source/mui/css/mui.css">
     <link rel="stylesheet" href="../source/css/imagepreview.css">
     <link rel="stylesheet" href="../source/css/init.css">
@@ -18,72 +18,108 @@
     <script src="../source/js/public.js"></script>
     <script src="../source/js/public_b.js"></script>
 </head>
-<body>
+<body @tap="showInput = false">
     <div class="mui-content">
-        <ul class="mui-table-view no-padding-list">
-            <li class="" v-for="dynamic in dynamicList">
-                <div class="messageBox">
-                    <div class="leftImg">
-                        <img :src="dynamic.user.photo">
-                    </div>
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightTitle">{{dynamic.user.name}}</p>
-                            <p class="rightPara wordbreak">{{dynamic.text}}</p>
-                            <div class="photoPreviewBox flex flex-space-between flex-wrap">
-                                <template v-for="photoUrl in dynamic.photo">
-                                <div class="flex-item photo">
-                                    <div class="fix7_5">
-                                        <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+        <div id="pullrefresh" class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+                <ul class="mui-table-view">
+                    <li class="" v-for="dynamic in dynamicList">
+                        <div class="messageBox">
+                            <div class="leftImg">
+                                <img :src="dynamic.user.photo">
+                            </div>
+                            <div class="rightContent">
+                                <div class="rightContent_1">
+                                    <p class="rightTitle">{{dynamic.user.name}}</p>
+                                    <p class="rightPara wordbreak">{{dynamic.text}}</p>
+                                    <div class="photoPreviewBox flex flex-space-between flex-wrap">
+                                        <template v-for="photoUrl in dynamic.photo">
+                                        <div class="flex-item photo">
+                                            <div class="fix7_5">
+                                                <img :src="photoUrl" alt="" data-preview-src="" data-preview-group="{{dynamic.id}}">
+                                            </div>
+                                        </div>
+                                        </template>
                                     </div>
-                                </div>
-                                </template>
+                                    <div class="tips">
+                                        <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
+                                        <img @tap.stop="beginComment(dynamic);" src="../source/img/message.png">
+                                    </div>
+                                </div> 
                             </div>
-                            <div class="tips">
-                                <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
-                                <img @tap="beginComment(dynamic);" src="../source/img/message.png">
-                            </div>
-                        </div> 
-                    </div>
-                </div>
-                <div class="comment" v-if="dynamic.comment.length > 0">
-                    <div class="commentBox" v-for="cmt in dynamic.comment">
-                        <div class="leftImg">
-                            <img :src="cmt.user.photo">
-                            <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                         </div>
-                        <div class="rightContent">
-                            <div class="rightContent_1">
-                                <p class="rightPara wordbreak">{{cmt.text}}</p>
-                                <div class="tips">
-                                    <span class="leftTips">{{stamp2time(cmt.in_time)}}</span>
+                        <div class="comment" v-if="dynamic.comment.length > 0">
+                            <div class="commentBox" v-for="cmt in dynamic.comment">
+                                <div class="leftImg">
+                                    <img :src="cmt.user.photo">
+                                    <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                                 </div>
-                            </div> 
+                                <div class="rightContent">
+                                    <div class="rightContent_1">
+                                        <p class="rightPara wordbreak">{{cmt.text}}</p>
+                                        <div class="tips">
+                                            <span class="leftTips">{{stamp2time(cmt.in_time)}}</span>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
      <!-- v-show="showInput" -->
-    <div class="mui-input-row enterHide">
+    <div class="mui-input-row enterHide" v-show="showInput">
         <input id="commentInput" v-model="commentValue" type="text" placeholder="请输入评论...">
-        <div class="button" @tap="sendComment();">发送</div>
+        <div class="button" @tap="sendComment(e);">发送</div>
     </div>
 </body>
 <script src="../source/mui/js/mui.zoom.js"></script>
 <script src="../source/mui/js/mui.previewimage.js"></script>
 <script>
 $(function() {
-    mui.init();
-    mui.previewImage();
+    
+    // function pulldownRefresh() {
+    //     setTimeout(function() {
+    //         var table = document.body.querySelector('.mui-table-view');
+    //         var cells = document.body.querySelectorAll('.mui-table-view-cell');
+    //         for (var i = cells.length, len = i + 3; i < len; i++) {
+    //             var li = document.createElement('li');
+    //             li.className = 'mui-table-view-cell';
+    //             li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+    //             //下拉刷新，新纪录插到最前面；
+    //             table.insertBefore(li, table.firstChild);
+    //         }
+    //         mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+    //     }, 1500);
+    // }
+    // var count = 0;
+    /**
+     * 上拉加载具体业务实现
+     */
+    // function pullupRefresh() {
+    //     setTimeout(function() {
+    //         mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
+    //         var table = document.body.querySelector('.mui-table-view');
+    //         var cells = document.body.querySelectorAll('.mui-table-view-cell');
+    //         for (var i = cells.length, len = i + 20; i < len; i++) {
+    //             var li = document.createElement('li');
+    //             li.className = 'mui-table-view-cell';
+    //             li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+    //             table.appendChild(li);
+    //         }
+    //     }, 1500);
+    // }
+
 var vm = new Vue({
         el: "body",
         data: {
             showInput: false,
             focusDynamicId: 0,
             commentValue: "",
-            dynamicList: []
+            dynamicList: [],
+            nowpage: 0,
         },
         computed: {
             
@@ -93,15 +129,15 @@ var vm = new Vue({
                 var self = this;
                 self.showInput = true;
                 self.focusDynamic = dynamic;
-                // $("#commentInput").focus();
-                // document.getElementById('commentInput').focus()
+                document.getElementById('commentInput').focus();
             },
-            sendComment: function(){
+            sendComment: function(e){
                 var self = this;
                 $.when(commentDynamicByDynamicId(self.focusDynamic.id,self.commentValue)).done(function(data){
                     if(data.state == 0){
                         self.refreshDynamicById(self.focusDynamic);
                     }
+                    mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
                 });
             },
             refreshDynamicById: function(dynamic){
@@ -110,19 +146,57 @@ var vm = new Vue({
                         dynamic.comment = data.data.comment;
                     }
                 })
+            },
+            getNewestCompanyDynamic: function(){
+                var self = this;
+                $.when(getMyDynamic(0,20)).done(function(data){
+                    if(data.state == 0){
+                        self.dynamicList = data.data;
+                        self.nowpage ++;
+                        mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+                        if(data.data.length < 20){
+                            mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+                        }
+                    }                
+                });
+            },
+            getMoreCompanyDynamic: function(){
+                var self = this;
+                $.when(getMyDynamic(self.nowpage,20)).done(function(data){
+                    if(data.state == 0){
+                        self.dynamicList = self.dynamicList.concat(data.data);
+                        self.nowpage ++;
+                        if(data.data.length < 20){
+                            mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+                        }
+                    }
+                })
             }
         },
         created: function() {
             var self = this;
             var queryData = getQueryData();
-            $.when(getCompanyDynamic()).done(function(data){
-                if(data.state == 0){
-                    self.dynamicList = data.data;
-                }                
-            });
+            
         },
         ready: function() {
-
+            var self = this;
+            // window.pulldownRefresh = self.getNewestCompanyDynamic;
+            mui.init({
+                pullRefresh: {
+                    container: '#pullrefresh',
+                    down: {
+                        callback: self.getNewestCompanyDynamic
+                    },
+                    up: {
+                        contentrefresh: '正在加载...',
+                        callback: self.getMoreCompanyDynamic
+                    }
+                }
+            });
+            mui.ready(function() {
+                mui.previewImage();
+                mui('#pullrefresh').pullRefresh().pullupLoading();
+            });
         }
     })
 });

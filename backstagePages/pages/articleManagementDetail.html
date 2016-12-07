@@ -1,4 +1,4 @@
-<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
@@ -13,16 +13,17 @@
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name">文章标题：<input style="width: 92%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name">文章标题：<input style="width: 92%;height: 30px;padding:0 10px" type="" name="" class="ar-title"></div>
+				</div>
+				<div class="admin_ui_form_field" >
+					<div class="admin_ui_name">行业标签：<label v-for="(show,index) in dataSource_filter" :for=show.id style="margin:5px"><input type="radio" :id=show.id name="label"><span class="themeContent">{{show.name}}</span></label>
+					</div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name">行业标签：<span></span></div>
-				</div>
-				<div class="admin_ui_form_field">
-					<div class="admin_ui_name">是否置顶：<label for="up"><input type="radio" name=selName"" id="up" style="margin:5px;">是</label><label for="down"><input type="radio" name=selName"" id="down" style="margin:5px;">否</label></div>
+					<div class="admin_ui_name">是否置顶：<label for="up"><input type="radio" name="selName" id="up" style="margin:5px;"><span class="judge">是</span></label><label for="down"><input type="radio" name="selName" id="down" style="margin:5px;"><span class="judge">否</span></label></div>
 				</div>
 				<!-- <div class="admin_ui_cont"> -->
-					<textarea id="tinymce" style="display: none;"></textarea>
+					<textarea id="tinymce"></textarea>
 				<!-- </div> -->
 			</div>
 		</div>
@@ -30,23 +31,14 @@
 </div>
 <div class="admin_ui_cont_bottomFixed">
 	<div class="admin_ui_button_group" style="float: right">
-		<div class="admin_ui_button admin_ui_button_green" data-urlback>
+		<div class="admin_ui_button admin_ui_button_green" data-urlback id="saveButton">
 			发布
 		</div>
 	</div>
 </div>
 <script>
-	// var queryData = getQueryData();
-	// if(!queryData){
-	// 	alert("查询参数错误，为您自动跳转至列表页");
-	// 	window.location.hash = "#/showImageManagement.html";
-	// }
-	// $("#showImagePhoto").attr("src", getImageByUrl(handleNullObject(queryData.photo, "url")));
-	// $("#showImageId").text(queryData.id);
-	// $("#showImageLike").text(queryData.like);
-	// $("#showImageComment").text(queryData.comment);
-	// $("#showImageRead").text(queryData.read);
 	var editor =  new tinymce.Editor('tinymce', {
+		selector: '#tinymce',
 	    height: 500,
 		theme: 'modern',
 		language: 'zh_CN',
@@ -98,50 +90,101 @@
 	    var dataURL = canvas.toDataURL("image/png");
 	    return dataURL;
 	}
-	$("#tinymce").show()
-	editor.render();
-	$.when(getGlobal("contactUs")).done(function(data){
-		if(data.state == 0){
-			if(data.text){
-				$("#tinymce").html(data.text);
-			}
-			$("#tinymce").show()
-			editor.render();
-		}
-	});
-	$("#saveButton").bind('click',function(data){
-		var content = $(editor.getContent());
-		var imgLen = $(content).find('img').length;
-		var count = 0;
-		var uploadImageDeferred = $.Deferred();
-		for(var i = 0, imgLen = content.find('img').length; i < imgLen; i++){
-			var _img = content.find('img')[i];
-			var file = dataURL2Bolb(getBase64Image(_img));
-			var formData = new FormData();
-			formData.append('file',file);
-			$.when(uploadImage(formData)).done(function(data){
+	var vm=new Vue({
+		el:"#admin_content_innerBox",
+		data:{
+			dataSource:[],
+			dataSource_filter: [],
+		},
+		methods:{
+			refreshTable: function(){
+				var self = this;
+				$('.M-box').pagination({
+					totalData: self.dataSource_filter.length,
+				    showData: 10,
+				    current: self.pageIndex,
+				    count:3,
+				    jump:true,
+					coping:true,
+					prevContent:'<i class="fa fa-angle-left"></i>',		//上一页内容
+					nextContent:'<i class="fa fa-angle-right"></i>',		//下一页内容
+				    callback:function(index){
+				        self.pageIndex = index;
+				    }
+				});
+			},
+		},
+		created: function(){
+			var self = this;
+			$.when(getLabel()).done(function(data){
 				if(data.state == 0){
-					_img.src = getImageByUrl(data.name);
-					count ++;
-					if(count == imgLen){
-						uploadImageDeferred.resolve();
-					}
+					self.dataSource = data.data;
+					self.dataSource_filter = self.dataSource;
+					self.refreshTable();
+				}
+			});
+		},
+		mounted: function(){
+			editor.render()
+		}
+	})
+	var id_array=window.location.hash;
+	var id_=id_array.split("=");
+	var id=id_[1];
+	if(id){
+		$.when(getArticleDetail(id)).done(function(data){
+			if(data.state == 0){
+				var data_=data.data[0];
+				$(".ar-title").val(data_.title);
+				var val=data_.label[0].id;
+				// console.log(val.toString());
+				// var selector=document.getElementById(val.toString());
+				// console.log(selector);
+				$("#"+val).prop("checked",true);
+				var val_=data.top;
+				if(val_){
+					$("#up").prop("checked",true);
 				}
 				else{
-					uploadImageDeferred.reject();
+					$("#down").prop("checked",true);
 				}
-			});
-		}
-		$.when(uploadImageDeferred).done(function(){
-			var _contentHTML = $("<div>").append(content).html();
-			$.when(setGlobal("contactUs", _contentHTML)).done(function(data){
-				if(data.state == 0){
-					alert("保存成功");
-				}
-			});
-		}).fail(function(){
-			alert("上传图片至服务器失败，请检查网络");
+				editor.setContent(data_.text);
+				// tinymce.activeEditor.setContent(data_.text);
+			}
 		});
+	}
+	$("#saveButton").bind('click',function(data){
+		var top;
+		var text = editor.getContent();
+		var label = $("input[name='label']:checked").attr("id");
+		var title=$(".ar-title").val();
+		var top_ = $("input[name='selName']:checked").attr("id");
+		if(top_=="up"){
+			top=true;
+		}
+		else{
+			top=false;
+		}
+		if(id){
+			$.when(editArticle(id,title,text,label,top)).done(function(data){
+				if(data.state==0){
+					alert("修改成功！");
+				}
+				else{
+					alert("操作失败！")
+				}
+			})	
+		}
+		else{
+			$.when(sendArticle(title,text,label,top)).done(function(data){
+				if(data.state==0){
+					alert("新增成功！");
+				}
+				else{
+					alert("操作失败！")
+				}
+			})	
+		}	
 	});
 </script>
 

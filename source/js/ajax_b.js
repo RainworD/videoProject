@@ -1,11 +1,13 @@
 // B端api
 // 配置项
-var baseUrl = "http://monitor.xiyoukeji.com"
+var baseUrl = "http://monitor.xiyoukeji.com",
+	ossUrl = "http://xiyou-monitor.oss-cn-hangzhou.aliyuncs.com";
 // 17是同事,/login_test?id=4
 $.ajaxSetup({
 	type: "POST",
 	success: successHandle,
 	error: errorHandle,
+	cache: false,
 	traditional: true,
 	xhrFields: {
       withCredentials: true
@@ -213,12 +215,39 @@ function b_getStatistics(){
 	});
 	return ajax;
 }
-// 获得企业的动态
-function getCompanyDynamic(){
+// 获得所有的企业的动态
+function getAllCompanyDynamic(start, rows){
+	if(!start){
+		start = 0;
+	}
+	if(!rows){
+		rows = 0;
+	}
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Dynamic",
 		data: {
-			"add_":["comment","user","comment.user"]
+			"start_": start,
+			"rows_": rows,
+			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"]
+		}
+	});
+	return ajax;
+}
+// 获得我的动态
+function getMyDynamic(start, rows){
+	if(!start){
+		start = 0;
+	}
+	if(!rows){
+		rows = 0;
+	}
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		data: {
+			"start_": start,
+			"rows_": rows,
+			"user": getUser_Id(),
+			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"]
 		}
 	});
 	return ajax;
@@ -244,33 +273,39 @@ function commentDynamicByDynamicId(dynamicId,text){
 	});
 	return ajax;
 }
-// 获得所有企业的动态
-function getAllCompanyDynamic(){
-	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Dynamic",
-		data: {
-			"add_":["comment","user","comment.user"],
-		}
-	});
-	return ajax;
-}
 // 获得知会我的企业动态
-function getInformedDynamic(){
+function getInformedDynamic(start, rows){
+	if(!start){
+		start = 0;
+	}
+	if(!rows){
+		rows = 0;
+	}
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Dynamic",
 		data: {
-			"add_":["comment","user","comment.user"],
+			"start_": start,
+			"rows_": rows,
+			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"],
 			"informed": 1
 		}
 	});
 	return ajax;
 }
-// 获得知会我评论的
-function getCommentDynamic(){
+// 获得我评论的企业动态
+function getCommentDynamic(start, rows){
+	if(!start){
+		start = 0;
+	}
+	if(!rows){
+		rows = 0;
+	}
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Dynamic",
 		data: {
-			"add_":["comment","user","comment.user"],
+			"start_": start,
+			"rows_": rows,
+			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"],
 			"comment": 1
 		}
 	});
@@ -423,6 +458,48 @@ function readMessage(id){
 	});
 }
 
+function uploadImageAndGetId(file){
+	var deferred = $.Deferred();
+	fileType = file.type;
+	$.ajax({
+		url: baseUrl + "/upload?type="+fileType,
+	}).done(function(result){
+		var formData = new FormData();
+		var data = result.data;
+		for(key in data){
+			if(data.hasOwnProperty(key)){
+				formData.append(key, data[key]);
+			}
+		}
+		formData.append("file",file);
+		$.ajax({
+			url: ossUrl,
+			data: formData,
+			processData: false,
+        	contentType: false,
+        	xhrFields: {
+		        withCredentials: false
+		    }
+		}).done(function(_data){
+			deferred.resolve(_data);
+		});
+	});
+	return deferred;
+}
+function uploadImageFileListAndGetIdArray(imageFileList){
+	var times = 0;
+	var deferred = $.Deferred();
+	var idList = [];
+	for(var i = 0, length = imageFileList.length; i < length; i++){
+		$.when(uploadImageAndGetId(imageFileList[i])).done(function(data){
+			idList.push(data.id);
+			if(++times == length){
+				deferred.resolve({"idList":idList});
+			}
+		});
+	}
+	return deferred;
+}
 
 
 
