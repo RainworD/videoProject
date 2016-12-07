@@ -127,7 +127,7 @@ var Vue = Vue.extend({
         stamp2time: stamp2time,
         stamp2formatTime: stamp2formatTime,
         stamp2formatDate: stamp2formatDate,
-        stamp2formatTime2: stamp2formatTime2
+        stamp2formatTime2: stamp2formatTime2,
         getResourceById: getResourceById,
         getMinifiedImage: function(id){
             var self = this;
