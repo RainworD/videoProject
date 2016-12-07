@@ -110,9 +110,7 @@ function getNewestAnnounce(){
 function getMessage(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Message",
-		data: {
-			
-		}
+		// url: "../announce.json",
 	});
 	return ajax;
 }
@@ -313,10 +311,67 @@ function postFeedback(text,contact){
 	});
 	return ajax;
 }
+// 获得某一种类型的Message
+function getTypeMessage (type) {
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Message",
+		// url: "../announce.json",
+		data: {
+			"type" : type
+		}
+	});
+	return ajax;
+}
+//获得所有Announce
 function getAnnounce () {
 	var ajax = $.ajax({
-		// url: baseUrl+"/model/get/Message",
-		url: "../announce.json",
+		url: baseUrl+"/model/get/Announce",
+		// url: "../announce.json",
+		data: {
+			add_: "read"
+		}
+	});
+	return ajax;
+}
+//获得未读的Announce
+function getAnnounceUnread () {
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Announce",
+		data:{
+			read: 0
+		}
+	});
+	return ajax;
+}
+//获得未读的Announce数量
+function getAnnounceUnreadCount (){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Announce",
+		data:{
+			read: 0,
+			count_: true
+		}
+	});
+	return ajax;
+}
+//获得某一种类型的未读Message
+function getMessageUnread(type){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Message",
+		data:{
+			is_read: false
+		}
+	});
+	return ajax;
+}
+//获得某一种类型的未读Message的数量
+function getMessageUnreadCount(type){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Message",
+		data:{
+			is_read: false,
+			count_: true
+		}
 	});
 	return ajax;
 }
@@ -332,15 +387,40 @@ function applyWithdraw(alipay,value){
 	});
 	return ajax;
 }
-
-function getDetail (sid) {
+//获得某一个Message的具体内容
+function getDetailMessage (id) {
 	var ajax = $.ajax({
-		url: '../detail.json',
+		// url: '../detail.json',
+		url: baseUrl+"/model/get/Message",
 		data: {
-			id: sid
+			"id": id
 		}
 	});
 	return ajax;
+}
+//获得某一个Announce的具体内容
+function getDetailAnnounce (id) {
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Announce",
+		data: {
+			"id": id
+		}
+	});
+	return ajax;
+}
+function readAnnounce(id){
+	var ajax = $.ajax({
+		url: baseUrl+"/announce/read?id="+id,
+	});
+}
+function readMessage(id){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Message",
+		data: {
+			"id": id,
+			"is_read": true
+		}
+	});
 }
 
 

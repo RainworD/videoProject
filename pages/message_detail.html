@@ -26,10 +26,10 @@
     <div class="detailBox">
         <p class="topTitle">{{detail.title}}</p>
         <p class="date">{{stamp2formatTime(detail.in_time)}}</p>
-        <div class="para">
+        <div class="para" v-html="detail.text">
             <!-- <img src="../source/img/b.png" alt="" class="innerPic">
             <p class="innerPara">有后台发起的内容展示展示展示...</p> -->
-            {{detail.text}}
+            <!-- {{detail.text}} -->
         </div>
     </div>
 </body>
@@ -38,14 +38,24 @@
         el: "body",
         data: {
             detail: {},
-            id: getQueryData().id
+            id: getQueryData().id,
+            title: getQueryData().title
         },
         created: function() {
             var self = this;
 
-            $.when(getDetail (self.id)).done(function(data){
-                self.detail = data.data[0];
-            })
+            if(self.title == "系统通告"){
+                $.when(getDetailAnnounce (self.id)).done(function(data){
+                    self.detail = data.data[0];
+                })
+                readAnnounce (self.id);
+            }
+            else{
+                $.when(getDetailMessage (self.id)).done(function(data){
+                    self.detail = data.data[0];
+                })
+                readMessage (self.id);
+            }
         }
     })
 </script>

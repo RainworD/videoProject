@@ -5,12 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>b端消息大类页</title>
+    <title>c端消息大类页</title>
     <link rel="stylesheet" href="../source/mui/css/mui.css">
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -29,77 +34,35 @@
         font-size: 12px;
         color: #999;
     }
+    p.date{
+        float: right;
+    }
+    a.mui-navigate-right:after{
+        content: "";
+    }
+    div.unread{
+        display: inline-block;
+        border-radius: 5px;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        vertical-align: middle;
+    }
+    p.rightTitle{
+        display: inline-block;
+    }
 </style>
 <body>
     <div class="mui-content messageShowBox">
         <ul class="mui-table-view">
-            <li class="mui-table-view-cell mui-media">
-                <a class="mui-navigate-right" href="message_detail.html">
-                    <img src="../source/img/warning.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
+            <li class="mui-table-view-cell mui-media" v-for="announce in announces">
+                <a class="mui-navigate-right" href="{{'message_detail.html?'+encodeObj({'id':announce.id,'title':announce.type})}}">
+                    <img :src="images[announce.type]" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
                     <div class="mui-media-body">
-                        <p class="rightTitle">异常警告</p>
-                        <p class="rightPara">设备发生...</p>
-                        <span class="redNum">5</span>
-                    </div>
-                </a>
-            </li>
-            <li class="mui-table-view-cell mui-media">
-                <a class="mui-navigate-right" href="message_detail.html">
-                    <img src="../source/img/register.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
-                    <div class="mui-media-body">
-                        <p class="rightTitle">注册通知</p>
-                        <p class="rightPara">设备发生...</p>
-                        <span class="redNum">5</span>
-                    </div>
-                </a>
-            </li>            
-            <li class="mui-table-view-cell mui-media">
-                <a class="mui-navigate-right" href="message_detail.html">
-                    <img src="../source/img/system.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
-                    <div class="mui-media-body">
-                        <p class="rightTitle">系统公告</p>
-                        <p class="rightPara">设备发生...</p>
-                        <span class="redNum">5</span>
-                    </div>
-                </a>
-            </li>
-            <li class="mui-table-view-cell mui-media">
-                <a class="mui-navigate-right" href="message_detail.html">
-                    <img src="../source/img/drawCash.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
-                    <div class="mui-media-body">
-                        <p class="rightTitle">提现提示</p>
-                        <p class="rightPara">设备发生...</p>
-                        <span class="redNum">5</span>
-                    </div>
-                </a>
-            </li>
-            <li class="mui-table-view-cell mui-media">
-                <a class="mui-navigate-right" href="message_detail.html">
-                    <img src="../source/img/addCash.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
-                    <div class="mui-media-body">
-                        <p class="rightTitle">充值成功</p>
-                        <p class="rightPara">设备发生...</p>
-                        <span class="redNum">5</span>
-                    </div>
-                </a>
-            </li>
-            <li class="mui-table-view-cell mui-media">
-                <a class="mui-navigate-right" href="message_detail.html">
-                    <img src="../source/img/deadline.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
-                    <div class="mui-media-body">
-                        <p class="rightTitle">设备到期</p>
-                        <p class="rightPara">设备发生...</p>
-                        <span class="redNum">5</span>
-                    </div>
-                </a>
-            </li>
-            <li class="mui-table-view-cell mui-media">
-                <a class="mui-navigate-right" href="message_detail.html">
-                    <img src="../source/img/motivation_.png" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
-                    <div class="mui-media-body">
-                        <p class="rightTitle">动态更新</p>
-                        <p class="rightPara">设备发生...</p>
-                        <span class="redNum">5</span>
+                        <p class="date">{{stamp2formatTime2(announce.in_time)}}</p>
+                        <div class="unread" ></div>
+                        <p class="rightTitle">{{announce.type}}</p>
+                        <p class="rightPara" v-html="announce.text"></p>
                     </div>
                 </a>
             </li>
@@ -107,6 +70,36 @@
     </div>
 </body>
 <script>
-
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            announces: [],
+            images: {
+                "异常警告": "../source/img/warning.png",
+                "注册通知": "../source/img/register.png",
+                "系统通告": "../source/img/system.png",
+                "提现提示": "../source/img/drawCash.png",
+                "充值成功": "../source/img/addCash.png",
+                "设备到期": "../source/img/deadline.png",
+                "动态更新": "../source/img/motivation_.png"
+            }
+        },
+        created: function() {
+            var self = this;
+            $.when(getMessage()).done(function(data){
+                self.announces = data.data;
+            })
+            $.when(getAnnounce()).done(function(data){
+                var newDatas = data.data;
+                for( i in newDatas){
+                    newDatas[i].type = "系统通告";
+                    self.announces.push(newDatas[i]);
+                }
+            })
+        }
+    })
+});
 </script>
 </html>

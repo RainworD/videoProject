@@ -26,18 +26,26 @@
         height: 30px !important;
         margin-top: 5px;
     }
+    div.unread{
+        display: inline-block;
+        border-radius: 5px;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+    }
 </style>
 <body>
     <div class="mui-content messageShowBox">
         <ul class="mui-table-view">
             <li class="mui-table-view-cell" v-for="announce in announces">
-                <a href="{{'message_detail.html?'+encodeObj({'id':announce.id})}}">
-                    <img :src="announce.image" class="mui-media-object mui-pull-left head-img icon-img">
+                <a href="{{'message_detail.html?'+encodeObj({'id':announce.id,'title':title})}}">
+                    <img :src="images[title]" class="mui-media-object mui-pull-left head-img icon-img">
                     <div class="mui-media-body">
+                        <div class="unread" ></div>
                         {{announce.title}}
-                        <p class="mui-ellipsis">{{announce.text}}</p>
+                        <p class="mui-ellipsis" v-html="announce.text"></p>
                         <div class="timeShow">
-                            {{stamp2formatTime(announce.in_time)}}
+                            {{stamp2formatTime2(announce.in_time)}}
                         </div>
                     </div>
                 </a>
@@ -72,21 +80,36 @@ $(function() {
     var vm = new Vue({
         el: "body",
         data: {
-            announces: []
+            announces: [],
+            title: getQueryData().title,
+            images: {
+                "异常警告": "../source/img/warning.png",
+                "注册通知": "../source/img/register.png",
+                "系统通告": "../source/img/system.png",
+                "提现提示": "../source/img/drawCash.png",
+                "充值成功": "../source/img/addCash.png",
+                "设备到期": "../source/img/deadline.png",
+                "动态更新": "../source/img/motivation_.png"
+            }
         },
         computed: {
-            
         },
         methods: {
         },
         created: function() {
             var self = this;
-            
-            $.when(getAnnounce ()).done(function(data){
-                self.announces = data.data;
-            })
+            if(self.title=="系统通告"){
+                $.when(getAnnounce ()).done(function(data){
+                    self.announces = data.data;
+                })
+            }
+            else{
+                $.when(getTypeMessage (self.title)).done(function(data){
+                    self.announces = data.data;
+                })
+            }
         }
-    })
+    });
 });
 </script>
 </html>

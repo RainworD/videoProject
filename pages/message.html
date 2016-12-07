@@ -31,13 +31,13 @@
     <div class="mui-content messageShowBox">
         <ul class="mui-table-view">
             <li class="mui-table-view-cell mui-media" v-for="announce in announces">
-                <a class="mui-navigate-right" href="message_center.html">
+                <a class="mui-navigate-right" href="{{'message_center.html?'+encodeObj({'title':announce.title})}}">
                     <img :src="announce.image" class="mui-media-object mui-pull-left head-img icon-img">
                     <div class="mui-media-body">
                         {{announce.title}}
-                        <p class="mui-ellipsis">{{announce.text}}</p>
+                        <p class="mui-ellipsis" v-html="announce.text"></p>
                     </div>
-                    <span class="mui-badge mui-badge-danger">5</span>
+                    <span class="mui-badge mui-badge-danger" v-if="announce.unread>0">{{announce.unread}}</span>
                 </a>
             </li>
         </ul>
@@ -48,37 +48,44 @@ var dataList = [{
     image: "../source/img/warning.png",
     title: "异常警告",
     text: "设备发生...",
-    in_time: 0
+    in_time: 0,
+    unread: 0
 },{
     image: "../source/img/register.png",
     title: "注册通知",
     text: "设备发生...",
-    in_time: 0
+    in_time: 0,
+    unread: 0
 },{
     image: "../source/img/system.png",
-    title: "系统公告",
+    title: "系统通告",
     text: "设备发生...",
-    in_time: 0
+    in_time: 0,
+    unread: 0
 },{
     image: "../source/img/drawCash.png",
     title: "提现提示",
     text: "设备发生...",
-    in_time: 0
+    in_time: 0,
+    unread: 0
 },{
     image: "../source/img/addCash.png",
     title: "充值成功",
     text: "设备发生...",
-    in_time: 0
+    in_time: 0,
+    unread: 0
 },{
     image: "../source/img/deadline.png",
     title: "设备到期",
     text: "设备发生...",
-    in_time: 0
+    in_time: 0,
+    unread: 0
 },{
     image: "../source/img/motivation_.png",
     title: "动态更新",
     text: "设备发生...",
-    in_time: 0
+    in_time: 0,
+    unread: 0
 }];
 $(function() {
     mui.init();
@@ -95,9 +102,31 @@ $(function() {
         created: function() {
             var self = this;
             self.announces = dataList;
-            $.when(getMessage()).done(function(data){
-                console.log(data);
+            for(var i in self.announces){
+                if(i == 2)
+                    continue;
+                $.when(getMessageUnread(self.announces[i].title)).done(function(data){
+                    if(data.data.length >= 1){
+                        self.announces[i].text = data.data[0].text;
+                    }
+                })
+                $.when(getMessageUnreadCount()).done(function(data){
+                    self.announces[i].unread = data.data;
+                })
+            }
+            $.when(getAnnounceUnread()).done(function(data){
+                var newDatas = data.data;
+                if(newDatas.length != 0){
+                    self.announces[2].text = newDatas[0].text;
+                }
+                else{
+                    self.announces[2].text = "设备发生...";
+                }
             })
+            $.when(getAnnounceUnreadCount()).done(function(data){
+                self.announces[2].unread = data.data;
+            })
+
         }
     })
 });

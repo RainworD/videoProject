@@ -50,7 +50,12 @@ function getTimeBy(stamp){
 // 时间戳转化为yyyy-mm-dd hh-mm-ss
 function stamp2formatTime(stamp){
     var time = getTimeBy(stamp);
-    return time.year+"-"+time.month+"-"+time.day+" "+time.hour+"-"+time.minute+"-"+time.second;
+    return time.year+"-"+(time.month<=9?"0":"")+time.month+"-"+time.day+" "+(time.hour<=9?"0":"") +time.hour+":"+(time.minute<=9?"0":"") + time.minute+":"+(time.second<=9?"0":"") +time.second;
+}
+// 时间戳转化为yyyy-mm-dd hh-mm
+function stamp2formatTime2(stamp){
+    var time = getTimeBy(stamp);
+    return time.year+"-"+ (time.month<=9?"0":"") + time.month +"-" + time.day+" "+ (time.hour<=9?"0":"") + time.hour+":"+(time.minute<=9?"0":"") +time.minute;
 }
 function stamp2formatDate(stamp){
     var time = getTimeBy(stamp);
@@ -111,7 +116,8 @@ var Vue = Vue.extend({
         getQueryData: getQueryData,
         stamp2time: stamp2time,
         stamp2formatTime: stamp2formatTime,
-        stamp2formatDate: stamp2formatDate
+        stamp2formatDate: stamp2formatDate,
+        stamp2formatTime2: stamp2formatTime2
     }
 });
 function cclear(){
