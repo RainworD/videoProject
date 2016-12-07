@@ -29,11 +29,11 @@
 					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{show.id}}</td>
 						<td>{{show.title}}</td>
-						<td>{{show.label}}</td>
+						<td v-for="(show_,index) in show.label">{{show_.name}}</td>
 						<td>{{show.in_time}}</td>
 						<td style="width:136px;">
 							<div class="admin_ui_select">
-								<select v-model="show._top" @change="topShowButton($index)">
+								<select v-model="show.top" @change="topShowButton(index)">
 									<option :value="true">是</option>
 									<option :value="false">否</option>
 								</select>
@@ -44,7 +44,7 @@
 								<i class="fa fa-pencil"></i>
 								编辑
 							</a>
-							<div class="iconButton removeIcon" @click="removeWebsite($index)">
+							<div class="iconButton removeIcon" @click="deleteLabelButton(index)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -75,7 +75,7 @@ var vm = new Tvm({
 			self.dataSource_filter = [];
 			for(index in self.dataSource){
 				var _data = self.dataSource[index];
-				if(self.isContainKeyword([_data.user_nick],self.keyword)){
+				if(self.isContainKeyword([_data.title],self.keyword)){
 					self.dataSource_filter.push(_data);
 				}
 			}
@@ -114,33 +114,45 @@ var vm = new Tvm({
 		topShowButton: function(index){
 			var self = this;
 			var showId = self.dataSource_filter[index].id,
-				value = self.dataSource_filter[index]._top;
+				value = self.dataSource_filter[index].top;
 			if(!value){
 				// 取消置顶
-				$.when(cancelTopShow(showId)).done(function(data){
+				$.when(changeTop(showId,value)).done(function(data){
 					if(data.state == 0){
 						alert("取消置顶成功！");
 					}
 					else{
-						self.dataSource_filter[index]._top = true;
+						self.dataSource_filter[index].top = true;
 					}
 				});
 			}
 			else{
 				// 置顶
-				$.when(topShow(showId)).done(function(data){
+				$.when(changeTop(showId,value)).done(function(data){
 					if(data.state == 0){
 						alert("置顶成功！");
 					}
 					else{
-						self.dataSource_filter[index]._top = false;
+						self.dataSource_filter[index].top = false;
 					}
 				});
 			}
 		},
 		goSomewhere:function(index){
 			window.location.href='#/articleManagementDetail.html?id='+index;
-		}
+		},
+		deleteLabelButton: function(index){
+			var self = this;
+			if(confirm("您确定要删除该篇文章吗？")){
+				$.when(deleteArticle(self.dataSource_filter[index].id)).done(function(data){
+					if(data.state == 0){
+						alert("删除成功");
+						self.dataSource_filter.splice(index,1);
+						self.refreshTable();
+					}
+				});
+			}
+		},
 	},
 	created: function(){
 		var self = this;

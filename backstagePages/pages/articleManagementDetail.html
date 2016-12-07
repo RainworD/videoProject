@@ -16,7 +16,7 @@
 					<div class="admin_ui_name">文章标题：<input style="width: 92%;height: 30px;padding:0 10px" type="" name="" class="ar-title"></div>
 				</div>
 				<div class="admin_ui_form_field" >
-					<div class="admin_ui_name">行业标签：<label v-for="(show,index) in dataSource_filter" v-bind:for="index" style="margin:5px"><input type="radio" :id="index" name="label"><span class="themeContent">{{show.name}}</span></label>
+					<div class="admin_ui_name">行业标签：<label v-for="(show,index) in dataSource_filter" :for=show.id style="margin:5px"><input type="radio" :id=show.id name="label"><span class="themeContent">{{show.name}}</span></label>
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
@@ -128,21 +128,63 @@
 			editor.render()
 		}
 	})
+	var id_array=window.location.hash;
+	var id_=id_array.split("=");
+	var id=id_[1];
+	if(id){
+		$.when(getArticleDetail(id)).done(function(data){
+			if(data.state == 0){
+				var data_=data.data[0];
+				$(".ar-title").val(data_.title);
+				var val=data_.label[0].id;
+				// console.log(val.toString());
+				// var selector=document.getElementById(val.toString());
+				// console.log(selector);
+				$("#"+val).prop("checked",true);
+				var val_=data.top;
+				if(val_){
+					$("#up").prop("checked",true);
+				}
+				else{
+					$("#down").prop("checked",true);
+				}
+				editor.setContent(data_.text);
+				// tinymce.activeEditor.setContent(data_.text);
+			}
+		});
+	}
 	$("#saveButton").bind('click',function(data){
-		var text = $(editor.getContent());
-		var label = $("input[name='label']:checked").next(".themeContent").text();
+		var top;
+		var text = editor.getContent();
+		var label = $("input[name='label']:checked").attr("id");
 		var title=$(".ar-title").val();
-		var top = $("input[name='selName']:checked").next(".judge").text();
-		console.log(text);
-		console.log(top);
-		$.when(sendArticle(title,text,label,top)).done(function(){
-			if(data.state==0){
-				alert("新增成功！")
-			}
-			else{
-				alert("新增失败！")
-			}
-		})
+		var top_ = $("input[name='selName']:checked").attr("id");
+		if(top_=="up"){
+			top=true;
+		}
+		else{
+			top=false;
+		}
+		if(id){
+			$.when(editArticle(id,title,text,label,top)).done(function(data){
+				if(data.state==0){
+					alert("修改成功！");
+				}
+				else{
+					alert("操作失败！")
+				}
+			})	
+		}
+		else{
+			$.when(sendArticle(title,text,label,top)).done(function(data){
+				if(data.state==0){
+					alert("新增成功！");
+				}
+				else{
+					alert("操作失败！")
+				}
+			})	
+		}	
 	});
 </script>
 

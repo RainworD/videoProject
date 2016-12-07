@@ -7,7 +7,7 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/agentsManagementDetail.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">导入设备</a>
+					<a href="#/deviceManagementDetail.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">导入设备</a>
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
@@ -28,32 +28,27 @@
 					</tr>
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="show in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{show.id}}</td>
-						<td>{{show.user_nick}}</td>
+						<td>{{show.code}}</td>
 						<td>{{show.like}}</td>
-						<td>{{show.comment}}</td>
-						<td>{{show.read}}</td>
+						<td>{{show.expire_time}}</td>
+						<td>{{show.company.name}}</td>
 						<td style="width:136px;">
 							<div class="admin_ui_select">
-							<select v-model="show._top" @change="topShowButton($index)">
-								<option :value="true">是</option>
-								<option :value="false">否</option>
+							<select @change="topShowButton(index)" id="selectBox">
+								<option v-for="(show_,index) in dataSource_business">{{show_.name}}</option>
 							</select>
 							</div>
 						</td>
-						<!-- <td>
-							<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" data-addShowImageAsTopSlideImage>设置</div>
-						</td> -->
-						<td>
-							<div @click="addShowImageAsBottomSlideImage($index)" class="admin_ui_button admin_ui_button_xs admin_ui_button_white">设置</div>
-						</td>
+						<td>{{show.number}}</td>
 						<td class="admin_ui_table_action">
-							<a href="#/agentsManagementDetail.html?{{encodeURI(JSON.stringify(website))}}" class="iconButton checkIcon">
+							<div class="iconButton checkIcon"  @click="changeUserState(show.id,index)" :data-state="show.enable">
 								<i class="fa fa-pencil"></i>
-								解绑
-							</a>
-							<div class="iconButton removeIcon" @click="removeWebsite($index)">
+								<span v-if="show.enable">{{state_1}}</span>
+								<span v-else>{{state_2}}</span>
+							</div>
+							<div class="iconButton removeIcon" @click="deleteLabelButton(index)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -68,13 +63,17 @@
 	</div>
 </div>
 <script>
-var vm = new Tvm({
+var vm = new Vue({
 	el: '#admin_content_innerBox',
 	data:{
 		keyword: "",
 		dataSource: [],
 		dataSource_filter: [],
-		pageIndex: 1
+		pageIndex: 1,
+		state_1:"解绑",
+		state_2:"绑定",
+		state:"",
+		dataSource_business:[],
 	},
 	computed: {
 	},
@@ -84,7 +83,7 @@ var vm = new Tvm({
 			self.dataSource_filter = [];
 			for(index in self.dataSource){
 				var _data = self.dataSource[index];
-				if(self.isContainKeyword([_data.id, _data.user_nick],self.keyword)){
+				if(self.isContainKeyword([_data.code],self.keyword)){
 					self.dataSource_filter.push(_data);
 				}
 			}
@@ -123,142 +122,64 @@ var vm = new Tvm({
 		topShowButton: function(index){
 			var self = this;
 			var showId = self.dataSource_filter[index].id,
-				value = self.dataSource_filter[index]._top;
-			if(!value){
-				// 取消置顶
-				$.when(cancelTopShow(showId)).done(function(data){
+				// value = self.dataSource_filter[index].business.name;
+				value=$(".selectBox").val();
+			if(value){
+				$.when(bindDevice(showId,value)).done(function(data){
 					if(data.state == 0){
-						alert("取消置顶成功！");
 					}
 					else{
-						self.dataSource_filter[index]._top = true;
+						self.dataSource_filter[index].business.name = value;
 					}
 				});
 			}
 			else{
-				// 置顶
-				$.when(topShow(showId)).done(function(data){
+			}
+		},
+		deleteLabelButton: function(index){
+			var self = this;
+			if(confirm("您确定要删除该设备吗？")){
+				$.when(deleteDevice(self.dataSource_filter[index].id)).done(function(data){
 					if(data.state == 0){
-						alert("置顶成功！");
-					}
-					else{
-						self.dataSource_filter[index]._top = false;
+						alert("删除成功");
+						self.dataSource_filter.splice(index,1);
+						self.refreshTable();
 					}
 				});
 			}
 		},
-		addShowImageAsBottomSlideImage: function(index){
+		changeUserState: function(id,index){
 			var self = this;
-			var showId = self.dataSource_filter[index].id;
-			// 设为底部轮播图
-			$.when(addShowImageAsBottomSlideImage(showId)).done(function(data){
-				if(data.state == 0){
-					alert("设置成功！");
+			var val=$(".checkIcon").eq(index).children("span").text();
+			console.log(val);
+			if(val==self.state_1){
+				self.state=self.state_1;
+				if(confirm("您确定要"+self.state+"该用户吗？")){
+					$.when(unbindDevice(id)).done(function(data){
+						if(data.state == 0){
+							alert("账户已"+self.state);
+						}
+					});
 				}
-			});
-		}
+			}
+			else{
+			}
+		},
 	},
 	created: function(){
 		var self = this;
-		$.when(getShowRank(1,0)).done(function(data){
+		$.when(getDevice()).done(function(data){
 			if(data.state == 0){
-				self.dataSource = data.show;
+				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
 				self.refreshTable();
 			}
 		});
-	}
-});
-	// $.when(getShowRank(1,0)).done(function(data){
-	// 	if(data.state == 0){
-	// 		var html = "";
-	// 		for(var i = 0, length = data.show.length; i < length; i++){
-	// 			var show = data.show[i];
-	// 			var showDataString = encodeURI(JSON.stringify(show));
-	// 			html+= '<tr data-showId="'+show.id+'">'+
-	// 						'<td>'+show.id+'</td>'+
-	// 						'<td>'+show.user_nick+'</td>'+
-	// 						'<td>'+
-	// 							show.like+
-	// 						'</td>'+
-	// 						'<td>'+
-	// 							show.comment+
-	// 						'</td>'+
-	// 						'<td>'+
-	// 							show.read+
-	// 						'</td>'+
-	// 						'<td style="width:136px;">'+
-	// 							'<div class="admin_ui_select">'+
-	// 							'<select data-topShowButton>'+
-	// 								'<option value="1" '+(show._top?" selected":"")+'>是</option>'+
-	// 								'<option value="0" '+(show._top?"":" selected")+'>否</option>'+
-	// 							'</select>'+
-	// 							'</div>'+
-	// 						'</td>'+
-	// 						// '<td>'+
-	// 						// 	'<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" data-addShowImageAsTopSlideImage>设置</div>'+
-	// 						// '</td>'+
-	// 						'<td>'+
-	// 							'<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" data-addShowImageAsBottomSlideImage>设置</div>'+
-	// 						'</td>'+
-	// 						'<td class="admin_ui_table_action">'+
-	// 							'<a href="#/showImageManagementDetail.html?'+showDataString+'" class="iconButton checkIcon">'+
-	// 								'<i class="fa fa-eye"></i>'+
-	// 								'查看'+
-	// 							'</a>'+
-	// 						'</td>'+
-	// 					'</tr>';
-	// 		}
-	// 		$("#showImageManagement_data").append(html);
-	// 		TablePage(".admin_ui_table",10);
-	// 	}
-	// });
-	// $("#showImageManagement_data").on('change','[data-topShowButton]',function(e){
-	// 	var $this = $(this);
-	// 	var showId = $this.closest("tr").attr("data-showId");
-	// 	if($(this).val() == 0){
-	// 		// 取消置顶
-	// 		$.when(cancelTopShow(showId)).done(function(data){
-	// 			if(data.state == 0){
-	// 				alert("取消置顶成功！");
-	// 			}
-	// 			else{
-	// 				$this.val(1);
-	// 			}
-	// 		});
-	// 	}
-	// 	else{
-	// 		// 置顶
-	// 		$.when(topShow(showId)).done(function(data){
-	// 			if(data.state == 0){
-	// 				alert("置顶成功！");
-	// 			}
-	// 			else{
-	// 				$this.val(0);
-	// 			}
-	// 		});
-	// 	}
-	// });
-//	是否设为顶部轮播图
-	// $("#showImageManagement_data").on('click','[data-addShowImageAsTopSlideImage]',function(){
-	// 	var $this = $(this);
-	// 	var showId = $this.closest("tr").attr("data-showId");
-	// 	// 设为顶部轮播图
-	// 	$.when(addShowImageAsTopSlideImage(showId)).done(function(data){
-	// 		if(data.state == 0){
-	// 			alert("设置成功！");
-	// 		}
-	// 	});
-	// });
-	//	是否设为底部轮播图
-	$("#showImageManagement_data").on('click','[data-addShowImageAsBottomSlideImage]',function(){
-		var $this = $(this);
-		var showId = $this.closest("tr").attr("data-showId");
-		// 设为底部轮播图
-		$.when(addShowImageAsBottomSlideImage(showId)).done(function(data){
+		$.when(getBusiness()).done(function(data){
 			if(data.state == 0){
-				alert("设置成功！");
+				self.dataSource_business = data.data;
 			}
 		});
-	});
+	},
+});
 </script>

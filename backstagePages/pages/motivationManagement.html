@@ -24,17 +24,19 @@
 					</tr>
 				</thead>
 				<tbody id="commentManagement_commentData" class="admin_ui_table_hoverEffect">
-					<tr v-for="comment in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+					<tr v-for="(comment,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{comment.id}}</td>
 						<td>
-							{{comment.value}}
+							{{comment.text}}
 						</td>
-						<td>{{comment.user_nick}}</td>
+						<td>{{comment.user.name}}</td>
 						<td>
 							{{stamp2time(comment.in_time)}}
 						</td>
+						<td>{{comment.user.company.name}}</td>
+						<td>{{comment.user.company.business.name}}</td>
 						<td class="admin_ui_table_action">
-							<div class="iconButton removeIcon deleteCommentButton" @click="deleteCommentButton($index)">
+							<div class="iconButton removeIcon deleteCommentButton" @click="deleteCommentButton(index)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -53,8 +55,20 @@ var vm = new Tvm({
 	el: '#admin_content_innerBox',
 	data:{
 		keyword: "",
-		dataSource: [],
-		dataSource_filter: [],
+		dataSource: [{
+			user:{
+				company:{
+					business:{}
+				}
+			}
+		}],
+		dataSource_filter:  [{
+			user:{
+				company:{
+					business:{}
+				}
+			}
+		}],
 		pageIndex: 1
 	},
 	computed: {
@@ -65,7 +79,7 @@ var vm = new Tvm({
 			self.dataSource_filter = [];
 			for(index in self.dataSource){
 				var _data = self.dataSource[index];
-				if(self.isContainKeyword([_data.id,_data.value, _data.user_nick, _data.in_time],self.keyword)){
+				if(self.isContainKeyword([_data.text,_data.title],self.keyword)){
 					self.dataSource_filter.push(_data);
 				}
 			}
@@ -103,8 +117,8 @@ var vm = new Tvm({
 		},
 		deleteCommentButton: function(index){
 			var self = this;
-			if(confirm("您确定要删除这条评论吗？")){
-				$.when(deleteComment(self.dataSource_filter[index].id)).done(function(data){
+			if(confirm("您确定要删除这条动态吗？")){
+				$.when(deleteDynamic(self.dataSource_filter[index].id)).done(function(data){
 					if(data.state == 0){
 						alert("删除成功");
 						self.dataSource_filter.splice(index, 1);
@@ -116,9 +130,9 @@ var vm = new Tvm({
 	},
 	created: function(){
 		var self = this;
-		$.when(getComments()).done(function(data){
+		$.when(getDynamic()).done(function(data){
 			if(data.state == 0){
-				self.dataSource = data.comment;
+				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
 				self.refreshTable();
 			}

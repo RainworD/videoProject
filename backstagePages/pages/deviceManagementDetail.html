@@ -1,0 +1,58 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">设备管理</span>
+		</div>
+		<div class="admin_ui_cont">
+			<div class="admin_ui_search">
+				<div style="float:left;height:30px;">
+					<a href="#/deviceManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">返回</a>
+				</div>
+				<div style="float:right;height:30px;">
+					<a id="submit"  href="#/deviceManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;">保存</a>
+				</div>
+			</div>
+			<div class="admin_ui_border admin_ui_cont">
+				<div class="admin_ui_form_field">
+					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
+					<div class="admin_ui_name"><span style="width: 75px;display: inline-block;">设备号：</span><input style="width: 92%;height: 30px;padding:0 10px" type="" name="" class="ar-title"></div>
+				</div>
+				<div class="admin_ui_form_field">
+					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
+					<div class="admin_ui_name"><span style="width: 75px;display: inline-block;">流量卡号：</span><input style="width: 92%;height: 30px;padding:0 10px" type="" name="" class="ar-code"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- <div class="admin_ui_cont_bottomFixed">
+	<div class="admin_ui_button_group" style="float: right">
+		<div class="admin_ui_button admin_ui_button_green" data-urlback id="saveButton">
+			发布
+		</div>
+	</div>
+</div> -->
+<script>
+	$("#submit").bind('click',function(data){
+		var number=$(".ar-code").val();
+		var code=$(".ar-title").val();
+		$.when(addDevice(code,number)).done(function(data){
+			if(data.state==0){
+				alert("新增成功！");
+			}
+			else{
+				alert("操作失败！")
+			}
+		})	
+	});
+</script>
+
+
+
+
+
+
+
+
+
