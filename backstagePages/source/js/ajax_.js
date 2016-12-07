@@ -1,3 +1,12 @@
+$.ajaxSetup({
+	type: "POST",
+	success: successHandle,
+	error: errorHandle,
+	traditional: true,
+	xhrFields: {
+      withCredentials: true
+    }
+});
 var baseUrl = "http://monitor.xiyoukeji.com"
 function errorHandle(){
 	alert("网络异常");
