@@ -1676,7 +1676,6 @@ a .mui-table-view-cell:after {
   opacity: 1;
 }
 .fix7_5 > img {
-  opacity: 0;
   position: absolute;
   top: 0;
   left: 0;

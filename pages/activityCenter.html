@@ -56,8 +56,8 @@
                                         <div class="photoPreviewBox">
                                             <template v-for="photoUrl in dynamic.photo">
                                             <div class="photo">
-                                                <div class="fix7_5" :style="{backgroundImage: 'url('+getMinifiedImage(photoUrl.id)+')'}">
-                                                    <img src="" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'informed_'+dynamic.id}}">
+                                                <div class="fix7_5">
+                                                    <img src="getMinifiedImage(photoUrl.id)" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'informed_'+dynamic.id}}">
                                                 </div>
                                             </div>
                                             </template>
@@ -106,8 +106,8 @@
                                         <div class="photoPreviewBox">
                                             <template v-for="photoUrl in dynamic.photo">
                                             <div class="photo">
-                                                <div class="fix7_5" :style="{backgroundImage: 'url('+getMinifiedImage(photoUrl.id)+')'}">
-                                                    <img src="" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'comment_'+dynamic.id}}">
+                                                <div class="fix7_5">
+                                                    <img src="getMinifiedImage(photoUrl.id)" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'comment_'+dynamic.id}}">
                                                 </div>
                                             </div>
                                             </template>
@@ -156,8 +156,8 @@
                                         <div class="photoPreviewBox">
                                             <template v-for="photoUrl in dynamic.photo">
                                             <div class="photo">
-                                                <div class="fix7_5" :style="{backgroundImage: 'url('+getMinifiedImage(photoUrl.id)+')'}">
-                                                    <img src="" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'all'+dynamic.id}}">
+                                                <div class="fix7_5">
+                                                    <img src="getMinifiedImage(photoUrl.id)" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'all'+dynamic.id}}">
                                                 </div>
                                             </div>
                                             </template>
@@ -200,10 +200,6 @@
 <script src="../source/mui/js/mui.previewimage.js"></script>
 <script>
 $(function() {
-    // mui.init();
-    // mui('#scroll').scroll({
-    //     indicators: true //是否显示滚动条
-    // });
     mui.previewImage();
     var vm = new Vue({
         el: "body",
