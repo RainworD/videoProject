@@ -1,5 +1,5 @@
 var ADMIN_CONFIG = {
-	"homePage": "userManagement.html",
+	"homePage": "user.html",
 	"mainBodySelector": "#admin_body",
 	"headerSelector": "#admin_header",
 	"contentSelector": "#admin_content",
