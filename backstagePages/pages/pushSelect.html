@@ -1,4 +1,12 @@
-
+<style type="text/css">
+	.button_{
+	    display: inline-block!important;
+	    min-width: 80px;
+	    height: 30px;
+	    line-height: 28px;
+	    padding: 0;
+	}
+</style>
 <div class="admin_content_innerBox" id="admin_content_innerBox">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
@@ -8,10 +16,10 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/slideImages.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">返回</a>
+					<a href="#/slideImages.html" class="admin_ui_button admin_ui_button_white button_">返回</a>
 				</div>
 				<div style="float:right;height:30px;">
-					<a href="#/slideImages.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;">保存</a>
+					<a href="#/slideImages.html" class="admin_ui_button admin_ui_button_green button_ submitBtn">保存</a>
 				</div>
 			</div>
 			<table class="admin_ui_table">
@@ -25,7 +33,7 @@
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
 					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
-						<td><input type="radio" name="article"></td>
+						<td><input type="radio" name="article" :data-id="show.id"></td>
 						<td>{{show.title}}</td>
 						<td>{{show.in_time}}</td>
 						<td v-for="(show_,index) in show.business">{{show_.name}}</td>
@@ -120,4 +128,11 @@ var vm = new Tvm({
 		});
 	}
 });
+var id_array=window.location.hash;
+var id_=id_array.split("=");
+var id=id_[1];
+$(".submitBtn").bind("click",function(){
+	var announce=$("input[name='article']:checked").attr("data-id");
+	localStorage.setItem(id,announce);
+})
 </script>

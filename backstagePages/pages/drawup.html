@@ -1,153 +1,100 @@
-<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+<style type="text/css">
+	.button_{
+	    display: inline-block!important;
+	    min-width: 80px;
+	    height: 30px;
+	    line-height: 28px;
+	    padding: 0;
+	}
+</style>
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
-			<span class="maintitle">后台用户管理</span>
+			<span class="maintitle">代理商财务</span>
 		</div>
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/user.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">返回</a>
+					<a href="#/agentsAccount.html" class="admin_ui_button admin_ui_button_white button_">返回</a>
 				</div>
 				<div style="float:right;height:30px;">
-					<a href="#/user.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;">保存</a>
+					<a class="admin_ui_button admin_ui_button_green button_ submitBtn">提现</a>
 				</div>
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">代理商名称：</span><span></span></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">代理商名称：</span><span>{{dataSource.name}}</span></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<div class="admin_ui_name"><span style="width: 130px;display: inline-block;">代理商名称邀请码：</span>
-					</div>
+					<span>{{dataSource.code}}</span></div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><span></span></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><span>{{dataSource.contact}}</span></div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">账户余额：</span><span></span></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">账户余额：</span><span>{{dataSource.price/100}}</span></div>
 				</div>
-				<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">设备押金：</span><span></span></div>
+				<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">设备押金：</span><span>{{dataSource.deposit/100}}</span></div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">提现金额：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">提现金额(元)：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="money"></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">类型：</span>
-					<label for="accountBalance"><input type="checkbox" name="" id="accountBalance"  style="margin: 5px;">账户余额</label><label for="devicePledge"><input type="checkbox" name="" id="devicePledge" style="margin: 5px;">设备押金</label></div>
+					<label for="accountBalance"><input type="radio" name="selName" id="accountBalance"  style="margin: 5px;">账户余额</label><label for="devicePledge"><input type="radio" name="selName" id="devicePledge" style="margin: 5px;">设备押金</label></div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <script>
-	// var queryData = getQueryData();
-	// if(!queryData){
-	// 	alert("查询参数错误，为您自动跳转至列表页");
-	// 	window.location.hash = "#/showImageManagement.html";
-	// }
-	// $("#showImagePhoto").attr("src", getImageByUrl(handleNullObject(queryData.photo, "url")));
-	// $("#showImageId").text(queryData.id);
-	// $("#showImageLike").text(queryData.like);
-	// $("#showImageComment").text(queryData.comment);
-	// $("#showImageRead").text(queryData.read);
-	var editor =  new tinymce.Editor('tinymce', {
-	    height: 500,
-		theme: 'modern',
-		language: 'zh_CN',
-		plugins: [
-		    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-		    'searchreplace wordcount visualblocks visualchars code fullscreen',
-		    'insertdatetime media nonbreaking save table contextmenu directionality',
-		    'emoticons template paste textcolor colorpicker textpattern imagetools'
-		],
-		toolbar1: 'insertfile undo redo | fontsizeselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-		toolbar2: 'print preview media | forecolor backcolor | example',
-		setup: function(ed) {
-	    },
-	    fontsize_formats: "12px 14px 18px 24px 36px 48px 60px 72px 84px 96px 108px 120px",
-		image_advtab: true,
-		image_upload: true,
-		relative_url: false,
-		templates: [
-		    { title: 'Test template 1', content: 'Test 1' },
-		    { title: 'Test template 2', content: 'Test 2' }
-		],
-		content_css: [
-		    '../source/css/tinymce.css'
-		]
-	}, tinymce.EditorManager);
-
-	// 获得编辑器中内容
-	function getEditorContent(){
-		return editor.getContent();
-	}
-	// 设置编辑器内容
-	function setEditorContent(html){
-		editor.setContent(html);
-	}
-	// 往编辑器中插入内容
-	function insertContentToEditor(html){
-		editor.insertContent(html);
-	}
-	// 设置 "design", "code" or "readonly"
-	function setEditorMode(mode){
-		editor.setMode(mode);
-	}
-	function getBase64Image(img) {
-	    var canvas = document.createElement("canvas");
-	    canvas.width = img.width;
-	    canvas.height = img.height;
-	    var ctx = canvas.getContext("2d");
-	    ctx.drawImage(img, 0, 0, img.width, img.height);
-	    var dataURL = canvas.toDataURL("image/png");
-	    return dataURL;
-	}
-	$("#tinymce").show()
-	editor.render();
-	$.when(getGlobal("contactUs")).done(function(data){
-		if(data.state == 0){
-			if(data.text){
-				$("#tinymce").html(data.text);
-			}
-			$("#tinymce").show()
-			editor.render();
+	var id_array=window.location.hash;
+	var id_=id_array.split("=");
+	var id=id_[1];
+	var vm = new Vue({
+		el: '#admin_content_innerBox',
+		data:{
+			id:id,
+			dataSource: [],
+		},
+		methods: {
+		},
+		created: function(){
+			var self = this;
+			$.when(getSingleAgentFinance(self.id)).done(function(data){
+				if(data.state == 0){
+					self.dataSource = data.data[0];
+				}
+			});
 		}
 	});
-	$("#saveButton").bind('click',function(data){
-		var content = $(editor.getContent());
-		var imgLen = $(content).find('img').length;
-		var count = 0;
-		var uploadImageDeferred = $.Deferred();
-		for(var i = 0, imgLen = content.find('img').length; i < imgLen; i++){
-			var _img = content.find('img')[i];
-			var file = dataURL2Bolb(getBase64Image(_img));
-			var formData = new FormData();
-			formData.append('file',file);
-			$.when(uploadImage(formData)).done(function(data){
-				if(data.state == 0){
-					_img.src = getImageByUrl(data.name);
-					count ++;
-					if(count == imgLen){
-						uploadImageDeferred.resolve();
-					}
+	$(".submitBtn").bind("click",function(){
+		var type;
+		var val=$("input[name='label']:checked").attr("id");
+		if(val=="devicePledge"){
+			type="押金提现";
+		}
+		else{
+			type="管理员提现";
+		}
+		var value=$(".money").val();
+		if(value>0){
+			$.when(recharge(type,id,value*100)).done(function(data){
+				if(data.state==0){
+					alert("提现成功！");
+					window.location.href="#/agentsAccount.html";
 				}
 				else{
-					uploadImageDeferred.reject();
+					alert("操作失败！");
 				}
-			});
+			})
 		}
-		$.when(uploadImageDeferred).done(function(){
-			var _contentHTML = $("<div>").append(content).html();
-			$.when(setGlobal("contactUs", _contentHTML)).done(function(data){
-				if(data.state == 0){
-					alert("保存成功");
-				}
-			});
-		}).fail(function(){
-			alert("上传图片至服务器失败，请检查网络");
-		});
-	});
+		else{
+			alert("输入的金额必须大于0！");
+		}
+	})
 </script>
 
 

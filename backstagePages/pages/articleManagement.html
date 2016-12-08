@@ -39,7 +39,7 @@
 						<td>{{show.id}}</td>
 						<td>{{show.title}}</td>
 						<td v-for="(show_,index) in show.label">{{show_.name}}</td>
-						<td>{{show.in_time}}</td>
+						<td>{{stamp2time(show.in_time)}}</td>
 						<td style="width:136px;">
 							<div class="admin_ui_select">
 								<select v-model="show.top" @change="topShowButton(index)">

@@ -35,7 +35,7 @@
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
 					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{show.title}}</td>
-						<td>{{show.in_time}}</td>
+						<td>{{stamp2time(show.in_time)}}</td>
 						<td v-for="(show_,index) in show.business">{{show_.name}}</td>
 						<td class="admin_ui_table_action">
 							<a href="#/pushManagementDetail.html" class="iconButton checkIcon" @click="goSomewhere(show.id)">

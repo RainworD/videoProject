@@ -41,7 +41,7 @@
 						<td>{{show.id}}</td>
 						<td>{{show.code}}</td>
 						<td>{{show.like}}</td>
-						<td>{{show.expire_time}}</td>
+						<td>{{stamp2time(show.expire_time)}}</td>
 						<td>{{show.company.name}}</td>
 						<td style="width:136px;">
 							<div class="admin_ui_select">
@@ -72,7 +72,7 @@
 	</div>
 </div>
 <script>
-var vm = new Vue({
+var vm = new Tvm({
 	el: '#admin_content_innerBox',
 	data:{
 		keyword: "",

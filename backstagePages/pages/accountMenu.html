@@ -1,3 +1,12 @@
+<style type="text/css">
+	.button_{
+	    display: inline-block!important;
+	    min-width: 120px;
+	    height: 30px;
+	    line-height: 28px;
+	    padding: 0;
+	}
+</style>
 <div class="admin_content_innerBox" id="admin_content_innerBox">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
@@ -16,11 +25,15 @@
 					今日统计
 				</div>
 				<div style="float:right;height:30px;">
-					<a href="#/accountMenuDetail.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">查看更多</a>
+					<a href="#/accountMenuDetail.html" class="admin_ui_button admin_ui_button_green button_">查看更多</a>
 				</div>
 			</div>
 			<div class="admin_ui_search">
-				<div style="float:left;width:20%;line-height: 30px;"><span>今日提现总额:</span><span></span></div><div style="float:left;width:20%;line-height: 30px;"><span>今日充值总额:</span><span></span></div><div style="float:left;width:20%;line-height: 30px;"><span>今日消费总额:</span><span></span></div><div style="float:left;width:20%;line-height: 30px;"><span>所有代理商账户余额:</span><span></span></div><div style="float:left;width:20%;line-height: 30px;"><span>押金总额:</span><span></span></div>
+				<div style="float:left;width:20%;line-height: 30px;"><span>今日提现总额:</span>{{dataSource_statistics.withdraw}}</div>
+				<div style="float:left;width:20%;line-height: 30px;"><span>今日充值总额:</span>{{dataSource_statistics.recharge}}</div>
+				<div style="float:left;width:20%;line-height: 30px;"><span>今日消费总额:</span>{{dataSource_statistics.consumption}}</div>
+				<div style="float:left;width:20%;line-height: 30px;"><span>所有代理商账户余额:</span>{{dataSource_statistics.account}}</div>
+				<div style="float:left;width:20%;line-height: 30px;"><span>押金总额:</span>{{dataSource_statistics.deposit}}</div>
 			</div>
 			<table class="admin_ui_table">
 				<thead>
@@ -35,20 +48,23 @@
 					</tr>
 				</thead>
 				<tbody id="commentManagement_commentData" class="admin_ui_table_hoverEffect">
-					<tr v-for="comment in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+					<tr v-for="(comment,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{comment.id}}</td>
 						<td>
-							{{comment.value}}
+							{{stamp2time(comment.success_time)}}
 						</td>
-						<td>{{comment.user_nick}}</td>
+						<td>{{comment.value}}</td>
 						<td>
-							{{stamp2time(comment.in_time)}}
+							{{comment.type}}
 						</td>
-						<td class="admin_ui_table_action">
-							<div class="iconButton removeIcon deleteCommentButton" @click="deleteCommentButton($index)">
-								<i class="fa fa-remove"></i>
-								删除
-							</div>
+						<td>
+							{{comment.business.contact}}
+						</td>
+						<td>
+							{{comment.business.phone}}
+						</td>
+						<td>
+							{{comment.business.name}}
 						</td>
 					</tr>
 				</tbody>
@@ -66,7 +82,8 @@ var vm = new Tvm({
 		keyword: "",
 		dataSource: [],
 		dataSource_filter: [],
-		pageIndex: 1
+		pageIndex: 1,
+		dataSource_statistics:[],
 	},
 	computed: {
 	},
@@ -76,7 +93,7 @@ var vm = new Tvm({
 			self.dataSource_filter = [];
 			for(index in self.dataSource){
 				var _data = self.dataSource[index];
-				if(self.isContainKeyword([_data.id,_data.value, _data.user_nick, _data.in_time],self.keyword)){
+				if(self.isContainKeyword([_data.type,_data.value, _data.business.name, _data.business.contact],self.keyword)){
 					self.dataSource_filter.push(_data);
 				}
 			}
@@ -112,28 +129,19 @@ var vm = new Tvm({
 			    }
 			});
 		},
-		deleteCommentButton: function(index){
-			var self = this;
-			if(confirm("您确定要删除这条评论吗？")){
-				$.when(deleteComment(self.dataSource_filter[index].id)).done(function(data){
-					if(data.state == 0){
-						alert("删除成功");
-						self.dataSource_filter.splice(index, 1);
-						self.refreshTable();
-					}
-				});
-			}
-		}
 	},
 	created: function(){
 		var self = this;
-		$.when(getComments()).done(function(data){
+		$.when(getBill()).done(function(data){
 			if(data.state == 0){
-				self.dataSource = data.comment;
+				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
 				self.refreshTable();
 			}
 		});
+		$.when(getTodayStatistics()).done(function(data){
+			self.dataSource_statistics=data.data;
+		})
 	}
 });
 </script>

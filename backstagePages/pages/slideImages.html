@@ -7,8 +7,37 @@
 	    line-height: 30px;
 	    padding: 0;
 	}
+    .file_{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: 2;
+        cursor: pointer;
+    }
+    .button_1{
+        height: 30px;
+        padding: 0;
+        line-height: 30px;
+        min-width: 80px;
+        margin-left: 5px;
+    }
+    .button_2{
+        height: 30px;
+        padding: 0;
+        line-height: 30px;
+        min-width: 80px;
+        margin-left: 5px;
+    }
+    .button_new{
+        width: 13%;
+        margin: 10px;
+    }
+    .admin_ui_slideImageBox{
+        min-height:295px;
+    }
 </style>
-<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-image fa-2x admin_ui_mainColor"></i>
@@ -19,17 +48,30 @@
 				轮播图管理
 			</div>
 			<div id="topSlideImagesBox" class="admin_ui_border admin_ui_cont" style="margin-bottom: 20px;">
+                <div class="admin_ui_slideImageBox" v-for="show in dataSource_">
+                    <div class="slideImageUpload">
+                       <img :src="'/resources/'+show.photo.id" class="upload_pic">
+                    </div>
+                    <textarea class="admin_ui_textarea" rows="2" placeholder="请输入链接地址" id="textArea">{{show.url}}</textarea>
+                    <p>系统推送:<span></span><a class="admin_ui_button admin_ui_button_white button_2" :data-id="show.announce.id">选择文章</a></p>
+                    <!-- <p>url:<input type="text" style="margin-top:10px;width:85%;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input"></p> -->
+                    <!-- <div class="admin_ui_button admin_ui_button_green checkButton button_ upload">
+                        确认
+                    </div>
+                    <div class="admin_ui_button admin_ui_button_red deleteButton button_">删除</div> -->
+                </div>
 				<div class="admin_ui_slideImageBox" >
 					<div class="slideImageUpload">
 						<p class="tip">
 							<i class="fa fa-cloud-upload"></i>
 							点击上传图片
 						</p>
+                        <input type="file" name="" class="file_">
 					</div>
-					<textarea class="admin_ui_textarea" rows="2" placeholder="请输入链接地址"></textarea>
-					<p>系统推送:<span></span><a href="#/pushSelect.html" class="admin_ui_button admin_ui_button_white" style="height: 30px;padding: 0;line-height: 30px;min-width: 80px;margin-left: 5px;">选择文章</a></p>
-					<p>url:<input type="text" style="margin-top:10px;width:85%;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input"></p>
-					<div class="admin_ui_button admin_ui_button_green checkButton button_">
+					<textarea class="admin_ui_textarea" rows="2" placeholder="请输入链接地址" id="textArea"></textarea>
+					<p>系统推送:<span></span><a class="admin_ui_button admin_ui_button_white button_2">选择文章</a></p>
+					<!-- <p>url:<input type="text" style="margin-top:10px;width:85%;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input"></p> -->
+					<div class="admin_ui_button admin_ui_button_green checkButton button_ upload">
 						确认
 					</div>
 					<div class="admin_ui_button admin_ui_button_red deleteButton button_">删除</div>
@@ -38,7 +80,35 @@
 		</div>
 	</div>
 </div>
-<div class="admin_ui_cont_bottomFixed">
+<div class="popBox">
+    <table class="admin_ui_table" id="ar-sel">
+        <thead>
+            <tr>
+                <th></th>
+                <th>文章标题</th>
+                <th>推送时间</th>
+                <th>推送范围</th>
+            </tr>
+        </thead>
+        <tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
+            <tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
+                <td><input type="radio" name="article" :data-id="show.id"></td>
+                <td>{{show.title}}</td>
+                <td>{{show.in_time}}</td>
+                <td v-for="(show_,index) in show.business">{{show_.name}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="admin_ui_pagination">
+        <div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+    </div>
+    <div class="admin_ui_button admin_ui_button_green checkButton button_  button_new upload_new">
+        确认
+    </div>
+    <div class="admin_ui_button admin_ui_button_red deleteButton button_ button_new cancel">取消</div>
+</div>
+<div class="mask"></div>
+<!-- <div class="admin_ui_cont_bottomFixed">
 	<div class="admin_ui_button_group" style="float: right">
 		<div class="admin_ui_button admin_ui_button_white" data-urlback>
 			返回
@@ -47,41 +117,97 @@
 			保存
 		</div>
 	</div>
-</div>
+</div> -->
+<script type="text/javascript">
+    var vm = new Tvm({
+        el: '#ar-sel',
+        data:{
+            keyword: "",
+            dataSource: [],
+            dataSource_filter: [],
+            business_filter:[],
+            pageIndex: 1
+        },
+        computed: {
+        },
+        methods: {
+            refreshTable: function(){
+                var self = this;
+                $('.M-box').pagination({
+                    totalData: self.dataSource_filter.length,
+                    showData: 10,
+                    current: self.pageIndex,
+                    count:3,
+                    jump:true,
+                    coping:true,
+                    prevContent:'<i class="fa fa-angle-left"></i>',     //上一页内容
+                    nextContent:'<i class="fa fa-angle-right"></i>',        //下一页内容
+                    callback:function(index){
+                        self.pageIndex = index;
+                    }
+                });
+            },
+        },
+        created: function(){
+            var self = this;
+            $.when(getPush()).done(function(data){
+                if(data.state == 0){
+                    self.dataSource = data.data;
+                    self.dataSource_filter = self.dataSource;
+                    self.business_filter=self.dataSource.business;
+                    self.refreshTable();
+                }
+            });
+        }
+    });
+    var vm_= new Vue({
+        el: '#admin_content_innerBox',
+        data:{
+            keyword: "",
+            dataSource_: [],
+        },
+        computed: {
+        },
+        methods: {
+        },
+        created: function(){
+            var self = this;
+            $.when(getCarousel()).done(function(data){
+                if(data.state == 0){
+                    self.dataSource_ = data.data;
+                }
+            });
+        }
+    })
+</script>
 <script>
 	var type_arr=[];
-    $("#file").on("change", function(e){
+    var photo_arr=[];
+    var announce;
+    $(".file_").on("change", function(e){
         type_arr=[];
-        var btn=document.getElementById("cancel");
         var file = e.target.files; //获取图片资源
-        // console.log(file.length);
         for(var i=0; i< file.length; i++){
             var type=file[i] .type;
             type_arr.push(type);  
-            // if (!file[i].type.match('image.*')) {
-            //     return false;
-            // }//只选取图片文件
+            if (!file[i].type.match('image.*')) {
+                return false;
+            }//只选取图片文件
             var reader = new FileReader();
 
             reader.readAsDataURL(file[i]); // 读取文件
               // 渲染文件
             reader.onload = function(arg) {
-                var img='<div class="deliverImg_">'+
-                            '<img src="' + arg.target.result + '" data-preview-src="" data-preview-group="1" class="commonImg">'+
-                            '<img src="../source/img/remove.png" alt="" class="removeBtn">'+
-                        '</div>'
+                var img=$(".admin_ui_slideImageBox").last().clone(true);
+                img.find(".slideImageUpload").empty;
+                img.find(".slideImageUpload").append('<img src="' + arg.target.result + '" class="upload_pic">');
             // var img = '<img class="preview" src="' + arg.target.result + '" alt="preview"/>';
-                $(".deliverImg").prepend(img);
+                $("#topSlideImagesBox").prepend(img);
             }
         }
-    });
-    $("#upload").bind("click",function(){
-        var photo_arr=[];
         if(type_arr.length){
-            console.log("success");
             for(var i=0;i<type_arr.length;i++){
                 $.when(getImgUrl(type_arr[i])).done(function(data){
-                    console.log(data);
                     if(data.state==0){
                         var data=data.data;
                         OSSAccessKeyId=data.OSSAccessKeyId;
@@ -90,7 +216,7 @@
                         key=data.key;
                         policy=data.policy;
                     }
-                    var picFileList = $("#file").get(0).files;
+                    var picFileList = $(".slideImageUpload").last().find(".file_").get(0).files;
                     // var picFileList = $("#pic")[0].files;验证是否可行
                     var formData = new FormData();
                     for(var i=0; i< picFileList.length; i++){
@@ -99,25 +225,105 @@
                         formData.append("callback",callback);
                         formData.append("key",key);
                         formData.append("policy",policy);
-                        formData.append("file" , picFileList[i]);
+                        formData.append("file",picFileList[i]);
                         $.when(uploadImg(formData)).done(function(data){
-                            alert("2222");
-                            photo_arr.push(data.id);
-                            var title;
-                            var text=$("#textArea").val();
-                            informed=[];
-                            $.when(deliverActivity(title,text,photo_arr,informed)).done(function(data){
-                                if(data.state==0){
-                                    alert("发布成功！")
-                                }
-                            })
+                            // $('.button_2').attr("href","#/pushSelect.html?id="+data.id);
+                            if(data.state==0){
+                                photo_arr.push(data.id);
+                            }            
                         })
                     }
                     // formData.append('file', $('#file')[0].files[0]);
                 })
             }
+        } 
+    });
+    $(".admin_ui_slideImageBox").on("click",".upload",function(){
+        var self=$(this);
+        // var photo_arr=[];
+        // if(type_arr.length){
+        //     for(var i=0;i<type_arr.length;i++){
+        //         $.when(getImgUrl(type_arr[i])).done(function(data){
+        //             if(data.state==0){
+        //                 var data=data.data;
+        //                 OSSAccessKeyId=data.OSSAccessKeyId;
+        //                 Signature=data.Signature;
+        //                 callback=data.callback;
+        //                 key=data.key;
+        //                 policy=data.policy;
+        //             }
+        //             var picFileList = $(".slideImageUpload").last().find(".file_").get(0).files;
+        //             // var picFileList = $("#pic")[0].files;验证是否可行
+        //             var formData = new FormData();
+        //             for(var i=0; i< picFileList.length; i++){
+        //                 formData.append("OSSAccessKeyId",OSSAccessKeyId);
+        //                 formData.append("Signature",Signature);
+        //                 formData.append("callback",callback);
+        //                 formData.append("key",key);
+        //                 formData.append("policy",policy);
+        //                 formData.append("file",picFileList[i]);
+        //                 $.when(uploadImg(formData)).done(function(data){
+        //                     $('.button_2').attr("href","#/pushSelect.html?id="+data.id);
+        //                     if(data.state==0){
+        //                         photo_arr.push(data.id);
+        //                     }            
+        //                     var url=self.siblings("#textArea").val();
+        //                     var announce=localStorage.getItem("announce")
+        //                     if(url){
+        //                         $.when(uploadSlideInfo_(photo_arr,url)).done(function(data){
+        //                             if(data.state==0){
+        //                                 alert("发布成功！")
+        //                             }
+        //                         })
+        //                     }
+        //                     else{
+        //                         $.when(uploadSlideInfo(photo_arr,url,announce)).done(function(data){
+        //                             if(data.state==0){
+        //                                 alert("发布成功！")
+        //                             }
+        //                         })
+        //                     }
+        //                 })
+        //             }
+        //             // formData.append('file', $('#file')[0].files[0]);
+        //         })
+        //     }
+        // }
+        var url=self.siblings("#textArea").val();
+        if(url){
+            $.when(uploadSlideInfo_(photo_arr,url)).done(function(data){
+                if(data.state==0){
+                    alert("发布成功！");
+                    window.location.reload();
+                }
+            })
+        }
+        else{
+            $.when(uploadSlideInfo(photo_arr,url,announce)).done(function(data){
+                if(data.state==0){
+                    alert("发布成功！");
+                    window.location.reload();
+                }
+            })
         }
     }) 
+    $("#topSlideImagesBox").on("click",".button_2",function(){
+        var id_=$(this).attr("data-id");
+        if(id_){
+            $("input[data-id="+id_+"]").prop("checked",true);
+        }
+        $('.mask').addClass("show");
+        $(".popBox").addClass("show");
+    })
+    $(".upload_new").bind("click",function(){
+        announce=$("input[name='article']:checked").attr("data-id");
+        $('.mask').removeClass("show");
+        $(".popBox").removeClass("show");
+    })
+    $(".cancel").bind("click",function(){
+        $('.mask').removeClass("show");
+        $(".popBox").removeClass("show");
+    })
 </script>
 
 

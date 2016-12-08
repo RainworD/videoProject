@@ -1,5 +1,5 @@
 $.ajaxSetup({
-	type: "POST",
+	// type: "POST",
 	success: successHandle,
 	error: errorHandle,
 	traditional: true,
@@ -329,9 +329,10 @@ function changeTop(id,top){
 }
 function getDevice(){//获得设备列表
 	var ajax = $.ajax({
-		url: "/model/get/Device?add_=business&add_=company",
+		url: "/model/get/Device",
 		type: "POST",
 		data:{
+			add_:['business','company'],
 		}
 	});
 	return ajax;
@@ -413,4 +414,162 @@ function deleteComment(id){//删除评论列表
 		}
 	});
 	return ajax;
+}
+function getImgUrl(type){//上传图片
+	var ajax = $.ajax({
+		url: "/upload",
+		type: "POST",
+		data:{
+			type:type,
+		}
+	});
+	return ajax;
+}
+function uploadImg(formData){//上传图片到oss
+	var ajax=$.ajax({
+        url: 'http://xiyou-monitor.oss-cn-hangzhou.aliyuncs.com',
+        type: 'POST',
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false,
+        xhrFields: {
+	      withCredentials: false,
+	    }
+    })
+    return ajax;
+}
+function uploadSlideInfo(photo,url,announce){//上传图片到oss
+	var ajax=$.ajax({
+        url: '/model/save/Carousel',
+        type: 'POST',
+        data: {
+        	photo:photo,
+        	url:url,
+        	announce:announce,
+        },
+    })
+    return ajax;
+}
+function uploadSlideInfo_(photo,announce){//上传图片到oss
+	var ajax=$.ajax({
+        url: '/model/save/Carousel',
+        type: 'POST',
+        data: {
+        	photo:photo,
+        	announce:announce,
+        },
+    })
+    return ajax;
+}
+function slideInfo(){//上传图片到oss
+	var ajax=$.ajax({
+        url: '/model/get/Carousel',
+        type: 'POST',
+       	data:{}
+    })
+    return ajax;
+}
+function getAgentFinance(){//获得代理商财务
+	var ajax=$.ajax({
+        url: '/model/get/Business',
+        type: 'POST',
+       	data:{}
+    })
+    return ajax;
+}
+function getSingleAgentFinance(id){//获得代理商财务
+	var ajax=$.ajax({
+        url: '/model/get/Business?id='+id,
+        type: 'POST',
+       	data:{}
+    })
+    return ajax;
+}
+function recharge(type,business,value){
+	var ajax=$.ajax({
+        url: '/model/save/Order',
+        type: 'POST',
+       	data:{
+       		type:type,
+       		business:business,
+       		value:value,
+       	}
+    })
+    return ajax;
+}
+function getRecharge(add_,order_,state,type){
+	var ajax=$.ajax({
+        url: '/model/get/Order',
+        type: 'POST',
+       	data:{
+       		add_:add_,
+       		order_:order_,
+       		state:state,
+       		type:type,
+       	}
+    })
+    return ajax;
+}
+function setRechargeState(id,success){
+	var ajax=$.ajax({
+        url: '/order/withdraw',
+        type: 'POST',
+       	data:{
+       		id:id,
+       		success:success,
+       	}
+    })
+    return ajax;
+}
+function setFee(renewal){
+	var ajax=$.ajax({
+        url: '/variable/global/set',
+        type: 'POST',
+       	data:{
+       		renewal:renewal,
+       	}
+    })
+    return ajax;
+}
+function getBill(){
+	var ajax=$.ajax({
+        url: '/model/get/Order',
+        type: 'POST',
+       	data:{
+       		add_:['business'],
+       		order_:'id des',
+       		state:'已完成',
+       	}
+    })
+    return ajax;
+}
+function getTodayStatistics(){
+	var ajax=$.ajax({
+        url: '/statistics',
+        type: 'POST',
+       	data:{
+       	}
+    })
+    return ajax;
+}
+function getMoreStatistics(){
+	var ajax=$.ajax({
+        url: '/model/get/Statistics',
+        type: 'POST',
+       	data:{
+       		order_:'id desc'
+       	}
+    })
+    return ajax;
+}
+function getCarousel(){
+	var ajax=$.ajax({
+        url: '/model/get/Carousel',
+        type: 'POST',
+       	data:{
+       		add_:['photo','announce']
+       	}
+    })
+    return ajax;
 }
