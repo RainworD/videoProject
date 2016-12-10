@@ -96,7 +96,7 @@ function logoutApi(){
 // 修改密码
 function changePassword(oldPassword,newPassword){
 	var ajax = $.ajax({
-		url: baseUrl + "/api/change_password",
+		url: baseUrl + "/changePassword",
 		type: "POST",
 		data: {
 			"old_password": oldPassword,
@@ -468,13 +468,13 @@ function uploadSlideInfo(photo,url,announce){//上传图片到oss
     })
     return ajax;
 }
-function uploadSlideInfo_(photo,announce){//上传图片到oss
+function uploadSlideInfo_(photo,url){//上传图片到oss
 	var ajax=$.ajax({
         url: '/model/save/Carousel',
         type: 'POST',
         data: {
         	photo:photo,
-        	announce:announce,
+        	url:url,
         },
     })
     return ajax;
@@ -570,7 +570,90 @@ function getTodayStatistics(){
     })
     return ajax;
 }
-function getMoreStatistics(){
+function deleteCarousel(id){//删除轮播图
+	var ajax=$.ajax({
+        url: '/model/delete/Carousel',
+        type: 'POST',
+       	data:{
+       		id:id,
+       	}
+    })
+    return ajax;
+}
+function getFeedback(){//获得意见反馈
+	var ajax=$.ajax({
+        url: '/model/get/Feedback',
+        type: 'POST',
+       	data:{
+       		add_:['user.company','user','user.company.business'],
+       	}
+    })
+    return ajax;
+}
+function deleteFeedback(id){//获得意见反馈
+	var ajax=$.ajax({
+        url: '/model/delete/Feedback',
+        type: 'POST',
+       	data:{
+       		id:id,
+       	}
+    })
+    return ajax;
+}
+function deleteFeedback(id){//获得意见反馈
+	var ajax=$.ajax({
+        url: '/model/delete/Feedback',
+        type: 'POST',
+       	data:{
+       		id:id,
+       	}
+    })
+    return ajax;
+}
+function getAboutus_1(){//获得关于我们
+	var ajax=$.ajax({
+        url: '/variable/global/get',
+        type: 'POST',
+       	data:{
+       		key:['flag_1','title_1','content_1']
+       	}
+    })
+    return ajax;
+}
+function getAboutus_2(){//获得关于我们
+	var ajax=$.ajax({
+        url: '/variable/global/get',
+        type: 'POST',
+       	data:{
+       		key:['flag_2','title_2','content_2']
+       	}
+    })
+    return ajax;
+}
+function setAboutus_1(flag_1,title_1,content_1){//设置关于我们
+	var ajax=$.ajax({
+        url: '/variable/global/set',
+        type: 'POST',
+       	data:{
+       		flag_1:flag_1,
+       		title_1:title_1,
+       		content_1:content_1,
+       	}
+    })
+    return ajax;
+}
+function setAboutus_2(flag_2,title_2,content_2){//设置关于我们
+	var ajax=$.ajax({
+        url: '/variable/global/set',
+        type: 'POST',
+       	data:{
+       		flag_2:flag_2,
+       		title_2:title_2,
+       		content_2:content_2,
+       	}
+    })
+    return ajax;
+}function getMoreStatistics(){
 	var ajax=$.ajax({
         url: '/model/get/Statistics',
         type: 'POST',

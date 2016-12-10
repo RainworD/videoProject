@@ -40,22 +40,26 @@
 					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{show.id}}</td>
 						<td>{{show.code}}</td>
-						<td>{{show.like}}</td>
+						<td>{{show.company?'已绑定':'未绑定'}}</td>
 						<td>{{stamp2time(show.expire_time)}}</td>
-						<td>{{show.company.name}}</td>
+						<td>{{show.company?show.company.name:''}}</td>
 						<td style="width:136px;">
 							<div class="admin_ui_select">
 							<select @change="topShowButton(index)" id="selectBox">
-								<option v-for="(show_,index) in dataSource_business">{{show_.name}}</option>
+								<option v-for="(show_,index) in dataSource_business">{{show_?show_.name:''}}</option>
 							</select>
 							</div>
 						</td>
 						<td>{{show.number}}</td>
 						<td class="admin_ui_table_action">
-							<div class="iconButton checkIcon"  @click="changeUserState(show.id,index)" :data-state="show.enable">
+							<!-- <div class="iconButton checkIcon"  @click="changeUserState(show.id,index)" :data-state="show.enable">
 								<i class="fa fa-pencil"></i>
 								<span v-if="show.enable">{{state_1}}</span>
 								<span v-else>{{state_2}}</span>
+							</div> -->
+							<div class="iconButton checkIcon"  @click="changeUserState(show.id,index)">
+								<i class="fa fa-pencil" v-show="show.company?true:false"></i>
+								<span>{{show.company?'解绑':''}}</span>
 							</div>
 							<div class="iconButton removeIcon" @click="deleteLabelButton(index)">
 								<i class="fa fa-remove"></i>
@@ -79,9 +83,9 @@ var vm = new Tvm({
 		dataSource: [],
 		dataSource_filter: [],
 		pageIndex: 1,
-		state_1:"解绑",
-		state_2:"绑定",
-		state:"",
+		// state_1:"解绑",
+		// state_2:"绑定",
+		// state:"",
 		dataSource_business:[],
 	},
 	computed: {
@@ -157,21 +161,30 @@ var vm = new Tvm({
 				});
 			}
 		},
+		// changeUserState: function(id,index){
+		// 	var self = this;
+		// 	var val=$(".checkIcon").eq(index).children("span").text();
+		// 	console.log(val);
+		// 	if(val==self.state_1){
+		// 		self.state=self.state_1;
+		// 		if(confirm("您确定要"+self.state+"该用户吗？")){
+		// 			$.when(unbindDevice(id)).done(function(data){
+		// 				if(data.state == 0){
+		// 					alert("账户已"+self.state);
+		// 				}
+		// 			});
+		// 		}
+		// 	}
+		// 	else{
+		// 	}
+		// },
 		changeUserState: function(id,index){
-			var self = this;
-			var val=$(".checkIcon").eq(index).children("span").text();
-			console.log(val);
-			if(val==self.state_1){
-				self.state=self.state_1;
-				if(confirm("您确定要"+self.state+"该用户吗？")){
-					$.when(unbindDevice(id)).done(function(data){
-						if(data.state == 0){
-							alert("账户已"+self.state);
-						}
-					});
-				}
-			}
-			else{
+			if(confirm("您确定要解绑该用户吗？")){
+				$.when(unbindDevice(id)).done(function(data){
+					if(data.state == 0){
+						alert("账户已"+self.state);
+					}
+				});
 			}
 		},
 	},

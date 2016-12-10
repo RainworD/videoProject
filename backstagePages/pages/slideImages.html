@@ -48,17 +48,21 @@
 				轮播图管理
 			</div>
 			<div id="topSlideImagesBox" class="admin_ui_border admin_ui_cont" style="margin-bottom: 20px;">
-                <div class="admin_ui_slideImageBox" v-for="show in dataSource_">
+                <div class="admin_ui_slideImageBox" v-for="(show,index) in dataSource_">
                     <div class="slideImageUpload">
                        <img :src="'/resources/'+show.photo.id" class="upload_pic">
                     </div>
-                    <textarea class="admin_ui_textarea" rows="2" placeholder="请输入链接地址" id="textArea">{{show.url}}</textarea>
-                    <p>系统推送:<span></span><a class="admin_ui_button admin_ui_button_white button_2" :data-id="show.announce.id">选择文章</a></p>
+                    <textarea class="admin_ui_textarea" rows="2" placeholder="请输入链接地址(以http或https开头)" id="textArea" disabled="disabled">{{show.url}}</textarea>
+                    <p>系统推送:<span></span>
+                    <!-- <a class="admin_ui_button admin_ui_button_white button_2" v-if="!show.announce" :data-id="-1">选择文章</a>
+                    <a class="admin_ui_button admin_ui_button_white button_2" v-else :data-id="show.announce.id">选择文章</a>
+                    </p> -->
+                    <a class="admin_ui_button admin_ui_button_white button_2" :data-id="!show.announce?'-1':show.announce.id">选择文章</a>
                     <!-- <p>url:<input type="text" style="margin-top:10px;width:85%;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input"></p> -->
                     <!-- <div class="admin_ui_button admin_ui_button_green checkButton button_ upload">
                         确认
-                    </div>
-                    <div class="admin_ui_button admin_ui_button_red deleteButton button_">删除</div> -->
+                    </div>-->                    
+                    <div class="admin_ui_button admin_ui_button_red deleteButton button_"  @click="deleteCarousel(index)">删除</div>
                 </div>
 				<div class="admin_ui_slideImageBox" >
 					<div class="slideImageUpload">
@@ -169,6 +173,19 @@
         computed: {
         },
         methods: {
+            deleteCarousel: function(index){
+            var self = this;
+            if(confirm("您确定要删除该轮播图吗？")){
+                $.when(deleteCarousel(self.dataSource_[index].id)).done(function(data){
+                    if(data.state == 0){
+                        alert("删除成功");
+                        self.dataSource_.splice(index,1);
+                        window.reload();
+                        // self.refreshTable();
+                    }
+                });
+            }
+        },
         },
         created: function(){
             var self = this;
@@ -199,7 +216,7 @@
               // 渲染文件
             reader.onload = function(arg) {
                 var img=$(".admin_ui_slideImageBox").last().clone(true);
-                img.find(".slideImageUpload").empty;
+                img.find(".slideImageUpload").empty();
                 img.find(".slideImageUpload").append('<img src="' + arg.target.result + '" class="upload_pic">');
             // var img = '<img class="preview" src="' + arg.target.result + '" alt="preview"/>';
                 $("#topSlideImagesBox").prepend(img);
@@ -289,7 +306,7 @@
         //         })
         //     }
         // }
-        var url=self.siblings("#textArea").val();
+        var url=$.trim(self.siblings("#textArea").val());
         if(url){
             $.when(uploadSlideInfo_(photo_arr,url)).done(function(data){
                 if(data.state==0){
@@ -309,8 +326,11 @@
     }) 
     $("#topSlideImagesBox").on("click",".button_2",function(){
         var id_=$(this).attr("data-id");
-        if(id_){
+        if(id_>0){
             $("input[data-id="+id_+"]").prop("checked",true);
+        }
+        else{
+            $("input[name='article']").prop("checked",false);  
         }
         $('.mask').addClass("show");
         $(".popBox").addClass("show");
