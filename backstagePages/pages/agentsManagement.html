@@ -7,7 +7,7 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/agentsManagementDetail.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">新增</a>
+					<a href="#/agentsManagementDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a>
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
@@ -22,12 +22,13 @@
 						<th>邀请码</th>
 						<th>负责人</th>
 						<th>
-							<select @change="bus_change" id="bus_select" style="width: 100%;font-size: 16px;">
-								<option value="0">全部</option>
-								<option value="1">总代理商</option>
-								<option value="2">子代理商</option>
-								
-							</select>
+							<div class="admin_ui_select">
+								<select v-model="selected" id="bus_select" style="width: 100%;font-size: 16px;">
+									<option value="0">全部</option>
+									<option value="1">总代理商</option>
+									<option value="2">子代理商</option>
+								</select>
+							</div>
 						</th>
 						<th>注册时间</th>
 						<th>联系方式</th>
@@ -35,13 +36,13 @@
 					</tr>
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="show in dataSource_filter">
+					<tr v-for="show in dataSource_all[selected]">
 						<td>{{show.id}}</td>
 						<td>{{show.name}}</td>
 						<td>{{show.code}}</td>
 						<td>{{show.contact}}</td>
 						<td>{{show.read}}</td>
-						<td>{{show.in_time}}</td>
+						<td>{{stamp2time(show.in_time)}}</td>
 						<td>{{show.phone}}</td>
 						<td class="admin_ui_table_action">
 							<a href="#/agentsManagementDetail.html" class="iconButton checkIcon">
@@ -92,7 +93,9 @@ var vm = new Tvm({
 		dataSource_1: [],
 		dataSource_2: [],
 		dataSource_3: [],		
-		pageIndex: 1
+		pageIndex: 1,
+		selected: 0,
+		dataSource_all: []
 	},
 	computed: {
 	},
@@ -100,13 +103,33 @@ var vm = new Tvm({
 		search: function(){
 			var self = this;
 			self.dataSource_filter = [];
-			for(index in self.dataSource){
-				var _data = self.dataSource[index];
-				if(self.isContainKeyword([_data.id, _data.user_nick],self.keyword)){
-					self.dataSource_filter.push(_data);
+			if(self.selected==0){
+				for(index in self.dataSource_3){
+					var _data = self.dataSource_3[index];
+					if(self.isContainKeyword([_data.id, _data.name, _data.code, _data.contact, stamp2time(_data.in_time), _data.phone],self.keyword)){
+						self.dataSource_filter.push(_data);
+					}
+				}
+				
+			}
+			else if(self.selected==1){
+				for(index in self.dataSource_1){
+					var _data = self.dataSource_1[index];
+					if(self.isContainKeyword([_data.id, _data.name, _data.code, _data.contact, stamp2time(_data.in_time), _data.phone],self.keyword)){
+						self.dataSource_filter.push(_data);
+					}
 				}
 			}
-			self.refreshTable();
+			else if(self.selected==2){
+				for(index in self.dataSource_2){
+					var _data = self.dataSource_2[index];
+					if(self.isContainKeyword([_data.id, _data.name, _data.code, _data.contact, stamp2time(_data.in_time), _data.phone],self.keyword)){
+						self.dataSource_filter.push(_data);
+					}
+				}	
+			}
+			self.dataSource_all[self.selected] = self.dataSource_filter;
+
 		},
 		isContainKeyword: function(arr,keyword){
 			for(index in arr){
@@ -176,20 +199,6 @@ var vm = new Tvm({
 			});
 		},
 
-		bus_change: function(){
-		 	var self = this;
-		 	var select_val = $("#bus_select").val();
-		 	if(select_val==0){
-		 		self.dataSource_filter = self.dataSource_3;	
-		 	}
-		 	else if(select_val==1){
-		 		self.dataSource_filter = self.dataSource_1;
-		 	}
-		 	else{
-				self.dataSource_filter = self.dataSource_2;
-		 	}
-
-		}
 
 
 	},
@@ -204,29 +213,25 @@ var vm = new Tvm({
 
 			}
 		});
-		$.when(getSubBusiness()).done(function(data_sub){
-			if(data_sub.state == 0){
-				self.dataSource_sub = data_sub.data;	
-				self.dataSource_2 = JSON.parse(JSON.stringify(self.dataSource_sub));
-				self.dataSource_3= self.dataSource;
-				for (var i = 0; i < self.dataSource_sub.length; i++) {
-					self.dataSource_3.push(self.dataSource_sub[i]);
-				}	
-				self.dataSource_filter = self.dataSource_3;	
-				self.refreshTable();		
-			}
-		});
+		setTimeout(function(){
+			$.when(getSubBusiness()).done(function(data_sub){
+				if(data_sub.state == 0){
+					self.dataSource_sub = data_sub.data;	
+					self.dataSource_2 = JSON.parse(JSON.stringify(self.dataSource_sub));
+					self.dataSource_3= self.dataSource;
+					for (var i = 0; i < self.dataSource_sub.length; i++) {
+						self.dataSource_3.push(self.dataSource_sub[i]);
+					}	
+					self.dataSource_all[0] = self.dataSource_3;
+					self.dataSource_all[1] = self.dataSource_1;
+					self.dataSource_all[2] = self.dataSource_2;
+				 	self.dataSource_filter = self.dataSource_all[self.selected];
+					self.refreshTable();		
 
+				}
+			});
+		},500);
 	},
-	// mounted: function(){
-	// 	var self = this;
-	// 	$("#bus_select").on("change",function(){
-	// 		self.dataSource_final = self.dataSource_filter_sub;	
-	// 	});
-	// }
-
-	
-
 
 
 });
