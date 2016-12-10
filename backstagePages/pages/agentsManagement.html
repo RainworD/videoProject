@@ -2,7 +2,7 @@
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
-			<span class="maintitle">账户管理</span>
+			<span class="maintitle">代理商管理</span>
 		</div>	
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
@@ -11,7 +11,7 @@
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
-					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
+					<i @change="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
 				</div>
 			</div>
 			<table class="admin_ui_table">
@@ -22,10 +22,11 @@
 						<th>邀请码</th>
 						<th>负责人</th>
 						<th>
-							<select style="width: 100%;font-size: 16px;">
-								<option>总代理商</option>
-								<option>子代理商</option>
-								<option>全部</option>
+							<select @change="bus_change" id="bus_select" style="width: 100%;font-size: 16px;">
+								<option value="0">全部</option>
+								<option value="1">总代理商</option>
+								<option value="2">子代理商</option>
+								
 							</select>
 						</th>
 						<th>注册时间</th>
@@ -34,26 +35,33 @@
 					</tr>
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="show in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+					<tr v-for="show in dataSource_filter">
 						<td>{{show.id}}</td>
-						<td>{{show.user_nick}}</td>
-						<td>{{show.like}}</td>
-						<td>{{show.comment}}</td>
+						<td>{{show.name}}</td>
+						<td>{{show.code}}</td>
+						<td>{{show.contact}}</td>
 						<td>{{show.read}}</td>
-						<td style="width:136px;">
-							<div class="admin_ui_select">
-							<select v-model="show._top" @change="topShowButton($index)">
-								<option :value="true">是</option>
-								<option :value="false">否</option>
-							</select>
+						<td>{{show.in_time}}</td>
+						<td>{{show.phone}}</td>
+						<td class="admin_ui_table_action">
+							<a href="#/agentsManagementDetail.html" class="iconButton checkIcon">
+								<i class="fa fa-pencil"></i>
+								编辑
+							</a>
+							<div class="iconButton removeIcon" @click="removeWebsite($index)">
+								<i class="fa fa-remove"></i>
+								删除
 							</div>
 						</td>
-						<!-- <td>
-							<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" data-addShowImageAsTopSlideImage>设置</div>
-						</td> -->
-						<td>
-							<div @click="addShowImageAsBottomSlideImage($index)" class="admin_ui_button admin_ui_button_xs admin_ui_button_white">设置</div>
-						</td>
+					</tr>
+					<!-- <tr v-for="show_sub in dataSource_filter_sub">
+						<td>{{show_sub.id}}</td>
+						<td>{{show_sub.business}}</td>
+						<td>{{show_sub.code}}</td>
+						<td>{{show_sub.contact}}</td>
+						<td>{{show_sub.read}}</td>
+						<td>{{show_sub.in_time}}</td>			
+						<td>{{show_sub.phone}}</td>
 						<td class="admin_ui_table_action">
 							<a href="#/agentsManagementDetail.html?{{encodeURI(JSON.stringify(website))}}" class="iconButton checkIcon">
 								<i class="fa fa-pencil"></i>
@@ -64,7 +72,7 @@
 								删除
 							</div>
 						</td>
-					</tr>
+					</tr> -->
 				</tbody>
 			</table>
 			<div class="admin_ui_pagination">
@@ -79,7 +87,11 @@ var vm = new Tvm({
 	data:{
 		keyword: "",
 		dataSource: [],
+		dataSource_sub: [],	
 		dataSource_filter: [],
+		dataSource_1: [],
+		dataSource_2: [],
+		dataSource_3: [],		
 		pageIndex: 1
 	},
 	computed: {
@@ -162,18 +174,61 @@ var vm = new Tvm({
 					alert("设置成功！");
 				}
 			});
+		},
+
+		bus_change: function(){
+		 	var self = this;
+		 	var select_val = $("#bus_select").val();
+		 	if(select_val==0){
+		 		self.dataSource_filter = self.dataSource_3;	
+		 	}
+		 	else if(select_val==1){
+		 		self.dataSource_filter = self.dataSource_1;
+		 	}
+		 	else{
+				self.dataSource_filter = self.dataSource_2;
+		 	}
+
 		}
+
+
 	},
 	created: function(){
 		var self = this;
-		$.when(getShowRank(1,0)).done(function(data){
+		$.when(getBusiness()).done(function(data){
 			if(data.state == 0){
-				self.dataSource = data.show;
-				self.dataSource_filter = self.dataSource;
-				self.refreshTable();
+				self.dataSource = data.data;
+				self.dataSource_1 = JSON.parse(JSON.stringify(self.dataSource));
+				self.dataSource_3 = JSON.parse(JSON.stringify(self.dataSource));
+				
+
 			}
 		});
-	}
+		$.when(getSubBusiness()).done(function(data_sub){
+			if(data_sub.state == 0){
+				self.dataSource_sub = data_sub.data;	
+				self.dataSource_2 = JSON.parse(JSON.stringify(self.dataSource_sub));
+				self.dataSource_3= self.dataSource;
+				for (var i = 0; i < self.dataSource_sub.length; i++) {
+					self.dataSource_3.push(self.dataSource_sub[i]);
+				}	
+				self.dataSource_filter = self.dataSource_3;	
+				self.refreshTable();		
+			}
+		});
+
+	},
+	// mounted: function(){
+	// 	var self = this;
+	// 	$("#bus_select").on("change",function(){
+	// 		self.dataSource_final = self.dataSource_filter_sub;	
+	// 	});
+	// }
+
+	
+
+
+
 });
 	// $.when(getShowRank(1,0)).done(function(data){
 	// 	if(data.state == 0){

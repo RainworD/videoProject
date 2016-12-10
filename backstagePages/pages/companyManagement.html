@@ -160,9 +160,9 @@ var vm = new Tvm({
 	},
 	created: function(){
 		var self = this;
-		$.when(getShowRank(1,0)).done(function(data){
+		$.when(getCompany()).done(function(data){
 			if(data.state == 0){
-				self.dataSource = data.show;
+				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
 				self.refreshTable();
 			}

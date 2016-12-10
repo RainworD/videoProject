@@ -53,15 +53,7 @@ function getLabel(){//获得标签列表
 	});
 	return ajax;
 }
-function getBusiness(){//获得代理商列表
-	var ajax = $.ajax({
-		url:"/model/get/Business",
-		type: "POST",
-		success: successHandle,
-		error: errorHandle
-	});
-	return ajax;
-}
+
 function sendMessage(title,text,business){//获得代理商列表
 	var ajax = $.ajax({
 		url:"/model/save/Announce",
@@ -388,7 +380,32 @@ function getDynamic(){//获得设备列表
 	});
 	return ajax;
 }
-function deleteDynamic(id){//获得设备列表
+function getBusiness(){//获得代理商列表
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Business",
+		type: "POST",
+		data:{
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getSubBusiness(){//获得代理商列表
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/SubBusiness",
+		type: "POST",
+		data:{
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+
+
+function deleteDynamic(id){//删除设备列表
 	var ajax = $.ajax({
 		url: "/model/delete/Dynamic?id="+id,
 		type: "POST",
