@@ -2,10 +2,13 @@
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
-			<span class="maintitle">企业管理</span>
+			<span class="maintitle">企业同事管理</span>
 		</div>	
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
+				<div style="float:left;height:30px;">
+					<a href="#/agentsManagementDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a>
+				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
 					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
@@ -25,12 +28,12 @@
 					</tr>
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="show in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+					<tr v-for="show in dataSource_filter">
 						<td>{{show.id}}</td>
-						<td>{{show.user_nick}}</td>
-						<td>{{show.like}}</td>
-						<td>{{show.comment}}</td>
-						<td>{{show.read}}</td>
+						<td>{{show.name}}</td>
+						<td>{{show.code}}</td>
+						<td>{{show.company.name}}</td>
+						<td>{{show.company.contact}}</td>
 						<td style="width:136px;">
 							<div class="admin_ui_select">
 							<select v-model="show._top" @change="topShowButton($index)">
@@ -153,9 +156,9 @@ var vm = new Tvm({
 	},
 	created: function(){
 		var self = this;
-		$.when(getShowRank(1,0)).done(function(data){
+		$.when(getUserInfo("企业同事")).done(function(data){
 			if(data.state == 0){
-				self.dataSource = data.show;
+				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
 				self.refreshTable();
 			}

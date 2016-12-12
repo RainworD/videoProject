@@ -183,19 +183,7 @@ function editUserState(id,enable){
 	});
 	return ajax;
 }
-function getUserInfo(competence){
-	var ajax = $.ajax({
-		url: "/model/get/User",
-		type: "POST",
-		traditional:true,
-		data:{
-			competence:competence,
-		},
-		success: successHandle,
-		error: errorHandle
-	});
-	return ajax;
-}
+
 function deleteLabel(id){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/delete/Label",
@@ -371,7 +359,7 @@ function addDevice(code,number){//获得设备列表
 	});
 	return ajax;
 }
-function getDynamic(){//获得设备列表
+function getDynamic(){//
 	var ajax = $.ajax({
 		url: "/model/get/Dynamic?add_=user.company.business&add_=user&add_=user.company",
 		type: "POST",
@@ -402,6 +390,41 @@ function getSubBusiness(){//获得代理商列表
 	});
 	return ajax;
 }
+function getCompany(){//
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Company?add_=business",
+		type: "POST",
+		data:{
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getUser(){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/User",
+		type: "POST",
+		data:{
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getUserInfo(competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/User?add_=company",
+		type: "POST",
+		data:{
+			competence: competence,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
 
 
 

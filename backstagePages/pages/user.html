@@ -16,7 +16,7 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/userDetail.html" class="admin_ui_button admin_ui_button_white button_">新增</a>
+					<a href="#/agentsManagementDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a>
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
@@ -35,7 +35,7 @@
 					</tr>
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
+					<tr v-for="(show,index) in dataSource_filter">
 						<!-- <td>{{show.id}}</td> -->
 						<td>{{show.username}}</td>
 						<td>{{show.contact}}</td>
@@ -160,7 +160,7 @@ var vm = new Tvm({
 	},
 	created: function(){
 		var self = this;
-		$.when(getUserInfo(self.competence)).done(function(data){
+		$.when(getUser()).done(function(data){
 			if(data.state == 0){
 				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
