@@ -25,7 +25,7 @@
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">账户名称：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="userName"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">账户名称：</span><input style="width: 88%;height: 30px;" type="" name="" class="userName ui-input"></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">账户类型：</span>
@@ -38,13 +38,13 @@
 					</div>
 				</div>
 				<div class="admin_ui_form_field" id="contact_">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="contact" v-model="number"></div>
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="contact"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;" type="" name="" class="contact ui-input" v-model="number"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;" type="" name="" class="contact ui-input"></div>
 				</div>
 				<div class="admin_ui_name" id="username_1"><span style="width: 100px;display: inline-block;" class="account account_1">登录账号：</span><span>{{number}}</span></div>
 				<div class="admin_ui_name" id="username_2"><span style="width: 100px;display: inline-block;" class="account account_2">登录账号：</span><span></span></div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;" id="resetpw">登录密码：</span><input style="width: 88%;height: 30px;padding:0 10px" type="password" name="" class="pw"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;" id="resetpw">登录密码：</span><input style="width: 88%;height: 30px;" type="password" name="" class="pw ui-input"></div>
 				</div>
 			</div>
 		</div>
