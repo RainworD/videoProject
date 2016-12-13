@@ -10,7 +10,7 @@
 					<a href="#/agentsManagement.html" class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">返回</a>
 				</div>
 				<div style="float:right;height:30px;">
-					<a href="#/agentsManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;">保存</a>
+					<a id="saveButton" href="#/agentsManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;">保存</a>
 				</div>
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
@@ -96,51 +96,48 @@
 	    var dataURL = canvas.toDataURL("image/png");
 	    return dataURL;
 	}
-	$("#tinymce").show()
+	$("#tinymce").show();
 	editor.render();
-	$.when(getGlobal("contactUs")).done(function(data){
-		if(data.state == 0){
-			if(data.text){
-				$("#tinymce").html(data.text);
-			}
-			$("#tinymce").show()
-			editor.render();
-		}
-	});
+	
+
+
 	$("#saveButton").bind('click',function(data){
-		var content = $(editor.getContent());
-		var imgLen = $(content).find('img').length;
-		var count = 0;
-		var uploadImageDeferred = $.Deferred();
-		for(var i = 0, imgLen = content.find('img').length; i < imgLen; i++){
-			var _img = content.find('img')[i];
-			var file = dataURL2Bolb(getBase64Image(_img));
-			var formData = new FormData();
-			formData.append('file',file);
-			$.when(uploadImage(formData)).done(function(data){
-				if(data.state == 0){
-					_img.src = getImageByUrl(data.name);
-					count ++;
-					if(count == imgLen){
-						uploadImageDeferred.resolve();
-					}
-				}
-				else{
-					uploadImageDeferred.reject();
-				}
-			});
-		}
-		$.when(uploadImageDeferred).done(function(){
-			var _contentHTML = $("<div>").append(content).html();
-			$.when(setGlobal("contactUs", _contentHTML)).done(function(data){
-				if(data.state == 0){
-					alert("保存成功");
-				}
-			});
-		}).fail(function(){
-			alert("上传图片至服务器失败，请检查网络");
+		var text = $(".admin_ui_input");
+		var name = text[0].value;
+		var contact = text[1].value;
+		var phone = text[2].value;
+		var code="B001";
+		var competence="代理商管理员";
+
+		$.when(editBusiness(code,name,contact,phone,competence)).done(function(data){	
 		});
+
+		
+	
+		// if(id){
+		// 	$.when(editArticle(id,title,text,label,top)).done(function(data){
+		// 		if(data.state==0){
+		// 			alert("修改成功！");
+		// 		}
+		// 		else{
+		// 			alert("操作失败！")
+		// 		}
+		// 	})	
+		// }
+		// else{
+		// 	$.when(sendArticle(title,text,label,top)).done(function(data){
+		// 		if(data.state==0){
+		// 			alert("新增成功！");
+		// 		}
+		// 		else{
+		// 			alert("操作失败！")
+		// 		}
+		// 	})	
+		// }	
 	});
+
+
+
 </script>
 
 

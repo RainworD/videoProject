@@ -6,9 +6,9 @@
 		</div>	
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
-				<div style="float:left;height:30px;">
+				<!-- <div style="float:left;height:30px;">
 					<a href="#/agentsManagementDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a>
-				</div>
+				</div> -->
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
 					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
@@ -22,8 +22,8 @@
 						<th>邀请码</th>
 						<th>企业名称</th>
 						<th>企业负责人</th>
+						<th>企业邀请码</th>
 						<th>联系方式</th>
-						<th>邀请码</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -34,20 +34,12 @@
 						<td>{{show.code}}</td>
 						<td>{{show.company.name}}</td>
 						<td>{{show.company.contact}}</td>
-						<td style="width:136px;">
-							<div class="admin_ui_select">
-							<select v-model="show._top" @change="topShowButton($index)">
-								<option :value="true">是</option>
-								<option :value="false">否</option>
-							</select>
-							</div>
-						</td>
+						<td>{{show.company.code}}</td>	
+						<td>{{show.company.phone}}</td>
 						<!-- <td>
 							<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" data-addShowImageAsTopSlideImage>设置</div>
 						</td> -->
-						<td>
-							<div @click="addShowImageAsBottomSlideImage($index)" class="admin_ui_button admin_ui_button_xs admin_ui_button_white">设置</div>
-						</td>
+						
 						<td class="admin_ui_table_action">
 							<div class="iconButton removeIcon" @click="removeWebsite($index)">
 								<i class="fa fa-remove"></i>

@@ -7,7 +7,7 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/agentsManagementDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a>
+					<a href="#/companyManagementDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增企业</a>
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
@@ -34,20 +34,11 @@
 						<td>{{show.code}}</td>
 						<td>{{show.contact}}</td>
 						<td>{{show.business.name}}</td>
-						<td style="width:136px;">
-							<div class="admin_ui_select">
-							<select v-model="show._top" @change="topShowButton($index)">
-								<option :value="true">是</option>
-								<option :value="false">否</option>
-							</select>
-							</div>
-						</td>
-						<!-- <td>
-							<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" data-addShowImageAsTopSlideImage>设置</div>
-						</td> -->
+						<td>{{show.business.code}}</td>
 						<td>
-							<div @click="addShowImageAsBottomSlideImage($index)" class="admin_ui_button admin_ui_button_xs admin_ui_button_white">设置</div>
+							<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" data-addShowImageAsTopSlideImage>设置</div>
 						</td>
+						<!-- <td>{{show.label.name}}</td> -->
 						<td class="admin_ui_table_action">
 							<a href="#/companyManagementDetail.html?{{encodeURI(JSON.stringify(website))}}" class="iconButton checkIcon">
 								<i class="fa fa-pencil"></i>

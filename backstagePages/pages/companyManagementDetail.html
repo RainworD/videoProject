@@ -10,44 +10,49 @@
 					<a href="#/companyManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">返回</a>
 				</div>
 				<div style="float:right;height:30px;">
-					<a href="#/companyManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;">保存</a>
+					<a href="#/companyManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;" id="saveButton">保存</a>
 				</div>
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">所属代理商：</span>
-						<select style="width: 88%;height: 30px;padding:0 10px;border:none;" type="" name="">
-								
+						<select style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+							<option>测试代理商1</option>
+							<option>测试代理商2</option>
 						</select>					
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">子代理商：</span>
-						<select style="width: 88%;height: 30px;padding:0 10px;border:none;" type="" name="">
-							
+						<select style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+							<option>测试子代理商1</option>
+							<option>测试子代理商2</option>
 						</select>
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">代理商邀请码：</span><span></span></div>
+					<div class="admin_ui_name">
+						<span style="width: 100px;display: inline-block;">代理商邀请码：</span>
+						<span></span>
+					</div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">行业标签：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">行业标签：</span><input class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">企业名称：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">企业名称：</span><input class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><input class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">邀请码：</span><span></span></div>
@@ -121,49 +126,30 @@
 	}
 	$("#tinymce").show()
 	editor.render();
-	$.when(getGlobal("contactUs")).done(function(data){
-		if(data.state == 0){
-			if(data.text){
-				$("#tinymce").html(data.text);
-			}
-			$("#tinymce").show()
-			editor.render();
-		}
-	});
+	
+	
+
 	$("#saveButton").bind('click',function(data){
-		var content = $(editor.getContent());
-		var imgLen = $(content).find('img').length;
-		var count = 0;
-		var uploadImageDeferred = $.Deferred();
-		for(var i = 0, imgLen = content.find('img').length; i < imgLen; i++){
-			var _img = content.find('img')[i];
-			var file = dataURL2Bolb(getBase64Image(_img));
-			var formData = new FormData();
-			formData.append('file',file);
-			$.when(uploadImage(formData)).done(function(data){
-				if(data.state == 0){
-					_img.src = getImageByUrl(data.name);
-					count ++;
-					if(count == imgLen){
-						uploadImageDeferred.resolve();
-					}
-				}
-				else{
-					uploadImageDeferred.reject();
-				}
-			});
-		}
-		$.when(uploadImageDeferred).done(function(){
-			var _contentHTML = $("<div>").append(content).html();
-			$.when(setGlobal("contactUs", _contentHTML)).done(function(data){
-				if(data.state == 0){
-					alert("保存成功");
-				}
-			});
-		}).fail(function(){
-			alert("上传图片至服务器失败，请检查网络");
+		var text = $(".admin_ui_input");
+		var label =text[0].value;
+		var name = text[1].value;
+		var contact = text[2].value;
+		var phone = text[3].value;
+		var code="C001";
+		var competence="企业管理员";
+		var business = 1;
+		var subBusiness = 1;
+		var label = 2;
+
+		$.when(editCompany(code,name,contact,phone,competence,business,subBusiness,label)).done(function(data){	
+		
 		});
+
+		
+
+	
 	});
+
 </script>
 
 

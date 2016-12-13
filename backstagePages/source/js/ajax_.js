@@ -317,7 +317,7 @@ function getDevice(){//获得设备列表
 	});
 	return ajax;
 }
-function deleteDevice(id){//获得设备列表
+function deleteDevice(id){//
 	var ajax = $.ajax({
 		url: "/model/delete/Device?id"+id,
 		type: "POST",
@@ -368,7 +368,7 @@ function getDynamic(){//
 	});
 	return ajax;
 }
-function getBusiness(){//获得代理商列表
+function getBusiness(){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Business",
 		type: "POST",
@@ -379,6 +379,7 @@ function getBusiness(){//获得代理商列表
 	});
 	return ajax;
 }
+
 function getSubBusiness(){//获得代理商列表
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/SubBusiness",
@@ -390,9 +391,47 @@ function getSubBusiness(){//获得代理商列表
 	});
 	return ajax;
 }
+
+function editBusiness(code,name,contact,phone,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			competence:competence
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+function editCompany(code,name,contact,phone,competence,business,subBusiness,label){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			competence:competence,
+			business:business,
+			subBusiness:subBusiness,
+			label:label
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
 function getCompany(){//
 	var ajax = $.ajax({
-		url: baseUrl+"/model/get/Company?add_=business",
+		url: baseUrl+"/model/get/Company?add_=business&add_=label",
 		type: "POST",
 		data:{
 		},
@@ -401,6 +440,12 @@ function getCompany(){//
 	});
 	return ajax;
 }
+
+
+
+
+
+
 function getUser(){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/User",

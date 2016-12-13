@@ -212,8 +212,6 @@ var vm = new Tvm({
 				
 
 			}
-		});
-		setTimeout(function(){
 			$.when(getSubBusiness()).done(function(data_sub){
 				if(data_sub.state == 0){
 					self.dataSource_sub = data_sub.data;	
@@ -230,7 +228,7 @@ var vm = new Tvm({
 
 				}
 			});
-		},1000);
+		});
 	},
 
 
