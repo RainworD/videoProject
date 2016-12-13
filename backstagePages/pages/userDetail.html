@@ -65,6 +65,7 @@
 		$("#contact_").children("div").eq(1).show();
 		$("#username_1").hide();
 		$("#username_2").show();
+		$(".userType").prop("disabled","disabled");
 		$.when(getSingleUser(id)).done(function(data){
 			if(data.state == 0){
 				var data=data.data[0];
@@ -85,7 +86,7 @@
 		var name=$(".userName").val();
 		var password=$(".pw").val();
 		var competence=$(".userType").val();
-		var contact=$(".contact").val();
+		var contact=$("#contact_").children().eq(1).find("input").val();
 		var username=$(".account_1").next("span").text();
 		if(password&&!id){
 			$.when(addAdmin(username,password,name,contact,competence)).done(function(data){

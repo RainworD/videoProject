@@ -36,6 +36,9 @@
     .admin_ui_slideImageBox{
         min-height:295px;
     }
+    .grey{
+        background-color: #ccc!important;
+    }
 </style>
 <div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
 	<div class="admin_scrollBox">
@@ -57,7 +60,7 @@
                     <!-- <a class="admin_ui_button admin_ui_button_white button_2" v-if="!show.announce" :data-id="-1">选择文章</a>
                     <a class="admin_ui_button admin_ui_button_white button_2" v-else :data-id="show.announce.id">选择文章</a>
                     </p> -->
-                    <a class="admin_ui_button admin_ui_button_white button_2" :data-id="!show.announce?'-1':show.announce.id">选择文章</a>
+                    <a class="admin_ui_button admin_ui_button_white button_2" :data-id="!show.announce?'-1':show.announce.id" :class="show.announce?active:''">选择文章</a>
                     <!-- <p>url:<input type="text" style="margin-top:10px;width:85%;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input"></p> -->
                     <!-- <div class="admin_ui_button admin_ui_button_green checkButton button_ upload">
                         确认
@@ -99,7 +102,7 @@
                 <td><input type="radio" name="article" :data-id="show.id"></td>
                 <td>{{show.title}}</td>
                 <td>{{show.in_time}}</td>
-                <td v-for="(show_,index) in show.business">{{show_.name}}</td>
+                <td><span v-for="(show_,index) in show.business">{{show_.name}}</span></td>
             </tr>
         </tbody>
     </table>
@@ -130,7 +133,7 @@
             dataSource: [],
             dataSource_filter: [],
             business_filter:[],
-            pageIndex: 1
+            pageIndex: 1,
         },
         computed: {
         },
@@ -169,23 +172,24 @@
         data:{
             keyword: "",
             dataSource_: [],
+            active:'grey',
         },
         computed: {
         },
         methods: {
             deleteCarousel: function(index){
-            var self = this;
-            if(confirm("您确定要删除该轮播图吗？")){
-                $.when(deleteCarousel(self.dataSource_[index].id)).done(function(data){
-                    if(data.state == 0){
-                        alert("删除成功");
-                        self.dataSource_.splice(index,1);
-                        window.reload();
-                        // self.refreshTable();
-                    }
-                });
-            }
-        },
+                var self = this;
+                if(confirm("您确定要删除该轮播图吗？")){
+                    $.when(deleteCarousel(self.dataSource_[index].id)).done(function(data){
+                        if(data.state == 0){
+                            alert("删除成功");
+                            self.dataSource_.splice(index,1);
+                            // window.location.reload();
+                            // self.refreshTable();
+                        }
+                    });
+                }
+            },
         },
         created: function(){
             var self = this;
@@ -216,10 +220,11 @@
               // 渲染文件
             reader.onload = function(arg) {
                 var img=$(".admin_ui_slideImageBox").last().clone(true);
+                img.addClass("deleteSome");
                 img.find(".slideImageUpload").empty();
                 img.find(".slideImageUpload").append('<img src="' + arg.target.result + '" class="upload_pic">');
             // var img = '<img class="preview" src="' + arg.target.result + '" alt="preview"/>';
-                $("#topSlideImagesBox").prepend(img);
+                $("#topSlideImagesBox").children(".admin_ui_slideImageBox").last().before(img);
             }
         }
         if(type_arr.length){
@@ -325,6 +330,7 @@
         }
     }) 
     $("#topSlideImagesBox").on("click",".button_2",function(){
+        $(this).addClass("grey");
         var id_=$(this).attr("data-id");
         if(id_>0){
             $("input[data-id="+id_+"]").prop("checked",true);
@@ -343,6 +349,9 @@
     $(".cancel").bind("click",function(){
         $('.mask').removeClass("show");
         $(".popBox").removeClass("show");
+    })
+    $("#topSlideImagesBox").on("click",".deleteSome .deleteButton",function(){
+        $(this).parents(".admin_ui_slideImageBox").remove();
     })
 </script>
 

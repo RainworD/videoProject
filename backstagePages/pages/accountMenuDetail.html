@@ -36,7 +36,7 @@
 				</thead>
 				<tbody id="commentManagement_commentData" class="admin_ui_table_hoverEffect">
 					<tr v-for="(comment,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
-						<td>{{stamp2time(comment.in_time)}}</td>
+						<td>{{stamp2time(comment.time)}}</td>
 						<td>
 							{{comment.withdraw}}
 						</td>

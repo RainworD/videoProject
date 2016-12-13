@@ -16,8 +16,8 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<input v-model="addword" @keyup.13="add" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input">
-					<span @click="add" class="admin_ui_button admin_ui_button_white button_">新增</span>
+					<input v-model="addword" @keyup.13="add(dataSource_filter)" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input">
+					<span @click="add(dataSource_filter)" class="admin_ui_button admin_ui_button_white button_">新增</span>
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
@@ -77,19 +77,35 @@ var vm = new Tvm({
 			}
 			self.refreshTable();
 		},
-		add:function(){
+		add:function(data_new){
 			var self = this;
-			// self.dataSource_filter = [];
-			console.log(self.dataSource_filter);
 			var name=self.addword;
-			$.ajax({
-				url:'/model/save/Label?name='+name,
-				type:'POST',
-				success:function(data){
-					var data_={in_time: data.time, name:name, id:data.id}
-					self.dataSource_filter.push(data_)
+			if(name){
+				// $.ajax({
+				// 	url:'/model/save/Label?name='+name,
+				// 	type:'POST',
+				// 	success:function(data){
+				// 		var data_={in_time: data.time, name:name, id:data.id}
+				// 		self.dataSource_filter.push(data_)
+				// 	}
+				// })
+				for(i=0;i<data_new.length;i++){
+					if(name==data_new[i].name){
+						alert("该标签已存在,请重新添加！");
+						self.addword="";
+					}
+					else{
+						$.ajax({
+							url:'/model/save/Label?name='+name,
+							type:'POST',
+							success:function(data){
+								var data_={in_time: data.time, name:name, id:data.id}
+								self.dataSource_filter.push(data_)
+							}
+						})
+					}
 				}
-			})
+			}
 			self.refreshTable();
 		},//新增实现
 		isContainKeyword: function(arr,keyword){

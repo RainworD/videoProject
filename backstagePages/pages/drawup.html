@@ -19,7 +19,7 @@
 					<a href="#/agentsAccount.html" class="admin_ui_button admin_ui_button_white button_">返回</a>
 				</div>
 				<div style="float:right;height:30px;">
-					<a class="admin_ui_button admin_ui_button_green button_ submitBtn">充值</a>
+					<a class="admin_ui_button admin_ui_button_green button_ submitBtn">提现</a>
 				</div>
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
@@ -35,11 +35,11 @@
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><span>{{dataSource.contact}}</span></div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">账户余额：</span><span class="rest_val">{{dataSource.price/100}}</span></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">账户余额：</span><span>{{dataSource.price/100}}</span></div>
 				</div>
-				<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">设备押金：</span><span class="deposit_val">{{dataSource.deposit/100}}</span></div>
+				<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">设备押金：</span><span>{{dataSource.deposit/100}}</span></div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">充值金额(元)：</span><input style="width: 88%;height: 30px" type="" name="" class="money ui-input"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">提现金额(元)：</span><input style="width: 88%;height: 30px;" type="" name="" class="money ui-input"></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">类型：</span>
@@ -73,17 +73,17 @@
 	$(".submitBtn").bind("click",function(){
 		var type;
 		var val=$("input[name='selName']:checked").attr("id");
-		var value=$(".money").val();
 		if(val=="devicePledge"){
-			type="押金充值";
+			type="押金提现";
 		}
 		else{
-			type="管理员充值";
+			type="管理员提现";
 		}
-		if(value>0){
+		var value=$(".money").val();
+		if(value){
 			$.when(recharge(type,id,value*100)).done(function(data){
 				if(data.state==0){
-					alert("充值成功！");
+					alert("提现成功！");
 					window.location.href="#/agentsAccount.html";
 				}
 				else{

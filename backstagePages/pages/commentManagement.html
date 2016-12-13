@@ -38,10 +38,10 @@
 							{{comment.dynamic.title}}
 						</td>
 						<td>
-							{{comment.user.company.name}}
+							{{comment.user.company?comment.user.company.name:''}}
 						</td>
 						<td>
-							{{comment.user.company.business.name}}
+							{{comment.user.company?comment.user.company.business.name:''}}
 						</td>
 						<td class="admin_ui_table_action">
 							<div class="iconButton removeIcon deleteCommentButton" @click="deleteCommentButton(index)">
