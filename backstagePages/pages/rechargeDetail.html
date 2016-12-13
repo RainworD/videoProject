@@ -43,7 +43,7 @@
 				</div>
 				<div class="admin_ui_form_field">
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">类型：</span>
-					<label for="accountBalance"><input type="radio" name="selName" id="accountBalance"  style="margin: 5px;">账户余额</label><label for="devicePledge"><input type="radio" name="selName" id="devicePledge" style="margin: 5px;">设备押金</label></div>
+					<label for="accountBalance"><input type="radio" name="selName" id="accountBalance"  style="margin: 5px;" checked="checked">账户余额</label><label for="devicePledge"><input type="radio" name="selName" id="devicePledge" style="margin: 5px;">设备押金</label></div>
 				</div>
 			</div>
 		</div>
@@ -72,7 +72,7 @@
 	});
 	$(".submitBtn").bind("click",function(){
 		var type;
-		var val=$("input[name='label']:checked").attr("id");
+		var val=$("input[name='selName']:checked").attr("id");
 		var value=$(".money").val();
 		if(val=="devicePledge"){
 			type="押金充值";

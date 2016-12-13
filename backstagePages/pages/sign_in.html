@@ -47,6 +47,7 @@ $("#loginButton").bind("click",function(){
 		$.when(loginApi(mail,pass)).done(function (data) {
 			if (data.state == 0) {
 				localStorage.setItem("username",data.username);
+				localStorage.setItem("competence",data.competence);
 				window.location.href = "index.html";
 			}
 			else{

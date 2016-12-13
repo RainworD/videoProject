@@ -16,7 +16,7 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/agentsManagementDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a>
+					<a href="#/userDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a>
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
@@ -71,7 +71,7 @@ var vm = new Tvm({
 		dataSource: [],
 		dataSource_filter: [],
 		pageIndex: 1,
-		competence:["一般管理员","财务管理员"],
+		// competence:["一般管理员","财务管理员"],
 		state_1:"停用",
 		state_2:"启用",
 		state:"",
@@ -160,7 +160,7 @@ var vm = new Tvm({
 	},
 	created: function(){
 		var self = this;
-		$.when(getUser()).done(function(data){
+		$.when(getUserInfo()).done(function(data){
 			if(data.state == 0){
 				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;

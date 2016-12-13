@@ -40,13 +40,18 @@
 					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{show.id}}</td>
 						<td>{{show.code}}</td>
-						<td>{{show.company?'已绑定':'未绑定'}}</td>
+						<td>{{show.business?'已绑定':'未绑定'}}</td>
 						<td>{{stamp2time(show.expire_time)}}</td>
 						<td>{{show.company?show.company.name:''}}</td>
 						<td style="width:136px;">
 							<div class="admin_ui_select">
-							<select @change="topShowButton(index)" id="selectBox">
-								<option v-for="(show_,index) in dataSource_business">{{show_?show_.name:''}}</option>
+							<select @change="topShowButton(index)" id="selectBox" :disabled="show.business?true:false" v-if="show.business">	
+								<!-- <option v-show="show.business?true:false"></option>				 -->
+								<option v-for="(show_,index) in dataSource_business" :id="show_.id">{{show_.name?show_.name:''}}</option>
+							</select>
+							<select @change="topShowButton(index)" id="selectBox" :disabled="show.business?true:false" v-else>	
+								<option v-show="show.business?true:false"></option>				
+								<option v-for="(show_,index) in dataSource_business" :id="show_.id">{{show_.name?show_.name:''}}</option>
 							</select>
 							</div>
 						</td>
@@ -57,9 +62,9 @@
 								<span v-if="show.enable">{{state_1}}</span>
 								<span v-else>{{state_2}}</span>
 							</div> -->
-							<div class="iconButton checkIcon"  @click="changeUserState(show.id,index)">
-								<i class="fa fa-pencil" v-show="show.company?true:false"></i>
-								<span>{{show.company?'解绑':''}}</span>
+							<div class="iconButton checkIcon"  @click="show.company?changeUserState('unbind',show.id,index):changeUserState('bind',show.id,index)">
+								<i class="fa fa-pencil"></i>
+								<span>{{show.business?'解绑':'绑定'}}</span>
 							</div>
 							<div class="iconButton removeIcon" @click="deleteLabelButton(index)">
 								<i class="fa fa-remove"></i>
@@ -161,31 +166,31 @@ var vm = new Tvm({
 				});
 			}
 		},
-		// changeUserState: function(id,index){
-		// 	var self = this;
-		// 	var val=$(".checkIcon").eq(index).children("span").text();
-		// 	console.log(val);
-		// 	if(val==self.state_1){
-		// 		self.state=self.state_1;
-		// 		if(confirm("您确定要"+self.state+"该用户吗？")){
-		// 			$.when(unbindDevice(id)).done(function(data){
-		// 				if(data.state == 0){
-		// 					alert("账户已"+self.state);
-		// 				}
-		// 			});
-		// 		}
-		// 	}
-		// 	else{
-		// 	}
-		// },
-		changeUserState: function(id,index){
-			if(confirm("您确定要解绑该用户吗？")){
-				$.when(unbindDevice(id)).done(function(data){
-					if(data.state == 0){
-						alert("账户已"+self.state);
-					}
-				});
+		changeUserState: function(flag,id,index){
+			if(flag=="unbind"){
+				if(confirm("您确定要解绑该用户吗？")){
+					$.when(unbindDevice(id)).done(function(data){
+						if(data.state == 0){
+							alert("账户已解绑！");
+							window.location.reload();
+						}
+					});
+				}
 			}
+			else{
+				var val=$("#showImageManagement_data").children("tr").eq(index).children("td").eq(5).find("#selectBox").val();
+				var business=$("#showImageManagement_data").children("tr").eq(index).children("td").eq(5).find("#selectBox").children("option:selected").attr("id");
+				console.log(val);
+				if(confirm("您确定绑定该用户到经销商吗？")){
+					$.when(bindDevice(id,business)).done(function(data){
+						if(data.state == 0){
+							alert("绑定成功！");
+							window.location.reload();
+						}
+					});
+				}
+			}
+
 		},
 	},
 	created: function(){

@@ -36,9 +36,9 @@
 					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{show.title}}</td>
 						<td>{{stamp2time(show.in_time)}}</td>
-						<td v-for="(show_,index) in show.business">{{show_.name}}</td>
+						<td><span v-for="(show_,index) in show.business">{{show_.name}}</span></td>
 						<td class="admin_ui_table_action">
-							<a href="#/pushManagementDetail.html" class="iconButton checkIcon" @click="goSomewhere(show.id)">
+							<a class="iconButton checkIcon" @click="goSomewhere(show.id)">
 								<i class="fa fa-pencil"></i>
 								查看
 							</a>
@@ -110,8 +110,8 @@ var vm = new Tvm({
 			    }
 			});
 		},
-		goSomewhere:function(index){
-			window.location.href='#/pushManagementDetail.html?id='+index;
+		goSomewhere:function(id){
+			window.location.href='#/pushManagementDetail.html?id='+id;
 		},
 		deleteLabelButton: function(index){
 			var self = this;

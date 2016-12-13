@@ -11,12 +11,12 @@
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
-			<span class="maintitle">文章管理</span>
+			<span class="maintitle">后台账户管理</span>
 		</div>	
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/articleManagementDetail.html" class="admin_ui_button admin_ui_button_white button_">新增文章</a>
+					<a href="#/userDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a>
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
@@ -26,36 +26,32 @@
 			<table class="admin_ui_table">
 				<thead>
 					<tr>
-						<th>id</th>
-						<th>文章标题</th>
-						<th>行业标签</th>
-						<th>发布时间</th>
-						<th>是否置顶</th>
+						<!-- <th>账户id</th> -->
+						<th>账户名称</th>
+						<th>联系方式</th>
+						<th>账户权限</th>
+						<th>重置密码</th>
 						<th>操作</th>
 					</tr>
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
-						<td>{{show.id}}</td>
-						<td>{{show.title}}</td>
-						<td><span v-for="(show_,index) in show.label">{{show_.name}}</span></td>
-						<td>{{stamp2time(show.in_time)}}</td>
-						<td style="width:136px;">
-							<div class="admin_ui_select">
-								<select v-model="show.top" @change="topShowButton(index)">
-									<option :value="true">是</option>
-									<option :value="false">否</option>
-								</select>
-							</div>
+					<tr v-for="(show,index) in dataSource_filter">
+						<!-- <td>{{show.id}}</td> -->
+						<td>{{show.username}}</td>
+						<td>{{show.contact}}</td>
+						<td>{{show.competence}}</td>
+						<td>
+							<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" @click="resetPassword(show.id)">重置</div>
 						</td>
 						<td class="admin_ui_table_action">
-							<a class="iconButton checkIcon" @click="goSomewhere(show.id)">
+							<a :href="getUrl(show.id)" class="iconButton checkIcon">
 								<i class="fa fa-pencil"></i>
-								编辑
+								修改
 							</a>
-							<div class="iconButton removeIcon" @click="deleteLabelButton(index)">
+							<div class="iconButton removeIcon"  @click="changeUserState(show.id,index)" :data-state="show.enable">
 								<i class="fa fa-remove"></i>
-								删除
+								<span v-if="show.enable">{{state_1}}</span>
+								<span v-else>{{state_2}}</span>
 							</div>
 						</td>
 					</tr>
@@ -74,7 +70,11 @@ var vm = new Tvm({
 		keyword: "",
 		dataSource: [],
 		dataSource_filter: [],
-		pageIndex: 1
+		pageIndex: 1,
+		competence:["一般管理员","财务管理员"],
+		state_1:"停用",
+		state_2:"启用",
+		state:"",
 	},
 	computed: {
 	},
@@ -84,7 +84,7 @@ var vm = new Tvm({
 			self.dataSource_filter = [];
 			for(index in self.dataSource){
 				var _data = self.dataSource[index];
-				if(self.isContainKeyword([_data.title],self.keyword)){
+				if(self.isContainKeyword([_data.username, _data.contact,_data.competence],self.keyword)){
 					self.dataSource_filter.push(_data);
 				}
 			}
@@ -120,52 +120,47 @@ var vm = new Tvm({
 			    }
 			});
 		},
-		topShowButton: function(index){
+		getUrl:function(val){
+			return '#/userDetail.html?id='+val;
+		},
+		resetPassword:function(id){
+			var pw="xiyoukeji";
+			$.when(editpw(id,pw)).done(function(data){
+				if(data.state == 0){
+					alert("重置密码成功！（初始密码为：xiyoukeji）")
+				}
+				else{
+					alert("重置密码失败！")
+				}
+			});
+		},
+		changeUserState: function(id,index){
 			var self = this;
-			var showId = self.dataSource_filter[index].id,
-				value = self.dataSource_filter[index].top;
-			if(!value){
-				// 取消置顶
-				$.when(changeTop(showId,value)).done(function(data){
-					if(data.state == 0){
-						alert("取消置顶成功！");
-					}
-					else{
-						self.dataSource_filter[index].top = true;
-					}
-				});
+			var val=$(".removeIcon").eq(index).children("span").text();
+			console.log(val);
+			if(val==self.state_1){
+				self.state=self.state_1;
+				enable=false;
+				$(".removeIcon").eq(index).children("span").text(self.state_2);
 			}
 			else{
-				// 置顶
-				$.when(changeTop(showId,value)).done(function(data){
+				self.state=self.state_2;
+				$(".removeIcon").eq(index).children("span").text(self.state_1);
+				enable=true;
+			}
+			if(confirm("您确定要"+self.state+"该用户吗？")){
+				$.when(editUserState(id,enable)).done(function(data){
 					if(data.state == 0){
-						alert("置顶成功！");
-					}
-					else{
-						self.dataSource_filter[index].top = false;
+						alert("账户已"+self.state);
 					}
 				});
 			}
-		},
-		goSomewhere:function(index){
-			window.location.href='#/articleManagementDetail.html?id='+index;
-		},
-		deleteLabelButton: function(index){
-			var self = this;
-			if(confirm("您确定要删除该篇文章吗？")){
-				$.when(deleteArticle(self.dataSource_filter[index].id)).done(function(data){
-					if(data.state == 0){
-						alert("删除成功");
-						self.dataSource_filter.splice(index,1);
-						self.refreshTable();
-					}
-				});
-			}
-		},
+		}
+		//启用！未有api
 	},
 	created: function(){
 		var self = this;
-		$.when(getArticle()).done(function(data){
+		$.when(getUserInfo(competence)).done(function(data){
 			if(data.state == 0){
 				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;
@@ -174,4 +169,5 @@ var vm = new Tvm({
 		});
 	}
 });
+
 </script>
