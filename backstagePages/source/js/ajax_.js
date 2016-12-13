@@ -409,6 +409,7 @@ function editBusiness(code,name,contact,phone,competence){
 	return ajax;
 }
 
+
 function editCompany(code,name,contact,phone,competence,business,subBusiness,label){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/Register",
