@@ -80,6 +80,7 @@ var vm = new Tvm({
 		add:function(data_new){
 			var self = this;
 			var name=self.addword;
+			var hasSome=false;
 			if(name){
 				// $.ajax({
 				// 	url:'/model/save/Label?name='+name,
@@ -89,21 +90,23 @@ var vm = new Tvm({
 				// 		self.dataSource_filter.push(data_)
 				// 	}
 				// })
+
 				for(i=0;i<data_new.length;i++){
 					if(name==data_new[i].name){
+						hasSome=true;
 						alert("该标签已存在,请重新添加！");
 						self.addword="";
 					}
-					else{
-						$.ajax({
-							url:'/model/save/Label?name='+name,
-							type:'POST',
-							success:function(data){
-								var data_={in_time: data.time, name:name, id:data.id}
-								self.dataSource_filter.push(data_)
-							}
-						})
-					}
+				}
+				if(!hasSome){
+					$.ajax({
+						url:'/model/save/Label?name='+name,
+						type:'POST',
+						success:function(data){
+							var data_={in_time: data.time, name:name, id:data.id}
+							self.dataSource_filter.push(data_)
+						}
+					})
 				}
 			}
 			self.refreshTable();
