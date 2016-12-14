@@ -186,7 +186,6 @@ body {
   color: #666;
   position: relative;
   padding-bottom: 10px;
-  bottom: -1px;
   z-index: 1;
 }
 .redNum {
@@ -223,6 +222,9 @@ body {
 .no-padding-list .mui-table-view-cell {
   padding: 0;
 }
+.messageBox {
+  padding: 10px 15px;
+}
 .messageBox .leftImg {
   float: left;
   margin-right: 12px;
@@ -239,22 +241,8 @@ body {
 .messageBox .rightContent .tips {
   margin-bottom: -10px;
 }
-.commentBox .leftImg {
-  float: left;
-  margin-right: 12px;
-}
-.commentBox .leftImg img {
-  display: block;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-.commentBox .rightContent {
-  padding-left: 50px;
-}
 .messageBox,
 .commentBox {
-  padding: 10px 15px;
   border-bottom: 1px solid #eee;
 }
 .messageBox .rightContent .rightTitle,
@@ -303,15 +291,36 @@ body {
   clear: both;
 }
 .commentBox {
-  padding-left: 65px;
-  border-bottom: none;
+  width: calc(100% - 85px);
+  padding: 10px 0;
+  display: table;
+  margin-left: 85px;
+  border-bottom: 1px solid #eee;
   padding-right: 0;
+}
+.commentBox:last-child {
+  border-bottom: none;
 }
 .commentBox .leftImg {
   margin-bottom: 5px;
+  vertical-align: top;
+  width: 40px;
+  display: table-cell;
+  padding-right: 12px;
+}
+.commentBox .leftImg img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.commentBox .leftImg > h6 {
+  width: 40px;
+  word-break: break-all;
 }
 .commentBox .rightContent {
-  border-bottom: 1px solid #eee;
+  vertical-align: top;
+  display: table-cell;
 }
 .commentBox .rightContent .rightPara {
   font-size: 12px;
@@ -1461,6 +1470,19 @@ a .mui-table-view-cell:after {
   width: 100%;
   padding-top: 10px;
 }
+.cash_detail .showProcess:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.cash_detail .showProcess.finished .leftPart_1:after {
+  border-top: 1px dashed #ccc;
+  content: '';
+  position: absolute;
+  width: 100px;
+  right: -50px;
+  top: 28px;
+}
 .cash_detail .showProcess .leftPart {
   float: left;
   width: 50%;
@@ -1485,7 +1507,6 @@ a .mui-table-view-cell:after {
 }
 .cash_detail .showProcess .leftPart_1:after {
   content: '';
-  border-top: 1px dashed #fff;
   position: absolute;
   width: 100px;
   right: -50px;

@@ -21,14 +21,14 @@
 <body>
     <div class="mui-content mui-fullscreen">
         <div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-negative">
-            <a class="mui-control-item" href="#item1" :class="{'mui-active': activeIndex == 0}">
+            <a class="mui-control-item" href="#item1" :class="{'mui-active': activeIndex == 0}" @tap="tap_all()">
                 <span class="listItem_name">全部
-                    <span class="mui-badge mui-badge-danger right-top">2</span>
+                    <span class="mui-badge mui-badge-danger right-top" v-cloak v-if="qd.newDynamicNumber>0">{{qd.newDynamicNumber}}</span>
                 </span>
             </a>
-            <a class="mui-control-item" href="#item2" :class="{'mui-active': activeIndex == 1}">
+            <a class="mui-control-item" href="#item2" :class="{'mui-active': activeIndex == 1}" @tap="tap_comment()">
                 <span class="listItem_name">我评论的
-                    <span class="mui-badge mui-badge-danger right-top">2</span>
+                    <span class="mui-badge mui-badge-danger right-top" v-cloak v-if="qd.newCommentDynamicNumber>0">{{qd.newCommentDynamicNumber}}</span>
                 </span>
             </a>
         </div>
@@ -39,7 +39,7 @@
                         <li class="" v-for="dynamic in dynamicList">
                             <div class="messageBox">
                                 <div class="leftImg">
-                                    <img :src="getResourceById(dynamic.user.photo.id)">
+                                    <img :src="getMinifiedImage(dynamic.user.photo.id,60,60)">
                                 </div>
                                 <div class="rightContent">
                                     <div class="rightContent_1">
@@ -49,14 +49,14 @@
                                             <template v-for="photoUrl in dynamic.photo">
                                             <div class="photo">
                                                 <div class="fix7_5">
-                                                    <img :src="getMinifiedImage(photoUrl.id)" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'informed_'+dynamic.id}}">
+                                                    <img :src="getMinifiedImage(photoUrl.id,minifiedWidth,minifiedHeight)" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'all_'+dynamic.id}}">
                                                 </div>
                                             </div>
                                             </template>
                                         </div>
                                         <div class="tips">
                                             <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
-                                            <img src="../source/img/message.png">
+                                            <img @tap="beginComment(dynamic);" src="../source/img/message.png">
                                         </div>
                                     </div> 
                                 </div>
@@ -64,7 +64,7 @@
                             <div class="comment">
                                 <div class="commentBox" v-for="cmt in dynamic.comment">
                                     <div class="leftImg">
-                                        <img :src="cmt.user.photo">
+                                        <img :src="getMinifiedImage(cmt.user.photo.id,40,40)">
                                         <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                                     </div>
                                     <div class="rightContent">
@@ -89,24 +89,24 @@
                         <li class="" v-for="dynamic in commentDynamicList">
                             <div class="messageBox">
                                 <div class="leftImg">
-                                    <img :src="getResourceById(dynamic.user.photo.id)">
+                                    <img :src="getMinifiedImage(dynamic.user.photo.id,60,60)">
                                 </div>
                                 <div class="rightContent">
                                     <div class="rightContent_1">
                                         <p class="rightTitle">{{dynamic.user.name}}</p>
                                         <p class="rightPara wordbreak">{{dynamic.text}}</p>
-                                        <div class="photoPreviewBox flex flex-space-between flex-wrap">
+                                        <div class="photoPreviewBox">
                                             <template v-for="photoUrl in dynamic.photo">
                                             <div class="photo">
                                                 <div class="fix7_5">
-                                                    <img src="getMinifiedImage(photoUrl.id)" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'informed_'+dynamic.id}}">
+                                                    <img :src="getMinifiedImage(photoUrl.id,minifiedWidth,minifiedHeight)" alt="" data-preview-src="{{getResourceById(photoUrl.id)}}" data-preview-group="{{'informed_'+dynamic.id}}">
                                                 </div>
                                             </div>
                                             </template>
                                         </div>
                                         <div class="tips">
                                             <span class="leftTips">{{stamp2time(dynamic.in_time)}}</span>
-                                            <img src="../source/img/message.png">
+                                            <img @tap="beginComment(dynamic);" src="../source/img/message.png">
                                         </div>
                                     </div> 
                                 </div>
@@ -114,7 +114,7 @@
                             <div class="comment">
                                 <div class="commentBox" v-for="cmt in dynamic.comment">
                                     <div class="leftImg">
-                                        <img :src="cmt.user.photo">
+                                        <img :src="getMinifiedImage(cmt.user.photo.id,40,40)">
                                         <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                                     </div>
                                     <div class="rightContent">
@@ -141,6 +141,8 @@
 <script src="../source/mui/js/mui.zoom.js"></script>
 <script src="../source/mui/js/mui.previewimage.js"></script>
 <script>
+// 一次多少个数据
+var DATALENGTH = 10;
 $(function() {
     mui.init();
     mui('#scroll').scroll({
@@ -150,6 +152,7 @@ $(function() {
     var vm = new Vue({
         el: "body",
         data: {
+            newDynamicNumberList: {0: 0, 1: 0},
             showInput: false,
             focusDynamicId: 0,
             commentValue: "",
@@ -158,15 +161,23 @@ $(function() {
             dynamicListStart: 0,
             commentDynamicListStart: 0,
             activeIndex: 0,
-            minifiedWidth: 89
+            minifiedWidth: 89,
+            qd: {}
         },
         computed: {
+            minifiedHeight: function(){
+                var self = this;
+                return parseInt(self.minifiedWidth*5/7);
+            }
         },
         methods: {
             beginComment: function(dynamic){
                 var self = this;
                 self.showInput = true;
                 self.focusDynamic = dynamic;
+                setTimeout(function(){
+                    $("#commentInput").focus();
+                },50)
             },
             sendComment: function(){
                 var self = this;
@@ -177,61 +188,92 @@ $(function() {
                 });
             },
             refreshDynamicById: function(dynamic){
+                var self = this;
                 $.when(getDynamicById(dynamic.id)).done(function(data){
                     if(data.state == 0){
-                        dynamic.comment = data.data.comment;
+                        dynamic.comment = data.data[0].comment;
+                        self.showInput = false;
+                        self.commentValue = "";
                     }
                 })
             },
             getNewestCommentDynamic: function(){
                 var self = this;
-                $.when(getCommentDynamic(0,20)).done(function(data){
+                self.commentDynamicList = 0;
+                $.when(getCommentDynamicByCompanyId(self.qd.companyId,self.commentDynamicList,DATALENGTH)).done(function(data){
                     if(data.state == 0){
                         self.commentDynamicList = data.data;
-                        self.commentDynamicListStart ++;
+                        self.commentDynamicListStart += DATALENGTH;
+
+                        self.tap_comment();
+
                         mui('#scroll2').pullRefresh().endPulldownToRefresh();
-                        if(data.data.length < 20){
+                        if(data.data.length < DATALENGTH){
                             mui('#scroll2').pullRefresh().endPullupToRefresh(true);
+                        }
+                        else{
+                            mui('#scroll2').pullRefresh().endPullupToRefresh(false);
                         }
                     }                
                 });
             },
             getMoreCommentDynamic: function(){
                 var self = this;
-                $.when(getCommentDynamic(self.commentDynamicListStart,20)).done(function(data){
+                $.when(getCommentDynamicByCompanyId(self.qd.companyId,self.commentDynamicListStart,DATALENGTH)).done(function(data){
                     if(data.state == 0){
                         self.commentDynamicList = self.commentDynamicList.concat(data.data);
-                        self.commentDynamicListStart ++;
-                        if(data.data.length < 20){
+                        self.commentDynamicListStart += DATALENGTH;
+                        if(data.data.length < DATALENGTH){
                             mui('#scroll2').pullRefresh().endPullupToRefresh(true);
+                        }
+                        else{
+                            mui('#scroll2').pullRefresh().endPullupToRefresh(false);
                         }
                     }
                 })
             },
             getNewestAllDynamic: function(){
                 var self = this;
-                $.when(getAllCompanyDynamic(0,20)).done(function(data){
+                self.dynamicListStart = 0;
+                $.when(getCompanyDynamicByCompanyId(self.qd.companyId,self.dynamicListStart,DATALENGTH)).done(function(data){
                     if(data.state == 0){
                         self.dynamicList = data.data;
-                        self.dynamicListStart ++;
+                        self.dynamicListStart += DATALENGTH;
+
+                        self.tap_all()
+
                         mui('#scroll1').pullRefresh().endPulldownToRefresh();
-                        if(data.data.length < 20){
+                        if(data.data.length < DATALENGTH){
                             mui('#scroll1').pullRefresh().endPullupToRefresh(true);
+                        }
+                        else{
+                            mui('#scroll1').pullRefresh().endPullupToRefresh(false);
                         }
                     }                
                 });
             },
             getMoreAllDynamic: function(){
                 var self = this;
-                $.when(getAllCompanyDynamic(self.dynamicListStart,20)).done(function(data){
+                $.when(getCompanyDynamicByCompanyId(self.qd.companyId,self.dynamicListStart,DATALENGTH)).done(function(data){
                     if(data.state == 0){
                         self.dynamicList = self.dynamicList.concat(data.data);
-                        self.dynamicListStart ++;
-                        if(data.data.length < 20){
+                        self.dynamicListStart += DATALENGTH;
+                        if(data.data.length < DATALENGTH){
                             mui('#scroll1').pullRefresh().endPullupToRefresh(true);
+                        }
+                        else{
+                            mui('#scroll1').pullRefresh().endPullupToRefresh(false);
                         }
                     }
                 })
+            },
+            tap_comment: function(){
+                setCompanyCommentDynamicLastStamp(this.qd.companyId,new Date() - 0)
+                this.qd.newCommentDynamicNumber = 0;
+            },
+            tap_all: function(){
+                setCompanyDynamicLastStamp(this.qd.companyId,new Date() - 0);
+                this.qd.newDynamicNumber = 0;
             },
             positionTo: function(index){
                 var self = this;
@@ -240,7 +282,7 @@ $(function() {
         },
         created: function() {
             var self = this;
-            var queryData = getQueryData();
+            self.qd = getQueryData();
         },
         ready: function() {
             var self = this;
@@ -250,33 +292,34 @@ $(function() {
                     down : {
                         contentnomore: '没有更多动态了',
                         callback : function(data){
-                            auto: true,//可选,默认false.自动下拉刷新一次
                             self.getNewestAllDynamic();
                         }
                     },
                     up: {
+                        auto: true,
                         contentnomore: '没有更多动态了',
                         callback : function(data){
                             self.getMoreAllDynamic();
                         }
                     }
-                }).pullupLoading();
+                });
                 mui("#scroll2").pullRefresh({
                     down : {
                         contentnomore: '没有更多动态了',
                         callback : function(data){
-                            auto: true,//可选,默认false.自动下拉刷新一次
                             self.getNewestCommentDynamic();
                         }
                     },
                     up: {
+                        auto: true,
                         contentnomore: '没有更多动态了',
                         callback : function(data){
                             self.getMoreCommentDynamic();
                         }
                     }
-                }).pullupLoading();
+                });
             });
+            
             window.positionTo = self.positionTo;
         }
     })

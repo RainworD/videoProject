@@ -1,0 +1,155 @@
+<!DOCTYPE html>  
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>b端，动态>公司列表</title>
+    <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/css/init.css">
+    <link rel="stylesheet" href="../source/css/public.css">
+    <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
+
+</head>
+<style type="text/css">
+    body{
+        background-color: #f3f3f3;
+    }
+</style>
+<body>
+    <div class=" mui-content">
+        <ul class="mui-table-view" v-if="children.length > 0">
+            <li class="mui-table-view-cell" v-for="child in children" @tap="companyTap(child.id)">
+                <a class="mui-navigate-right" href="company_activity.html?{{encodeObj({'companyId':child.id, 'newDynamicNumber':newDynamicNumberObj['companyId'+child.id],'newCommentDynamicNumber':newCommentDynamicNumberObj['companyId'+child.id]})}}">
+                    <span class="mui-h5">{{child.name}}</span>
+                    <span class="mui-badge mui-badge-danger" v-if="newDynamicNumberObj['companyId'+child.id]-0+(newCommentDynamicNumberObj['companyId'+child.id]-0)>0">{{newDynamicNumberObj['companyId'+child.id]-0+(newCommentDynamicNumberObj['companyId'+child.id]-0)}}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+$(function() {
+    mui.init();
+    var vm = new Vue({
+        el: "body",
+        data: {
+            children: [],
+            newDynamicNumberObj: {},
+            newCommentDynamicNumberObj: {},
+            newDynamicNumberObjLength: 0,
+            newCommentDynamicNumberObjLength: 0
+        },
+        computed: {
+            hasFinishOfGetNumber: function(){
+                var self = this;
+                if(self.newDynamicNumberObjLength == self.children.length && self.newCommentDynamicNumberObjLength == self.children.length){
+                    var newDynamicNumber = 0, newCommentDynamicNumber = 0;
+                    for(i in self.newDynamicNumberObj){
+                        newDynamicNumber += self.newDynamicNumberObj[i];
+                    }
+                    for(j in self.newCommentDynamicNumberObj){
+                        newCommentDynamicNumber += self.newCommentDynamicNumberObj[j];
+                    }
+                    window.location.href="Object:"+encodeObj({'newDynamicNumber':newDynamicNumber+newCommentDynamicNumber});
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        },
+        methods: {
+            companyTap: function(companyId){
+                setCompanyDynamicLastStamp(companyId,new Date() - 0);
+            },
+            getNumberOfCompanyDynamic: function(stampList, index){
+                var self = this;
+                var stamp = stampList[index]?stampList[index]:0;
+                $.when(getNumberOfCompanyDynamicAfter(stamp)).done(function(data){
+                    self.newDynamicNumberList.push(data.data);
+                    if(index < stampList.length - 1){
+                        self.getNumberOfCompanyDynamic(stampList, ++index);
+                    }
+                })
+            },
+            getNumberOfCompanyDynamic: function(companyId){
+                var self = this;
+                // 根据companyId获得上次浏览时间
+                $.when(getCompanyDynamicLastStamp(companyId)).done(function(data){
+                    var stamp = data.data[0];
+                    stamp = stamp? stamp: 0;
+                    // 根据上次浏览时间，得到该公司更新的动态条数
+                    $.when(getNumberOfCompanyDynamicByCompanyIdAndStamp(companyId, stamp)).done(function(data){
+                        var number = data.data;
+                        var originNumber = self.newDynamicNumberObj["companyId"+companyId];
+                        if(!originNumber){
+                            originNumber = 0;
+                        }
+                        var param = {};
+                        param["companyId"+companyId] = originNumber+number;
+                        self.newDynamicNumberObj = Object.assign({}, self.newDynamicNumberObj,param);
+                        self.newDynamicNumberObjLength++;
+                    });
+                })
+            },
+            getNumberOfCompanyCommentDynamic: function(companyId){
+                var self = this;
+                // 根据companyId获得上次浏览时间
+                $.when(getCompanyCommentDynamicLastStamp(companyId)).done(function(data){
+                    var stamp = data.data[0];
+                    stamp = stamp? stamp: 0;
+                    // 根据上次浏览时间，得到该公司我评论的、有新更新的动态条数
+                    $.when(getNumberOfCompanyCommentDynamicByCompanyIdAndStamp(companyId, stamp)).done(function(data){
+                        var number = data.data;
+                        var originNumber = self.newCommentDynamicNumberObj["companyId"+companyId];
+                        if(!originNumber){
+                            originNumber = 0;
+                        }
+                        var param = {};
+                        param["companyId"+companyId] = originNumber+number;
+                        self.newCommentDynamicNumberObj = Object.assign({}, self.newCommentDynamicNumberObj,param);
+                        self.newCommentDynamicNumberObjLength++;
+                    })
+                });
+            }
+        },
+        created: function() {
+            var self = this;
+            $.when(b_getAllCompany()).done(function(data){
+                if(data.state == 0){
+                    self.children = data.data;
+                    // var keyParams = "";
+                    // 获得查询参数,exp: key=companyId1&key=companyId2
+                    for(var i = 0, length = self.children.length; i < length; i++){
+                        // keyParams += "key=companyId"+self.children[i].id;
+                        // if(i < length - 1){
+                        //     keyParams += "&";
+                        // }
+                        self.getNumberOfCompanyDynamic(self.children[i].id);
+                        self.getNumberOfCompanyCommentDynamic(self.children[i].id);
+                    }
+                    // // 根据查询参数获得时间戳，表示最后浏览时间
+                    // $.when(getMutilUserVariable(keyParams)).done(function(data){
+                    //     // 将时间戳数组传入
+                    //     self.getNumberOfCompanyDynamic(data.data, 0);
+                    // });
+                }
+            });
+            
+            // $.when(getNumberOfCompanyDynamic(companyId,))
+        },
+        ready: function() {
+            window.companyTap = this.companyTap;
+        }
+    })
+});
+</script>
+</html>

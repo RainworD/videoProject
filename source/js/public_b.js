@@ -31,3 +31,7 @@ function getUser_Name(){
 function getB_Price(){
 	return window.localStorage.getItem("b_price");
 }
+// 获得押金
+function getB_Deposit(){
+	return window.localStorage.getItem("b_deposit");
+}

@@ -50,7 +50,7 @@
         <div class="photoPreviewBox">
             <div class="photo" v-for="image in selectedImageList" track-by="$index">
                 <div class="fix7_5" :style="{backgroundImage: 'url('+image+')'}">
-                    <img :src="image" alt="" data-preview-src="" data-preview-group="1">
+                    <img :src="image" alt="" data-preview-src="" data-preview-group="1" style="opacity: 0;">
                 </div>
                 <img src="../source/img/remove.png" alt="" class="removeBtn" @tap="removeImage($index);">
             </div>
@@ -65,7 +65,7 @@
         <p class="topPara">知会同事&nbsp;<span>(再次点击头像可删除)</span></p>
         <div class="userIcon">
             <template v-for="workmate in workmates">
-                <img :src="workmate.photo||'../source/img/q.png'" class="userPic">
+                <img :src="getMinifiedImage(workmate.photo.id,60,60)" class="userPic">
             </template>
             <img src="../source/img/userPlus.png" class="userPlus" @tap="chooseWorkmates()">
         </div>
@@ -89,9 +89,10 @@ $(function() {
         },
         computed: {
             workmateIdList: function(){
+                var self = this;
                 var list = [];
-                for(var i = 0, length = workmates.length; i < length; i++){
-                    list.push(workmates[i].id);
+                for(var i = 0, length = self.workmates.length; i < length; i++){
+                    list.push(self.workmates[i].id);
                 }
                 return list;
             }
@@ -114,9 +115,6 @@ $(function() {
                     else{
                         console.log("126: fileInput onchange")
                         self.readerOnload(files);
-                        for(var i = 0, length = files.length; i < length; i++){
-                            self.imageFileList.push(files[i]);
-                        }
                     }
                 }
             },
@@ -126,8 +124,8 @@ $(function() {
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function(event) {
-                    console.log("137: reader onload")
                     self.selectedImageList.push(event.target.result);
+                    self.imageFileList.push(file);
                     self.fileIndex++;
                     if(self.fileIndex < files.length){
                         self.readerOnload(files);
@@ -140,6 +138,8 @@ $(function() {
             removeImage: function(index){
                 var self = this;
                 self.selectedImageList.splice(index,1);
+                self.imageFileList.splice(index,1);
+                self.fileIndex--;
             },
             chooseWorkmates: function(){
                 var self = this;
@@ -154,6 +154,7 @@ $(function() {
             },
             applyButton: function(){
                 var self = this;
+                var uploadImages = $.Deferred();
                 $.when(uploadImageFileListAndGetIdArray(self.imageFileList)).done(function(data){
                     var photo = data.idList;
                     $.when(saveDynamic(self.text,photo,self.workmateIdList)).done(function(data){
@@ -175,6 +176,7 @@ $(function() {
         },
         ready: function() {
             var self = this;
+            window.chooseWorkmates = self.chooseWorkmates;
             window.writeWorkmates = self.writeWorkmates;
             window.applyButton = self.applyButton;
         }

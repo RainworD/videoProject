@@ -59,7 +59,6 @@ function stamp2formatTime2(stamp){
 }
 function stamp2formatDate(stamp){
     var time = getTimeBy(stamp);
-    console.log(stamp)
     return time.year+"-"+time.month+"-"+time.day;
 }
 // 时间戳转化为"刚刚"等
@@ -114,6 +113,9 @@ function getMinifiedImage(id,width,height){
     return getResourceById(id) + "?x-oss-process=image/resize,m_fill,w_"+width+",h_"+height
 
 }
+function getMoneyValue(value){
+    return (value/100).toFixed(2);
+}
 var Vue = Vue.extend({
     data: function(){
         return {
@@ -129,14 +131,9 @@ var Vue = Vue.extend({
         stamp2formatDate: stamp2formatDate,
         stamp2formatTime2: stamp2formatTime2,
         getResourceById: getResourceById,
-        getMinifiedImage: function(id){
+        getMoneyValue: getMoneyValue,
+        getMinifiedImage: function(id, width, height){
             var self = this;
-            var width = self.minifiedWidth,
-                height = self.minifiedHeight;
-            console.log(self.minifiedWidth)
-            if(!height){
-                height = parseInt(5*width/7);
-            }
             return getMinifiedImage(id, width, height);
         }
     }

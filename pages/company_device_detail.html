@@ -27,19 +27,19 @@
         <ul class="mui-table-view">
             <li class="mui-table-view-cell" v-for="device in datalist">
                 <div class="mui-slider-right mui-disabled">
-                    <a class="mui-btn mui-btn-red" @tap="unbind(device.id,$index)">解绑</a>
+                    <a class="mui-btn mui-btn-red" @tap="unbind(device.id,$index,isExpire(device.expire_time))">解绑</a>
                 </div>
                 <div class="mui-slider-handle listContent" v-if="isExpire(device.expire_time)">
                     设备号：{{device.code}}<span class="colorred">(到期)</span>
                     <p class="mui-ellipsis">有效期截止:<span>{{stamp2formatDate(device.expire_time)}}</span></p>
-                    <button type="button" class="mui-btn mui-btn-green">
+                    <button type="button" class="mui-btn mui-btn-green" @tap="renew(device.id,device.expire_time)">
                         续费
                     </button>
                 </div>
                 <div class="mui-slider-handle listContent" v-else>
                     设备号
                     <p class="mui-ellipsis">有效期截止:<span>{{stamp2formatDate(device.expire_time)}}</span></p>
-                    <button type="button" class="mui-btn">
+                    <button type="button" class="mui-btn" @tap="renew(device.id,device.expire_time)">
                         续费
                     </button>
                 </div>
@@ -53,7 +53,8 @@ $(function() {
     var vm = new Vue({
         el: "body",
         data: {
-            datalist: []
+            datalist: [],
+            qd: {}
         },
         computed: {
             
@@ -68,30 +69,49 @@ $(function() {
                     return false;
                 }
             },
-            unbind: function(id,index){
+            unbind: function(id,index,isExpire){
                 var self = this;
-                mui.confirm("您确定解绑该设备吗？",null,null,function(result){
-                    if(result.index == 1){
-                        $.when(b_unbindCompanyDeviceByDeviceId(id)).done(function(data){
-                            if(data.state == 0){
-                                mui.toast("解绑成功");
-                                self.datalist.splice(index,1);
-                            }
-                        })
+                if(isExpire){
+                    self.sendUnbindAjax(id, index);                                               
+                }
+                else{
+                    mui.confirm("","该设备尚未到期，确认解绑？",["取消","确认"],function(result){
+                        if(result.index == 1){
+                            self.sendUnbindAjax(id, index);   
+                        }
+                    });
+                }
+            },
+            sendUnbindAjax: function(id,index){
+                var self = this;
+                $.when(b_unbindCompanyDeviceByDeviceId(id)).done(function(data){
+                    if(data.state == 0){
+                        mui.toast("解绑成功");
+                        self.datalist.splice(index,1);
                     }
                 });
-                        
+            },
+            reloadDevice: function(){
+                var self = this;
+                $.when(b_getDeviceListByCompanyId(self.qd.companyId)).done(function(data){
+                    if(data.state == 0){
+                        self.datalist = data.data;
+                    }
+                });
+            },
+            renew: function(deviceId,expire_time){
+                var self = this;
+                window.location.href="open:renew.html?"+encodeObj({'companyId':self.qd.companyId,'deviceId':deviceId,'expire_time': expire_time})+",navigatorTitle:设备续费";
             }
         },
         created: function() {
             var self = this;
-            var qd = getQueryData();
-            $.when(b_getDeviceListByCompanyId(qd.id)).done(function(data){
-                if(data.state == 0){
-                    self.datalist = data.data;
-                }
-            });
-            
+            self.qd = getQueryData();
+            self.reloadDevice();
+        },
+        ready: function(){
+            var self = this;
+            window.reloadDevice = self.reloadDevice;
         }
     })
 });

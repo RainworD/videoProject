@@ -52,6 +52,7 @@ $(function() {
                         }
                     }
                 }
+                // console.log(choosenWorkmates);
                 // console.log("diliver.html?"+encodeObj({"choosenWorkmates":choosenWorkmates}))
                 window.location.href="backto:deliver.html,javascript:writeWorkmates('"+encodeObj({"choosenWorkmates":choosenWorkmates})+"')";
             }
@@ -60,9 +61,7 @@ $(function() {
             var self = this;
             var qd = getQueryData();
             if(qd&&qd.choosenWorkmates){
-
                 for(var i = 0, length = qd.choosenWorkmates.length; i < length; i++){
-                    mui.alert(qd.choosenWorkmates[i].id+"")
                     self.checkedUsersId.push(qd.choosenWorkmates[i].id+"");
                 }
             }

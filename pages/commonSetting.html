@@ -12,6 +12,12 @@
     <link href="../source/mui/css/mui.poppicker.css" rel="stylesheet" />
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -20,43 +26,18 @@
 </style>
 <body>
     <div class="flowSetting mui-content">
-        <!-- <ul class="workmatesList">
-            <a href="" id='showUserPicker'>
-                <li class="workmateItems">
-                    <div class="rightContent">
-                        <div class="rightContent_1">
-                            <p class="rightPara">流量限制</p>
-                            <span id='userResult' class="flowShow"></span>
-                            <img src="../source/img/right.png" alt="" class="lookMore">
-                        </div> 
-                    </div>
-                </li>
-            </a>
-        </ul>
-        <ul class="workmatesList">
-            <li class="workmateItems">
-                <div class="rightContent">
-                    <div class="rightContent_1">
-                        <p class="rightPara">设备自动升级</p>
-                        <div class="mui-switch mui-switch-mini mui-active flowCtr">
-                            <div class="mui-switch-handle"></div>
-                        </div>
-                    </div> 
-                </div>
-            </li>
-        </ul> -->
         <ul class="mui-table-view">
             <li class="mui-table-view-cell">
                 <a class="mui-navigate-right" id='showUserPicker'>
-                    <p class="rightPara">流量限制</p>
-                    <span id='userResult' class="flowShow"></span>
+                    流量限制
+                    <span id='userResult' class="mui-h5 mui-pull-right"></span>
                 </a>
             </li>
         </ul>
         <ul class="mui-table-view">
             <li class="mui-table-view-cell">
-                <p class="rightPara">设备自动升级</p>
-                <div class="mui-switch mui-switch-mini mui-active flowCtr">
+                设备自动升级
+                <div class="mui-switch mui-switch-mini mui-active">
                     <div class="mui-switch-handle"></div>
                 </div>
             </li>
@@ -67,7 +48,8 @@
 <!--<script src="../source/mui/js/mui.picker.min.js"></script>-->
 <script src="../source/mui/js/mui.picker.js"></script>
 <script src="../source/mui/js/mui.poppicker.js"></script>
-<script type="text/javascript">
+<script>
+
     (function($, doc) {
         $.init();
         $.ready(function() {
@@ -111,7 +93,11 @@
             //event.detail.isActive 可直接获取当前状态
             // this.parentNode.querySelector('span').innerText = '设备自动升级' + (event.detail.isActive ? 'true' : 'false');
             var val=(this.classList.contains('mui-active') ? 'true' : 'false');//动态变化的真值状态
+            // window.location.href="appAction:setAutoUpdate_"+val;
         });
     });
+    // function getAutoUpdate(bool){
+
+    // }
 </script>
 </html>

@@ -13,76 +13,165 @@
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/mui/js/mui.picker.js"></script>
+    <script src="../source/mui/js/mui.poppicker.js"></script>
+    <script src="../source/js/ajax_b.js"></script>
+    <script src="../source/js/vue.js"></script>
+    <script src="../source/js/vue-tap.js"></script>
+    <script src="../source/js/public.js"></script>
+    <script src="../source/js/public_b.js"></script>
 </head>
 <style type="text/css">
     body{
         background-color: #f3f3f3;
     }
+    .larger{
+        color: #e74f3a;
+        font-size: 21px;
+    }
 </style>
 <body>
     <div class="myworkmates">
-        <p class="topPara">应付金额:&nbsp;&nbsp;<span class="larger">￥&nbsp;<span>600</span>元</span></p>
+        <h6 class="mui-content-padded">应付金额:&nbsp;&nbsp;<span class="larger">￥{{200*result.value}}</span>&nbsp;&nbsp;元</h6>
+        <!-- <p class="topPara">应付金额:&nbsp;&nbsp;</span></p> -->
         <div class="mui-content">
-            <ul class="mui-table-view">
+            <ul class="mui-table-view mui-table-view-chevron mui-table-view-chevron-35">
                 <li class="mui-table-view-cell">
-                    <div class="mui-slider-handle listContent">
+                    每月价格
+                    <span class="mui-pull-right mui-h5">200元</span>
+                    <!-- <div class="mui-slider-handle listContent">
                         <span>每月价格</span>
                         <span class="commonNum">200元</span>                   
-                    </div>
+                    </div> -->
                 </li>
-                <a href="" id='showUserPicker' style="display: block">
-                    <li class="mui-table-view-cell">
-                        <div class="mui-slider-handle listContent">
-                            <span>续费时间</span>
-                            <span class="commonNum" id="userResult">3个月</span>    
-                            <img src="../source/img/right.png" alt="" class="lookMore">               
-                        </div>  
-                    </li>
-                </a>
+                <li class="mui-table-view-cell" @tap="showPicker()">
+                    <a class="mui-navigate-right">
+                        续费时间
+                        <span class="mui-pull-right mui-h5">{{result.text}}</span>
+                    </a>
+                    <!-- <div class="mui-slider-handle listContent">
+                        <span>续费时间</span>
+                        <span class="commonNum" id="userResult">3个月</span>    
+                        <img src="../source/img/right.png" alt="" class="lookMore">               
+                    </div> -->
+                </li>
             </ul>
         </div>
-        <p class="tips">该设备有效期将延长至<span>2016-09-11</span></p>
-        <p class="bottomBtn" id="bottomBtn">余额支付</p>
+        <p class="tips">该设备有效期将延长至{{stamp2formatDate(valid_time)}}</p>
+        <p class="bottomBtn" @tap="balancePay()">余额支付</p>
         <a class="addCash" href="recharge_main.html">账户充值</p>
     </div>
 </body>
-<script src="../source/mui/js/mui.min.js"></script>
-<!--<script src="../source/mui/js/mui.picker.min.js"></script>-->
-<script src="../source/mui/js/mui.picker.js"></script>
-<script src="../source/mui/js/mui.poppicker.js"></script>
-<script type="text/javascript">
-    (function($, doc) {
-        $.init();
-        $.ready(function() {
-            //普通示例
-            var userPicker = new $.PopPicker();
-            userPicker.setData([{
-                value: '0',
-                text: '3个月'
-            }, {
+<script>
+$(function() {
+    mui.init();
+    var userPicker;
+    mui.ready(function() {
+        //普通示例
+        userPicker = new mui.PopPicker();
+        userPicker.setData([{
+            value: '1',
+            text: '1个月'
+        }, {
+            value: '2',
+            text: '2个月'
+        },{
+            value: '3',
+            text: '3个月'
+        }, {
+            value: '4',
+            text: '4个月'
+        }, 
+        {
+            value: '5',
+            text: '5个月'
+        },
+        {
+            value: '6',
+            text: '6个月'
+        },{
+            value: '7',
+            text: '7个月'
+        }, {
+            value: '8',
+            text: '8个月'
+        }, 
+        {
+            value: '9',
+            text: '9个月'
+        },
+        {
+            value: '10',
+            text: '10个月'
+        }, 
+        {
+            value: '11',
+            text: '11个月'
+        },
+        {
+            value: '12',
+            text: '12个月'
+        }]);
+    });
+    var vm = new Vue({
+        el: "body",
+        data: {
+            result: {
                 value: '1',
-                text: '4个月'
-            }, 
-            {
-                value: '2',
-                text: '5个月'
+                text: '1个月'
             },
-            {
-                value: '3',
-                text: '6个月'
-            }]);
-            var showUserPickerButton = doc.getElementById('showUserPicker');
-            var userResult = doc.getElementById('userResult');
-            showUserPickerButton.addEventListener('tap', function(event) {
-                userPicker.show(function(items) {
-                    console.log(items[0].text);
-                    // userResult.innerText = JSON.stringify(items[0].text);
-                    userResult.innerText=items[0].text;
-                    //返回 false 可以阻止选择框的关闭
-                    //return false;
+            qd: {},
+            flag_balancePay: false,
+        },
+        computed: {
+            valid_time: function(){
+                var self = this;
+                var now = new Date() - 0;
+                if(now < self.qd.expire_time){
+                    now = self.qd.expire_time;
+                }
+                return now+self.result.value*30*86400000;
+            }
+        },
+        methods: {
+            showPicker: function(){
+                var self = this;
+                userPicker.show(function(items){
+                    self.result = items[0];
                 });
-            }, false);
-        });
-    })(mui, document);
+            },
+            balancePay:function(){
+                var self = this;
+                if(!self.flag_balancePay){
+                    self.flag_balancePay = true;
+                    $.when(getVerifyCode("","消费")).done(function(data){
+                        self.flag_balancePay = false;
+                        if(data.state == 0){
+                            mui.prompt('', '', '请输入短信验证码', ['取消', '续费'], function(e) {
+                                if (e.index == 1) {
+                                    $.when(renewDevice(self.qd.deviceId,self.result.value,e.value)).done(function(data){
+                                        if(data.state == 0){
+                                            mui.alert("","续费成功",null,function(){
+                                                window.location.href="backto:company_device_detail.html?"+encodeObj({
+                                                    "companyId": self.qd.companyId+",javascript:reloadDevice()"
+                                                });
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        },
+        created: function() {
+            var self = this;
+            self.qd = getQueryData();
+        }
+    })
+});
 </script>
 </html>

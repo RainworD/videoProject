@@ -27,8 +27,8 @@
     <div class="accountBalanceBox">
         <div class="topShow">
             <p class="para_1">可用余额</p>
-            <p class="para_2" v-cloak>￥&nbsp;{{price}}</p>
-            <p class="para_3" v-cloak>设备押金:&nbsp;&nbsp;￥&nbsp;{{deposit}}</p>
+            <p class="para_2" v-cloak>￥&nbsp;{{getMoneyValue(price)}}</p>
+            <p class="para_3" v-cloak>设备押金:&nbsp;&nbsp;￥&nbsp;{{getMoneyValue(deposit)}}</p>
             <p class="bottomBtn">
                 <a href="recharge_main.html">
                     <span class="recharge">充值</span>   
@@ -41,10 +41,10 @@
         <h6 class="mui-content-padded">收支明细</h6>
         <ul class="mui-table-view">
             <li class="mui-table-view-cell" v-for="order in orderList">
-                <a href="withdraw.html">
+                <a :href="'accountBalanceInfo.html?'+encodeObj({'orderId': order.id})">
                     <span class="mui-h5">{{order.type}}</span>
                     <p class="mui-ellipsis">{{stamp2formatTime(order.in_time)}}</p>
-                    <span class="mui-pull-right vertical-align">-500.00</span>
+                    <span class="mui-pull-right vertical-align">{{getSymbol(order.type)+getMoneyValue(order.value)}}</span>
                 </a>
             </li>
         </ul>
@@ -61,20 +61,25 @@ $(function() {
             orderList: []
         },
         computed: {
-            
+
         },
         methods: {
-            
+            getSymbol: function(type){
+                if(type.indexOf("消费")>=0||type.indexOf("提现")>=0){
+                    return "-";
+                }
+                else{
+                    return ""
+                }
+            }
         },
         created: function() {
             var self = this;
-            $.when(b_getBusiness()).done(function(data){
-                if(data.state == 0){
-                    self.price = data.data[0].price;
-                    self.deposit = data.data[0].deposit;
-                }
-            });
-            $.when(b_getOrder()).done(function(data){
+            $.when(__getSelf()).done(function(data){
+                self.price = getB_Price();
+                self.deposit = getB_Deposit();
+            })
+            $.when(b_getOrderByState("已完成")).done(function(data){
                 if(data.state == 0){
                     self.orderList = data.data;
                 }
@@ -85,5 +90,24 @@ $(function() {
         }
     })
 });
+function __getSelf(){
+    return $.when(getSelf()).done(function(data){
+        if(data.state == 0){
+            var _data = data.data[0];
+            window.localStorage.setItem("user_code",_data.code);
+            window.localStorage.setItem("user_name",_data.name);
+            window.localStorage.setItem("user_username",_data.username);
+            window.localStorage.setItem("user_competence",_data.competence);
+            window.localStorage.setItem("user_phone",_data.contact);
+            // b端情况
+            if(_data.business){
+                window.localStorage.setItem("b_deposit",_data.business.deposit);
+                window.localStorage.setItem("b_price",_data.business.price);
+            }
+            window.localStorage.setItem("user_id",_data.id);
+        }
+    });
+}
+    
 </script>
 </html>

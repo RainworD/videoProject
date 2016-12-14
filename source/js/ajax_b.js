@@ -53,7 +53,28 @@ function b_getOrder(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Order",
 		data:{
-
+			"create_user": getUser_Id()
+		}
+	});
+	return ajax;
+}
+function b_getOrderByState(state){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Order",
+		data:{
+			"order_": "id desc",
+			"state": state,
+			// "create_user": getUser_Id()
+		}
+	});
+	return ajax;
+}
+// 获取单个账单
+function b_getOrderById(orderId){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Order",
+		data:{
+			"id": orderId
 		}
 	});
 	return ajax;
@@ -228,7 +249,28 @@ function getAllCompanyDynamic(start, rows){
 		data: {
 			"start_": start,
 			"rows_": rows,
-			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"]
+			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"],
+			"order_":"id desc"
+		}
+	});
+	return ajax;
+}
+// 根据companyId获得某一个企业动态
+function getCompanyDynamicByCompanyId(companyId, start, rows){
+	if(!start){
+		start = 0;
+	}
+	if(!rows){
+		rows = 0;
+	}
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		data: {
+			"company": companyId,
+			"start_": start,
+			"rows_": rows,
+			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"],
+			"order_":"id desc"
 		}
 	});
 	return ajax;
@@ -247,7 +289,8 @@ function getMyDynamic(start, rows){
 			"start_": start,
 			"rows_": rows,
 			"user": getUser_Id(),
-			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"]
+			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"],
+			"order_":"id desc"
 		}
 	});
 	return ajax;
@@ -287,7 +330,8 @@ function getInformedDynamic(start, rows){
 			"start_": start,
 			"rows_": rows,
 			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"],
-			"informed": 1
+			"informed": 1,
+			"order_":"id desc"
 		}
 	});
 	return ajax;
@@ -306,7 +350,29 @@ function getCommentDynamic(start, rows){
 			"start_": start,
 			"rows_": rows,
 			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"],
-			"comment": 1
+			"commented": 1,
+			"order_":"id desc"
+		}
+	});
+	return ajax;
+}
+// 获得我评论的某一个企业的动态
+function getCommentDynamicByCompanyId(companyId,start, rows){
+	if(!start){
+		start = 0;
+	}
+	if(!rows){
+		rows = 0;
+	}
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Dynamic",
+		data: {
+			"company": companyId,
+			"start_": start,
+			"rows_": rows,
+			"add_":["comment","comment.user","comment.user.photo","user","user.photo","photo"],
+			"commented": 1,
+			"order_":"id desc"
 		}
 	});
 	return ajax;
@@ -316,7 +382,7 @@ function getDynamicById(dynamicId){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Dynamic",
 		data: {
-			"add_":["comment","user","comment.user"],
+			"add_":["comment","comment.user","comment.user.photo"],
 			"id": dynamicId
 		}
 	});
@@ -457,7 +523,29 @@ function readMessage(id){
 		}
 	});
 }
-
+function renewDevice(deviceId,month,code){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Order",
+		data: {
+			"device": deviceId,
+			"type": "消费",
+			"month": month,
+			"code": code
+		}
+	});
+	return ajax;
+}
+// 获取验证码
+function getVerifyCode(phone,type){
+	var ajax = $.ajax({
+		url: baseUrl+"/verify/getCode",
+		data: {
+			"phone": phone,
+			"type": type
+		}
+	});
+	return ajax;
+}
 function uploadImageAndGetId(file){
 	var deferred = $.Deferred();
 	fileType = file.type;
@@ -490,16 +578,139 @@ function uploadImageFileListAndGetIdArray(imageFileList){
 	var times = 0;
 	var deferred = $.Deferred();
 	var idList = [];
-	for(var i = 0, length = imageFileList.length; i < length; i++){
-		$.when(uploadImageAndGetId(imageFileList[i])).done(function(data){
-			idList.push(data.id);
-			if(++times == length){
-				deferred.resolve({"idList":idList});
-			}
-		});
+	if(imageFileList.length > 0){
+		for(var i = 0, length = imageFileList.length; i < length; i++){
+			$.when(uploadImageAndGetId(imageFileList[i])).done(function(data){
+				idList.push(data.id);
+				if(++times == length){
+					deferred.resolve({"idList":idList});
+				}
+			});
+		}
+	}
+	else{
+		deferred.resolve({"idList":idList});
 	}
 	return deferred;
 }
+// 设置私人变量
+function setUserVariable(key,value){
+	var ajax = $.ajax({
+		url: baseUrl+"/variable/user/set?"+key+"="+value
+	});
+	return ajax;
+}
+// c端，设置知会我的上次查看时间戳
+function setStamp_c_informedDynamic(stamp){
+	return setUserVariable("stamp_c_informedDynamic",stamp);
+}
+// c端，设置我评论的上次查看时间戳
+function setStamp_c_commentDynamic(stamp){
+	return setUserVariable("stamp_c_commentDynamic",stamp);
+}
+// c端，设置全部动态上次查看时间戳
+function setStamp_c_allDynamic(stamp){
+	return setUserVariable("stamp_c_allDynamic",stamp);
+}
+// 获得私人变量1
+function getUserVariable(key){
+	var ajax = $.ajax({
+		url: baseUrl+"/variable/user/get?key="+key,
+	});
+	return ajax;
+}
+// 获得私人变量2
+function getMutilUserVariable(keyParams){
+	var ajax = $.ajax({
+		url: baseUrl+"/variable/user/get?"+keyParams
+	});
+	return ajax;
+}
+// 获得某个公司动态的上次查看时间戳
+function getCompanyDynamicLastStamp(companyId){
+	return getUserVariable("companyDynamicLastStampOfCompanyId_"+companyId);
+}
+// 设置某个公司动态的上次查看时间戳
+function setCompanyDynamicLastStamp(companyId,stamp){
+	return setUserVariable("companyDynamicLastStampOfCompanyId_"+companyId, stamp);
+}
+// 获得我评论的某个公司动态上次查看时间戳
+function getCompanyCommentDynamicLastStamp(companyId){
+	return getUserVariable("companyCommentDynamicLastStampOfCompanyId_"+companyId);
+}
+// 设置某个公司动态的上次查看时间戳
+function setCompanyCommentDynamicLastStamp(companyId,stamp){
+	return setUserVariable("companyCommentDynamicLastStampOfCompanyId_"+companyId, stamp);
+}
+// 获得在某个时间戳后的动态条数
+// 知会我的
+function getNumberOfInformedDynamicAfter(stamp){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Dynamic",
+		data: {
+			"count_": true,
+			"informed": 1,
+			"in_time_begin_": stamp
+		}
+	});
+	return ajax;
+}
+// 我评论的
+function getNumberOfCommentDynamicAfter(stamp){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Dynamic",
+		data: {
+			"count_": true,
+			"commented": 1,
+			"update_time_begin_": stamp
+		}
+	});
+	return ajax;
+}
+// 全部的
+function getNumberOfAllDynamicAfter(stamp){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Dynamic",
+		data: {
+			"count_": true,
+			"in_time_begin_": stamp
+		}
+	});
+	return ajax;
+}
+// b端，获得某个公司的新动态条数
+function getNumberOfCompanyDynamicByCompanyIdAndStamp(companyId, stamp){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Dynamic",
+		data: {
+			"company": companyId,
+			"count_": true,
+			"in_time_begin_": stamp
+		}
+	});
+	return ajax;
+}
+// b端，获得某个公司的*我评论的\有更新的*动态条数
+function getNumberOfCompanyCommentDynamicByCompanyIdAndStamp(companyId, stamp){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Dynamic",
+		data: {
+			"company": companyId,
+			"commented": 1,
+			"count_": true,
+			"update_time_begin_": stamp
+		}
+	});
+	return ajax;
+}
+
+
+
+
+
+
+
+
 
 
 
