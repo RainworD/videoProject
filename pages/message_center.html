@@ -41,7 +41,7 @@
                 <a href="{{'message_detail.html?'+encodeObj({'id':announce.id,'title':title})}}">
                     <img :src="images[title]" class="mui-media-object mui-pull-left head-img icon-img">
                     <div class="mui-media-body">
-                        <div class="unread" ></div>
+                        <div class="unread" v-if="!announce.reading"></div>
                         {{announce.title}}
                         <p class="mui-ellipsis" v-html="announce.text"></p>
                         <div class="timeShow">
@@ -75,7 +75,11 @@ var dataList = [{
     text: "设备发生...",
     in_time: 0
 }];
+
 $(function() {
+    if(getQueryData() === ""){
+        window.location.href="message.html";
+    }
     mui.init();
     var vm = new Vue({
         el: "body",

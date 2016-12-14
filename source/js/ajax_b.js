@@ -429,7 +429,7 @@ function getAnnounce () {
 		url: baseUrl+"/model/get/Announce",
 		// url: "../announce.json",
 		data: {
-			add_: "read"
+			add_: "reading"
 		}
 	});
 	return ajax;
@@ -460,7 +460,7 @@ function getMessageUnread(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
-			is_read: false
+			reading: false
 		}
 	});
 	return ajax;
@@ -470,7 +470,7 @@ function getMessageUnreadCount(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
-			is_read: false,
+			reading: false,
 			count_: true
 		}
 	});
@@ -519,7 +519,7 @@ function readMessage(id){
 		url: baseUrl+"/model/save/Message",
 		data: {
 			"id": id,
-			"is_read": true
+			"reading": true
 		}
 	});
 }

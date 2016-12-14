@@ -60,7 +60,7 @@
                     <img :src="images[announce.type]" class="mui-media-object mui-pull-left head-img icon-img" id="head-img">
                     <div class="mui-media-body">
                         <p class="date">{{stamp2formatTime2(announce.in_time)}}</p>
-                        <div class="unread" ></div>
+                        <div class="unread" v-if="!announce.reading"></div>
                         <p class="rightTitle">{{announce.type}}</p>
                         <p class="rightPara" v-html="announce.text"></p>
                     </div>
