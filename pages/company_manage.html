@@ -32,7 +32,7 @@
                         <a class="mui-btn mui-btn-green" v-if="!company.enable">启用</a>
                         <a class="mui-btn mui-btn-red" v-else>停用</a>
                     </div>
-                    <a href="company_device_detail.html?{{encodeObj({'companyId':company.id})}}" class="mui-slider-handle mui-navigate-right listContent">
+                    <a class="mui-slider-handle mui-navigate-right listContent" @tap="goDetail(company.id);">
                         <span>{{company.name}}</span>
                         <span class="colorred" v-if="!company.enable">(停用)</span>
                         <span class="mui-pull-right color9" style="margin-right: 10px;">{{getAvailableDeviceLength(company.device)}}/{{company.device.length}}</span>
@@ -72,6 +72,9 @@ $(function() {
                         mui('#scroll').pullRefresh().endPulldownToRefresh();
                     }
                 })
+            },
+            goDetail: function(companyId){
+                window.location.href = "Object:"+encodeObj({'companyId':companyId});
             }
         },
         created: function() {
