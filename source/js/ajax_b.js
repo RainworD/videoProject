@@ -58,12 +58,20 @@ function b_getOrder(){
 	});
 	return ajax;
 }
-function b_getOrderByState(state){
+function b_getOrderByState(state, start, rows){
+	if(!start){
+		start = 0;
+	}
+	if(!rows){
+		rows = 0;
+	}
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Order",
 		data:{
 			"order_": "id desc",
 			"state": state,
+			"start_": start,
+			"rows_": rows
 			// "create_user": getUser_Id()
 		}
 	});
@@ -74,7 +82,19 @@ function b_getOrderById(orderId){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Order",
 		data:{
-			"id": orderId
+			"id": orderId,
+			"add_": ["device","device.company"]
+		}
+	});
+	return ajax;
+}
+// 根据deviceId获得所属设备
+function getDeviceByDeciceId(deviceId){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Company",
+		data:{
+			"id": orderId,
+			"add_": ["device","device.company"]
 		}
 	});
 	return ajax;

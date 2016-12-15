@@ -39,38 +39,76 @@
             </p>
         </div>
         <h6 class="mui-content-padded">收支明细</h6>
-        <ul class="mui-table-view">
-            <li class="mui-table-view-cell" v-for="order in orderList">
-                <a :href="'accountBalanceInfo.html?'+encodeObj({'orderId': order.id})">
-                    <span class="mui-h5">{{order.type}}</span>
-                    <p class="mui-ellipsis">{{stamp2formatTime(order.in_time)}}</p>
-                    <span class="mui-pull-right vertical-align">{{getSymbol(order.type)+getMoneyValue(order.value)}}</span>
-                </a>
-            </li>
-        </ul>
+        <div id="scroll1" class="mui-scroll-wrapper" style="top: 182px;">
+            <div class="mui-scroll">
+                <ul class="mui-table-view">
+                    <li class="mui-table-view-cell" v-for="order in orderList">
+                        <a :href="'accountBalanceInfo.html?'+encodeObj({'orderId': order.id})">
+                            <span class="mui-h5">{{order.type}}</span>
+                            <p class="mui-ellipsis">{{stamp2formatTime(order.in_time)}}</p>
+                            <span class="mui-pull-right vertical-align">{{getSymbol(order.type)+getMoneyValue(order.value)}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </body>
 <script>
+var DATALENGTH = 10;
 $(function() {
- mui.init();
- var vm = new Vue({
+    var vm = new Vue({
         el: "body",
         data: {
             price: 0,
             deposit: 0,
-            orderList: []
+            orderList: [],
+            page: 0
         },
         computed: {
 
         },
         methods: {
             getSymbol: function(type){
-                if(type.indexOf("消费")>=0||type.indexOf("提现")>=0){
-                    return "-";
+                if(type){
+                    if(type.indexOf("消费")>=0||type.indexOf("提现")>=0){
+                        return "-";
+                    }
+                    else{
+                        return ""
+                    }
                 }
-                else{
-                    return ""
-                }
+            },
+            getNewestOrder: function(){
+                var self = this;
+                self.page = 0;
+                $.when(b_getOrderByState("已完成",self.page*DATALENGTH, DATALENGTH)).done(function(data){
+                    if(data.state == 0){
+                        self.orderList = data.data;
+                        mui('#scroll1').pullRefresh().endPulldownToRefresh();
+                        if(data.data.length < DATALENGTH){
+                            mui('#scroll1').pullRefresh().endPullupToRefresh(true);
+                        }
+                        else{
+                            mui('#scroll1').pullRefresh().endPullupToRefresh(false);
+                        }
+                    }
+                });
+            },
+            getMoreOrder: function(){
+                var self = this;
+                $.when(b_getOrderByState("已完成",self.page*DATALENGTH, DATALENGTH)).done(function(data){
+                    if(data.state == 0){
+                        self.orderList = self.orderList.concat(data.data);
+                        self.page ++;
+                        if(data.data.length < DATALENGTH){
+                            mui('#scroll1').pullRefresh().endPullupToRefresh(true);
+                        }
+                        else{
+                            mui('#scroll1').pullRefresh().endPullupToRefresh(false);
+                        }
+                    }
+                });
             }
         },
         created: function() {
@@ -78,15 +116,28 @@ $(function() {
             $.when(__getSelf()).done(function(data){
                 self.price = getB_Price();
                 self.deposit = getB_Deposit();
-            })
-            $.when(b_getOrderByState("已完成")).done(function(data){
-                if(data.state == 0){
-                    self.orderList = data.data;
-                }
-            })
+            });
         },
         ready: function() {
-
+            var self = this;
+            mui.init();
+            mui.ready(function(){
+                mui("#scroll1").pullRefresh({
+                    down : {
+                        contentnomore: '没有更多记录了',
+                        callback : function(data){
+                            self.getNewestOrder();
+                        }
+                    },
+                    up: {
+                        auto: true,
+                        contentnomore: '没有更多记录了',
+                        callback : function(data){
+                            self.getMoreOrder();
+                        }
+                    }
+                });
+            })
         }
     })
 });

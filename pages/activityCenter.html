@@ -411,7 +411,6 @@ $(function() {
             var self = this;            
             mui.init();
             mui.ready(function(){
-                // $.when(isAfterGetNumber).done(function(data){
                     mui("#scroll1").pullRefresh({
                         down : {
                             contentnomore: '没有更多动态了',
@@ -427,40 +426,7 @@ $(function() {
                             }
                         }
                     });
-                    mui("#scroll2").pullRefresh({
-                        down : {
-                            contentnomore: '没有更多动态了',
-                            callback : function(data){
-                                self.getNewestCommentDynamic();
-                            }
-                        },
-                        up: {
-                            auto: true,
-                            contentnomore: '没有更多动态了',
-                            callback : function(data){
-                                self.getMoreCommentDynamic();
-                            }
-                        }
-                    });
-                    mui("#scroll3").pullRefresh({
-                        down : {
-                            contentnomore: '没有更多动态了',
-                            callback : function(data){
-                                self.getNewestAllDynamic();
-                            }
-                        },
-                        up: {
-                            auto: true,
-                            contentnomore: '没有更多动态了',
-                            callback : function(data){
-                                self.getMoreAllDynamic();
-                            }
-                        }
-                    });
-                // });
             });
-            self.reloadDynamicNumber();
-            window.positionTo = self.positionTo;
         }
     })
 });
