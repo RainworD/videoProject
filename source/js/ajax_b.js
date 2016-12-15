@@ -154,6 +154,9 @@ function getMessage(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Message",
 		// url: "../announce.json",
+		data: {
+			order_: "id desc"
+		}
 	});
 	return ajax;
 }
@@ -432,24 +435,14 @@ function postFeedback(text,contact){
 	});
 	return ajax;
 }
-// 获得某一种类型的Message
-function getTypeMessage (type) {
-	var ajax = $.ajax({
-		url: baseUrl+"/model/get/Message",
-		// url: "../announce.json",
-		data: {
-			"type" : type
-		}
-	});
-	return ajax;
-}
 //获得所有Announce
 function getAnnounce () {
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Announce",
 		// url: "../announce.json",
 		data: {
-			add_: "reading"
+			add_: "reading",
+			order_: "id desc"
 		}
 	});
 	return ajax;
@@ -459,7 +452,8 @@ function getAnnounceUnread () {
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Announce",
 		data:{
-			read: 0
+			read: 0,
+			order_: "id desc"
 		}
 	});
 	return ajax;
@@ -470,7 +464,21 @@ function getAnnounceUnreadCount (){
 		url: baseUrl+"/model/get/Announce",
 		data:{
 			read: 0,
-			count_: true
+			count_: true,
+			order_: "id desc"
+		}
+	});
+	return ajax;
+}
+//获得固定长度的Announce
+function getAnnounceFixedLength (start, length){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Announce",
+		data:{
+			add_: "reading",
+			order_: "id desc",
+			start_: start,
+			rows_: length
 		}
 	});
 	return ajax;
@@ -480,7 +488,9 @@ function getMessageUnread(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
-			reading: false
+			type: type,
+			reading: false,
+			order_: "id desc"
 		}
 	});
 	return ajax;
@@ -490,8 +500,23 @@ function getMessageUnreadCount(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
+			type: type,
 			reading: false,
-			count_: true
+			count_: true,
+			order_: "id desc"
+		}
+	});
+	return ajax;
+}
+//获得固定长度的Message
+function getMessageFixedLength (type, start, length){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Message",
+		data:{
+			type: type,
+			order_: "id desc",
+			start_: start,
+			rows_: length
 		}
 	});
 	return ajax;

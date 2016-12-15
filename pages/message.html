@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>b端系统消息</title>
+    <title>系统消息</title>
     <link rel="stylesheet" href="../source/mui/css/mui.css">
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
@@ -26,6 +26,9 @@
         height: 30px!important;
         margin-top: 5px;
     }
+    p.mui-ellipsis{
+        padding-right: 40px;
+    }
 </style>
 <body>
     <div class="mui-content messageShowBox">
@@ -44,7 +47,7 @@
     </div>
 </body>
 <script>
-var dataList = [{
+var dataListB = [{
     image: "../source/img/warning.png",
     title: "异常警告",
     text: "设备发生...",
@@ -64,13 +67,13 @@ var dataList = [{
     unread: 0
 },{
     image: "../source/img/drawCash.png",
-    title: "提现提示",
+    title: "提现通知",
     text: "设备发生...",
     in_time: 0,
     unread: 0
 },{
     image: "../source/img/addCash.png",
-    title: "充值成功",
+    title: "充值通知",
     text: "设备发生...",
     in_time: 0,
     unread: 0
@@ -80,9 +83,16 @@ var dataList = [{
     text: "设备发生...",
     in_time: 0,
     unread: 0
+}];
+var dataListC = [{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "设备发生...",
+    in_time: 0,
+    unread: 0
 },{
-    image: "../source/img/motivation_.png",
-    title: "动态更新",
+    image: "../source/img/system.png",
+    title: "系统通告",
     text: "设备发生...",
     in_time: 0,
     unread: 0
@@ -101,31 +111,46 @@ $(function() {
         },
         created: function() {
             var self = this;
-            self.announces = dataList;
+            self.announces = (getUser_Type() === "b")?dataListB:dataListC;
             for(var i in self.announces){
-                if(i == 2)
-                    continue;
-                $.when(getMessageUnread(self.announces[i].title)).done(function(data){
-                    if(data.data.length >= 1){
-                        self.announces[i].text = data.data[0].text;
-                    }
-                })
-                $.when(getMessageUnreadCount()).done(function(data){
-                    self.announces[i].unread = data.data;
-                })
-            }
-            $.when(getAnnounceUnread()).done(function(data){
-                var newDatas = data.data;
-                if(newDatas.length != 0){
-                    self.announces[2].text = newDatas[0].text;
+                let index = i;
+                if(self.announces[index].title === "系统通告"){
+                    $.when(getAnnounceUnread()).done(function(data){
+                        if(data.data){
+                            var newDatas = data.data;
+                            if(newDatas.length != 0){
+                                self.announces[index].text = newDatas[0].text;
+                            }
+                        }
+                    })
+                    $.when(getAnnounceUnreadCount()).done(function(data){
+                        self.announces[index].unread = data.data;
+                    })
                 }
+                // else if(self.announces[index].title === "动态更新"){
+                //     $.when(getDynamicUnread()).done(function(data){
+                //         if(data.data){
+                //             var newDatas = data.data;
+                //             if(newDatas.length != 0){
+                //                 self.announces[index].text = newDatas[0].text;
+                //             }
+                //         }
+                //     })
+                //     $.when(getDynamicUnreadCount()).done(function(data){
+                //         self.announces[index].unread = data.data;
+                //     })
+                // }
                 else{
-                    self.announces[2].text = "设备发生...";
+                    $.when(getMessageUnread(self.announces[index].title)).done(function(data){
+                        if(data.data && data.data.length >= 1){
+                            self.announces[index].text = data.data[0].text;
+                        }
+                    })
+                    $.when(getMessageUnreadCount(self.announces[index].title)).done(function(data){
+                        self.announces[index].unread = data.data;
+                    })
                 }
-            })
-            $.when(getAnnounceUnreadCount()).done(function(data){
-                self.announces[2].unread = data.data;
-            })
+            }
 
         }
     })

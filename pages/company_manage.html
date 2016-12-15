@@ -23,21 +23,23 @@
     }
 </style>
 <body>
-    <div class="mui-content">
-        <ul class="mui-table-view">
-            <li class="mui-table-view-cell" v-for="company in datalist">
-                <div class="mui-slider-right mui-disabled">
-                    <a class="mui-btn mui-btn-grey" href="addCompany.html">编辑</a>
-                    <a class="mui-btn mui-btn-green" v-if="!company.enable">启用</a>
-                    <a class="mui-btn mui-btn-red" v-else>停用</a>
-                </div>
-                <a href="company_device_detail.html?{{encodeObj({'companyId':company.id})}}" class="mui-slider-handle mui-navigate-right listContent">
-                    <span>{{company.name}}</span>
-                    <span class="colorred" v-if="!company.enable">(停用)</span>
-                    <span class="mui-pull-right color9" style="margin-right: 10px;">{{getAvailableDeviceLength(company.device)}}/{{company.device.length}}</span>
-                </a>
-            </li>
-        </ul>
+    <div id="scroll" class="mui-content mui-scroll-wrapper">
+        <div class="mui-scroll">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell" v-for="company in datalist">
+                    <div class="mui-slider-right mui-disabled">
+                        <a class="mui-btn mui-btn-grey" href="addCompany.html">编辑</a>
+                        <a class="mui-btn mui-btn-green" v-if="!company.enable">启用</a>
+                        <a class="mui-btn mui-btn-red" v-else>停用</a>
+                    </div>
+                    <a href="company_device_detail.html?{{encodeObj({'companyId':company.id})}}" class="mui-slider-handle mui-navigate-right listContent">
+                        <span>{{company.name}}</span>
+                        <span class="colorred" v-if="!company.enable">(停用)</span>
+                        <span class="mui-pull-right color9" style="margin-right: 10px;">{{getAvailableDeviceLength(company.device)}}/{{company.device.length}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </body>
 <script>
@@ -61,6 +63,15 @@ $(function() {
                     }
                 }
                 return count;
+            },
+            getNewest: function () {
+                var self = this;
+                $.when(b_getAllCompany()).done(function(data){
+                    if(data.state == 0){
+                        self.datalist = data.data;
+                        mui('#scroll').pullRefresh().endPulldownToRefresh();
+                    }
+                })
             }
         },
         created: function() {
@@ -70,7 +81,20 @@ $(function() {
                     self.datalist = data.data;
                 }
             })
-        }
+        },
+        ready: function () {
+            var self = this;            
+            mui.init();
+            mui.ready(function(){
+                mui("#scroll").pullRefresh({
+                    down : {
+                        callback : function(data){
+                            self.getNewest();
+                        }
+                    }
+                });
+            });
+        } 
     })
 });
 </script>

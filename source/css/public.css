@@ -1123,7 +1123,6 @@ body {
   text-decoration: underline;
 }
 .messageShowBox {
-  border-top: 1px solid #ddd;
   border-bottom: 1px solid #eee;
 }
 .messageShowBox a {
