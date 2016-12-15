@@ -436,6 +436,9 @@ body {
 .notice .userIcon img:nth-child(5n) {
   margin-right: 0;
 }
+.notice .userIcon .userPic {
+  border-radius: 50%;
+}
 .notice .userIcon:after {
   display: block;
   content: '';

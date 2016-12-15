@@ -65,7 +65,7 @@
         <p class="topPara">知会同事&nbsp;<span>(再次点击头像可删除)</span></p>
         <div class="userIcon">
             <template v-for="workmate in workmates">
-                <img :src="getMinifiedImage(workmate.photo.id,60,60)" class="userPic">
+                <img v-show="workmate.picked" :src="getMinifiedImage(workmate.photo.id,60,60)" class="userPic" @tap="workmate.picked = false;">
             </template>
             <img src="../source/img/userPlus.png" class="userPlus" @tap="chooseWorkmates()">
         </div>
@@ -143,13 +143,13 @@ $(function() {
             },
             chooseWorkmates: function(){
                 var self = this;
-                window.location.href="open:workmatesList.html?"+encodeObj({"choosenWorkmates":self.workmates})+",navigatorRightButton:确定,navigatorRightButtonCallback:finishChoose(),navigatorTitle:所有同事";
+                window.location.href="open:workmatesList.html?"+encodeObj({"workmates":self.workmates})+",navigatorRightButton:确定,navigatorRightButtonCallback:finishChoose(),navigatorTitle:所有同事";
             },
             writeWorkmates: function(string){
                 var self = this;
-                var choosenWorkmates = JSON.parse(decodeURIComponent(string)).choosenWorkmates;
-                if(choosenWorkmates){
-                    self.workmates = choosenWorkmates;
+                var workmates = JSON.parse(decodeURIComponent(string)).workmates;
+                if(workmates){
+                    self.workmates = workmates;
                 }
             },
             applyButton: function(){
@@ -166,13 +166,19 @@ $(function() {
                 // $.when(uploadImageAndGetId(self.imageFileList[0])).done(function(){
                 //     152
                 // });
-                
             }
         },
         created: function() {
             var self = this;
             var qd = getQueryData();
-
+            $.when(getAllUser("企业同事")).done(function(data){
+                if(data.state == 0){
+                    for(i in data.data){
+                        data.data[i].picked = true;
+                    }
+                    self.workmates = data.data;
+                }
+            });
         },
         ready: function() {
             var self = this;

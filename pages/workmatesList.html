@@ -21,7 +21,7 @@
     <div class="mui-content">
         <ul class="mui-table-view">
             <li class="mui-table-view-cell mui-checkbox mui-right" v-for="user in datalist">
-                <input class="vertical-align" name="checkbox1" type="checkbox" value="{{user.id}}" v-model="checkedUsersId">
+                <input class="vertical-align" name="checkbox1" type="checkbox" @true-value="true" v-model="user.picked">
                 <img src="../source/img/q.png" class="mui-media-object mui-pull-left media-object-50">
                 <span class="vertical-align mui-h5">{{user.username}}</span>
             </li>
@@ -34,42 +34,23 @@ $(function() {
     var vm = new Vue({
         el: "body",
         data: {
-            datalist: [],
-            checkedUsersId: []
+            datalist: []
         },
         computed: {
-            
         },
         methods: {
             finishChoose: function(){
                 var self = this;
-                var choosenWorkmates = [];
-                for(var i = 0, length = self.checkedUsersId.length; i < length; i++){
-                    var checkedId = self.checkedUsersId[i];
-                    for(var j = 0, jlength = self.datalist.length; j<jlength; j++ ){
-                        if(checkedId == self.datalist[j].id){
-                            choosenWorkmates.push(self.datalist[j]);
-                        }
-                    }
-                }
-                // console.log(choosenWorkmates);
-                // console.log("diliver.html?"+encodeObj({"choosenWorkmates":choosenWorkmates}))
-                window.location.href="backto:deliver.html,javascript:writeWorkmates('"+encodeObj({"choosenWorkmates":choosenWorkmates})+"')";
+                window.location.href="backto:deliver.html,javascript:writeWorkmates('"+encodeObj({"workmates":self.datalist})+"')";
             }
         },
         created: function() {
             var self = this;
             var qd = getQueryData();
-            if(qd&&qd.choosenWorkmates){
-                for(var i = 0, length = qd.choosenWorkmates.length; i < length; i++){
-                    self.checkedUsersId.push(qd.choosenWorkmates[i].id+"");
-                }
+            if(qd&&qd.workmates){
+                self.datalist = qd.workmates;
             }
-            $.when(getAllUser("企业同事")).done(function(data){
-                if(data.state == 0){
-                    self.datalist = data.data;
-                }
-            });
+            
         },
         ready: function() {
             window.finishChoose = this.finishChoose;
