@@ -166,3 +166,7 @@ h5,
 .mui-segmented-control.mui-segmented-control-inverted {
   border-bottom: 1px solid #ddd;
 }
+.mui-table-view-cell > .mui-slider-handle.mui-navigate-right:after,
+.mui-table-view-cell > .mui-slider-handle .mui-navigate-right:after {
+  right: 10px;
+}

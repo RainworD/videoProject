@@ -27,6 +27,10 @@ $.when(getSelf()).done(function(data){
 		window.localStorage.setItem("user_username",_data.username);
 		window.localStorage.setItem("user_competence",_data.competence);
 		window.localStorage.setItem("user_phone",_data.contact);
+		if(!_data.photo){
+			_data.photo = {};
+			_data.photo.id = 1;
+		}
 		window.localStorage.setItem("user_photoId", _data.photo.id)
 		// b端情况
 		if(_data.business){

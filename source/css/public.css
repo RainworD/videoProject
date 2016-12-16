@@ -788,12 +788,12 @@ body {
   border-right: 1px solid #ddd;
 }
 .aboutus .TopImg {
-  background-image: linear-gradient(-180deg, #fb9f92 0%, #e74f3a 100%);
   width: 60px;
   height: 60px;
   border-radius: 15px;
   margin: auto;
   margin-top: 30px;
+  overflow: hidden;
 }
 .aboutus .rightTitle {
   text-align: center;

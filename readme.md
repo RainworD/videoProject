@@ -44,7 +44,12 @@
 - withdraw_main.html
 	- 提现成功后会收到通知，回到accountBalance.html
 
+- addCompany.html
+	- 新增公司的时候，调用`addButton()`
+	- 编辑公司的时候，调用`saveButton()`
 
+- aboutus.html
+	- 将会收到页面跳转通知
 
 
 

@@ -749,8 +749,16 @@ function getNumberOfCompanyCommentDynamicByCompanyIdAndStamp(companyId, stamp){
 	return ajax;
 }
 
-
-
+// 获得全局变量
+function getGlobalData(key){
+	var ajax = $.ajax({
+		url: baseUrl+"/variable/global/get",
+		data: {
+			'key': key
+		}
+	});
+	return ajax;
+}
 
 
 

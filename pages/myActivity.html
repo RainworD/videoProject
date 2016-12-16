@@ -51,7 +51,7 @@
                             <div class="comment" v-if="dynamic.comment.length > 0">
                                 <div class="commentBox" v-for="cmt in dynamic.comment">
                                     <div class="leftImg">
-                                        <img :src="getMinifiedImage(dynamic.user.photo.id,40,40)">
+                                        <img :src="getMinifiedImage(cmt.user.photo.id,40,40)">
                                         <h6 class="mui-text-center">{{cmt.user.name}}</h6>
                                     </div>
                                     <div class="rightContent">

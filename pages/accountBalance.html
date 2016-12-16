@@ -33,7 +33,7 @@
                 <a href="open:recharge_main.html,navigatorTitle:账户充值">
                     <span class="recharge">充值</span>   
                 </a>
-                <a href="open:withdraw_main.html,navigotorTitle:账户提现">
+                <a href="open:withdraw_main.html,navigatorTitle:账户提现">
                     <span class="withdraw">提现</span>
                 </a>
             </p>
@@ -43,7 +43,7 @@
             <div class="mui-scroll">
                 <ul class="mui-table-view">
                     <li class="mui-table-view-cell" v-for="order in orderList">
-                        <a :href="'accountBalanceInfo.html?'+encodeObj({'orderId': order.id})">
+                        <a @tap="goOrderDetail(order.id)">
                             <span class="mui-h5">{{order.type}}</span>
                             <p class="mui-ellipsis">{{stamp2formatTime(order.in_time)}}</p>
                             <span class="mui-pull-right vertical-align">{{getSymbol(order.type)+getMoneyValue(order.value)}}</span>
@@ -94,6 +94,9 @@ $(function() {
                         }
                     }
                 });
+            },
+            goOrderDetail: function(orderId){
+                window.location.href = 'open:accountBalanceInfo.html?'+encodeObj({'orderId': orderId})+',navigatorTitle:收支详情';
             },
             getMoreOrder: function(){
                 var self = this;
