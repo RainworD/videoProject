@@ -30,10 +30,10 @@
             <p class="para_2" v-cloak>￥&nbsp;{{getMoneyValue(price)}}</p>
             <p class="para_3" v-cloak>设备押金:&nbsp;&nbsp;￥&nbsp;{{getMoneyValue(deposit)}}</p>
             <p class="bottomBtn">
-                <a href="recharge_main.html">
+                <a href="open:recharge_main.html,navigatorTitle:账户充值">
                     <span class="recharge">充值</span>   
                 </a>
-                <a href="withdraw_main.html">
+                <a href="open:withdraw_main.html,navigotorTitle:账户提现">
                     <span class="withdraw">提现</span>
                 </a>
             </p>
@@ -109,14 +109,18 @@ $(function() {
                         }
                     }
                 });
+            },
+            refreshData: function(){
+                var self = this;
+                $.when(__getSelf()).done(function(data){
+                    self.price = getB_Price();
+                    self.deposit = getB_Deposit();
+                });
             }
         },
         created: function() {
             var self = this;
-            $.when(__getSelf()).done(function(data){
-                self.price = getB_Price();
-                self.deposit = getB_Deposit();
-            });
+            self.refreshData();
         },
         ready: function() {
             var self = this;
@@ -137,7 +141,13 @@ $(function() {
                         }
                     }
                 });
-            })
+            });
+            window.refreshDataAndGetNewestOrder = function(){
+                self.refreshData();
+                self.getNewestOrder();
+            }
+            window.refreshData = self.refreshData;
+            window.getNewestOrder = self.getNewestOrder;
         }
     })
 });

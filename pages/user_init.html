@@ -30,7 +30,6 @@ $.when(getSelf()).done(function(data){
 		window.localStorage.setItem("user_photoId", _data.photo.id)
 		// b端情况
 		if(_data.business){
-
 			window.localStorage.setItem("b_deposit",_data.business.deposit);
 			window.localStorage.setItem("b_price",_data.business.price);
 		}
