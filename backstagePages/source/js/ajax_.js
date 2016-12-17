@@ -398,12 +398,31 @@ function getSubBusiness(){//获得代理商列表
 		url: baseUrl+"/model/get/SubBusiness",
 		type: "POST",
 		data:{
+			"add_":["business","user"]
+
 		},
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
+
+function getSubBusinessByBusid(id){//获得代理商列表
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/SubBusiness",
+		type: "POST",
+		data:{
+			business: id,
+			"add_":["business","user"]
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+
+
 
 function editBusiness(code,name,contact,phone,competence){
 	var ajax = $.ajax({
@@ -456,10 +475,6 @@ function getCompany(){//
 }
 
 
-
-
-
-
 function getUser(){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/User",
@@ -473,11 +488,12 @@ function getUser(){
 }
 function getUserInfo(){
 	var ajax = $.ajax({
-		url: "/model/get/User",
+		url: baseUrl+"/model/get/User",
 		type: "POST",
 		traditional:true,
 		data:{
-			competence:["一般管理员","财务管理员"],
+			competence: "企业同事",
+			"add_":"company",
 		},
 		success: successHandle,
 		error: errorHandle

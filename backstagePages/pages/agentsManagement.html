@@ -23,7 +23,7 @@
 						<th>负责人</th>
 						<th>
 							<div class="admin_ui_select">
-								<select v-model="selected" id="bus_select" style="width: 100%;font-size: 16px;">
+								<select v-model="selected" id="bus_select" style="width: 100%;font-size: 14px;">
 									<option value="0">全部</option>
 									<option value="1">总代理商</option>
 									<option value="2">子代理商</option>
@@ -38,9 +38,9 @@
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
 					<tr v-for="show in dataSource_all[selected]">
 						<td>{{show.id}}</td>
-						<td>{{show.name}}</td>
+						<td>{{show.name||show.user.name}}</td>
 						<td>{{show.code}}</td>
-						<td>{{show.contact}}</td>
+						<td>{{show.contact||show.user.username}}</td>
 						<td>{{show.read}}</td>
 						<td>{{stamp2time(show.in_time)}}</td>
 						<td>{{show.phone}}</td>

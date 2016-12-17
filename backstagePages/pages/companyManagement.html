@@ -75,7 +75,7 @@ var vm = new Tvm({
 			self.dataSource_filter = [];
 			for(index in self.dataSource){
 				var _data = self.dataSource[index];
-				if(self.isContainKeyword([_data.id, _data.user_nick],self.keyword)){
+				if(self.isContainKeyword([_data.id, _data.name, _data.name,_data.code,_data.contact, _data.business.name, _data.business.code],self.keyword)){
 					self.dataSource_filter.push(_data);
 				}
 			}
