@@ -167,10 +167,37 @@
 	$("#saveButton").bind('click',function(data){
 		var top;
 		var text = editor.getContent();
-		console.log(text);
-		
-		
+		var label = $("input[name='label']:checked").attr("id");
+		var title=$(".ar-title").val();
+		var top_ = $("input[name='selName']:checked").attr("id");
+		if(top_=="up"){
+			top=true;
+		}
+		else{
+			top=false;
+		}
+		if(id){
+			$.when(editArticle(id,title,text,label,top)).done(function(data){
+				if(data.state==0){
+					alert("修改成功！");
+				}
+				else{
+					alert("操作失败！")
+				}
+			})	
+		}
+		else{
+			$.when(sendArticle(title,text,label,top)).done(function(data){
+				if(data.state==0){
+					alert("新增成功！");
+				}
+				else{
+					alert("操作失败！")
+				}
+			})	
+		}	
 	});
+
 </script>
 
 

@@ -142,7 +142,7 @@
 		var text = editor.getContent();
 		var title=$(".ar-title").val();
 		var business = $("input[name='label']:checked").attr("id");
-		console.log(text);
+		console.log(business);
 		$.when(sendMessage(title,text,business)).done(function(data){
 			if(data.state == 0){
 				alert("新增成功！");
