@@ -16,11 +16,8 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-<<<<<<< HEAD
 					<a href="#/userDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增账户</a>
-=======
-					<a href="#/userDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a>
->>>>>>> origin/master
+					<!-- <a href="#/userDetail.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">新增</a> -->
 				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
@@ -162,7 +159,7 @@ var vm = new Tvm({
 		}
 		//启用！未有api
 	},
-	created: function(){
+	created: function(){ 
 		var self = this;
 		$.when(getUserInfo()).done(function(data){
 			if(data.state == 0){

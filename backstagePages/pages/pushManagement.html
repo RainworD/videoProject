@@ -36,7 +36,7 @@
 					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{show.title}}</td>
 						<td>{{stamp2time(show.in_time)}}</td>
-						<td><span v-for="(show_,index) in show.business">{{show_.name}}</span></td>
+						<td><span v-for="(show_,index) in show.business">{{show_.name+" "}}</span></td>
 						<td class="admin_ui_table_action">
 							<a class="iconButton checkIcon" @click="goSomewhere(show.id)">
 								<i class="fa fa-pencil"></i>
