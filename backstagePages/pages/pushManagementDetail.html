@@ -181,6 +181,7 @@
 		var business=[];
 		var text = editor.getContent();
 		var title=$(".ar-title").val();
+<<<<<<< HEAD
 		var business_ = $("input[name='label']:checked");
 		for (var i=0;i<business_.length;i++) {
 			business.push(business_.eq(i).attr("id"));
@@ -188,6 +189,10 @@
 		}
 		console.log(business);
 		console.log(text);
+=======
+		var business = $("input[name='label']:checked").attr("id");
+		console.log(business);
+>>>>>>> origin/master
 		$.when(sendMessage(title,text,business)).done(function(data){
 			if(data.state == 0){
 				alert("新增成功！");

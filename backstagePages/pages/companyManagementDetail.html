@@ -7,19 +7,18 @@
 		<div class="admin_ui_cont">
 			<div class="admin_ui_search">
 				<div style="float:left;height:30px;">
-					<a href="#/companyManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;background-color: #ddd;border: 1px solid #ccc;text-align: center;border-radius: 5px;color: #fafafa;">返回</a>
+					<a href="#/companyManagement.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">返回</a>
 				</div>
 				<div style="float:right;height:30px;">
-					<a href="#/companyManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;" id="saveButton">保存</a>
+					<a href="#/companyManagement.html" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; background-color:#3eb05b; padding: 0;" id="saveButton" class="admin_ui_button admin_ui_button_green button_ submitBtn">保存</a>
 				</div>
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">所属代理商：</span>
-						<select style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
-							<option>测试代理商1</option>
-							<option>测试代理商2</option>
+						<select calss="sel1" v-model="selected1" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+							<option v-for="show in dataSource">{{show.name}}</option>
 						</select>					
 					</div>
 				</div>
@@ -27,35 +26,36 @@
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">子代理商：</span>
 						<select style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
-							<option>测试子代理商1</option>
-							<option>测试子代理商2</option>
+							<option v-for="show in dataSource_sub">{{show.user.name}}</option>
 						</select>
+						
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
 					<div class="admin_ui_name">
 						<span style="width: 100px;display: inline-block;">代理商邀请码：</span>
-						<span></span>
+						<input v-model="bus_code"></input>
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">行业标签：</span><input class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">行业标签：</span><input v-model="com_label" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">企业名称：</span><input class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">企业名称：</span><input v-model="com_name" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><input class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><input v-model="com_contact" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input v-model="com_phone" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">邀请码：</span><span></span></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">邀请码：</span>
+						<input v-model="com_code"></div>
 				</div>
 			</div>
 		</div>
@@ -72,6 +72,11 @@
 	// $("#showImageLike").text(queryData.like);
 	// $("#showImageComment").text(queryData.comment);
 	// $("#showImageRead").text(queryData.read);
+
+	var id_array=window.location.hash;
+	var id_get=id_array.split("=")[1];
+	
+
 	var editor =  new tinymce.Editor('tinymce', {
 	    height: 500,
 		theme: 'modern',
@@ -127,28 +132,102 @@
 	$("#tinymce").show()
 	editor.render();
 	
-	
+	var vm = new Tvm({
+		el: '.admin_ui_cont',
+		data:{
+			selected1:"",
+			selected2:"",
+			dataSource: [],
+			dataSource_sub:[],
+			dataSource_tmp:[],
+			bus_id:"",
+			subBus_id:"",
+			code:"",
+			id_this:"",
+			bus_code:"",
+			com_code:"",
+			com_name:"",
+			com_contact:"",
+			com_phone:"",
+			com_label:"",
+		},
+		computed: {
+		},
+		mounted: function(){
+			var self = this;
+			$.when(getBusiness()).done(function(data){
+				self.dataSource = data.data;
+			});	
 
-	$("#saveButton").bind('click',function(data){
-		var text = $(".admin_ui_input");
-		var label =text[0].value;
-		var name = text[1].value;
-		var contact = text[2].value;
-		var phone = text[3].value;
-		var code="C001";
-		var competence="企业管理员";
-		var business = 1;
-		var subBusiness = 1;
-		var label = 2;
+			if(id_get){
+				$.when(getBusiness(id_get)).done(function(data){
+					self.selected1 = id_get;
+					self.bus_id = data.data[0].id;
+					self.bus_code = data.data[0].code;
+					$.when(getSubBusinessByBusid(self.bus_id)).done(function(data){
+						self.dataSource_tmp = data.data;
+						self.dataSource_sub=[];
+						for(var i = 0; i < self.dataSource_tmp.length; i++) {
+							self.dataSource_sub.push(self.dataSource_tmp[i]);
+						}
+					});	
+					$.when(getCompany(self.bus_id)).done(function(data){
+						self.com_code = data.data[0].code;
+						self.com_name = data.data[0].name;
+						self.com_contact = data.data[0].contact;
+						self.com_phone = data.data[0].phone;
+						self.com_label = data.data[0].label;
 
-		$.when(editCompany(code,name,contact,phone,competence,business,subBusiness,label)).done(function(data){	
-		
-		});
+					});
+				});
+			}
+			
 
-		
+			$("select").bind('change',function(data){
+				for (var i = 0; i < self.dataSource.length; i++) {
+					if(self.dataSource[i].name==self.selected1){
+						self.bus_id = self.dataSource[i].id;
+						self.code = self.dataSource[i].code;
+					}
+					$.when(getSubBusinessByBusid(self.bus_id)).done(function(data){
+						self.dataSource_tmp = data.data;
+						self.dataSource_sub=[];
+						for(var i = 0; i < self.dataSource_tmp.length; i++) {
+							self.dataSource_sub.push(self.dataSource_tmp[i]);
+						}
+					});	
+				}
+				for (var i = 0; i < self.dataSource_sub.length; i++) {
+					if(self.dataSource_sub[i].user.name==self.selected2){
+						self.subBus_id = self.dataSource_sub[i].id;
+					}
+				}
+			});
 
-	
+			$("#saveButton").bind('click',function(data){
+				var code = self.code;
+				var text = $(".admin_ui_input");
+			
+				var label =text[0].value;
+				var name = text[1].value;
+				var contact = text[2].value;
+				var phone = text[3].value;
+					console.log(phone)
+				var competence="企业管理员";
+				var business = self.bus_id;
+				var subBusiness = self.subBus_id;
+				
+				$.when(editCompany(code,name,contact,phone,competence,business,subBusiness)).done(function(data){
+					$.when(editLabel(label)).done(function(data){
+						});
+				});
+				
+			});
+			
+
+		}
 	});
+	
 
 </script>
 
