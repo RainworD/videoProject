@@ -17,19 +17,18 @@
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">所属代理商：</span>
-						<select style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
-							<option>测试代理商1</option>
-							<option>测试代理商2</option>
+						<select v-model="selected1" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+							<option v-for="show in dataSource">{{show.name}}</option>
 						</select>					
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">子代理商：</span>
-						<select style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
-							<option>测试子代理商1</option>
-							<option>测试子代理商2</option>
+						<select v-model="selected2" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+							<option v-for="show in dataSource_sub">{{show.user.name}}</option>
 						</select>
+						
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
@@ -127,28 +126,74 @@
 	$("#tinymce").show()
 	editor.render();
 	
-	
+	var vm = new Tvm({
+		el: '.admin_ui_cont',
+		data:{
+			selected1:"",
+			selected2:"",
+			dataSource: [],
+			dataSource_sub:[],
+			bus_id:"",
+			subBus_id:"",
+			code:"",
+		},
+		computed: {
+		},
+		mounted: function(){
+			var self = this;
+			$.when(getBusiness()).done(function(data){
+				self.dataSource = data.data;
+			});	
 
-	$("#saveButton").bind('click',function(data){
-		var text = $(".admin_ui_input");
-		var label =text[0].value;
-		var name = text[1].value;
-		var contact = text[2].value;
-		var phone = text[3].value;
-		var code="C001";
-		var competence="企业管理员";
-		var business = 1;
-		var subBusiness = 1;
-		var label = 2;
+			$("select").bind('change',function(data){
+				for (var i = 0; i < self.dataSource.length; i++) {
+					if(self.dataSource[i].name==self.selected1){
+						self.bus_id = self.dataSource[i].id;
+						self.code = self.dataSource[i].code;
+					}
+					$.when(getSubBusinessByBusid(self.bus_id)).done(function(data){
+						var dataSource_tmp = data.data;
+						self.dataSource_sub=[];
+						for(var i = 0; i < dataSource_tmp.length; i++) {
+							self.dataSource_sub.push(dataSource_tmp[i]);
+						}
+					});	
+				}
+				for (var i = 0; i < self.dataSource_sub.length; i++) {
+					if(self.dataSource_sub[i].user.name==self.selected2){
+						self.subBus_id = self.dataSource_sub[i].id;
+					}
+				}
+			});
 
-		$.when(editCompany(code,name,contact,phone,competence,business,subBusiness,label)).done(function(data){	
-		
-		});
+			$("#saveButton").bind('click',function(data){
+				var code = self.code;
+				var text = $(".admin_ui_input");
+				var label =text[0].value;
+				var name = text[1].value;
+				var contact = text[2].value;
+				var phone = text[3].value;
+				var competence="企业管理员";
+				var business = self.bus_id;
+				var subBusiness = self.subBus_id;
+				
+			$.when(editCompany(code,name,contact,phone,competence,business,subBusiness,label)).done(function(data){	
+			
+			});
+				
+				
 
-		
 
-	
+
+
+			});
+
+
+
+
+		}
 	});
+	
 
 </script>
 
