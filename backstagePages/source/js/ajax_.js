@@ -55,6 +55,18 @@ function getLabel(){//获得标签列表
 }
 function editLabel(name){//获得标签列表
 	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Label",
+		type: "POST",
+		data:{
+			name: name,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function addLabel(name){//获得标签列表
+	var ajax = $.ajax({
 		url: baseUrl + "/model/save/Label",
 		type: "POST",
 		data:{
@@ -65,7 +77,6 @@ function editLabel(name){//获得标签列表
 	});
 	return ajax;
 }
-
 function sendMessage(title,text,business){//获得代理商列表
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/Announce",
