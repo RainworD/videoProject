@@ -53,6 +53,18 @@ function getLabel(){//获得标签列表
 	});
 	return ajax;
 }
+function editLabel(name){//获得标签列表
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Label",
+		type: "POST",
+		data:{
+			name: name,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
 
 function sendMessage(title,text,business){//获得代理商列表
 	var ajax = $.ajax({
@@ -381,11 +393,12 @@ function getDynamic(){//
 	});
 	return ajax;
 }
-function getBusiness(){
+function getBusiness(name){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Business",
 		type: "POST",
 		data:{
+			name:name,
 		},
 		success: successHandle,
 		error: errorHandle
@@ -423,7 +436,7 @@ function editBusiness(code,name,contact,phone,competence){
 }
 
 
-function editCompany(code,name,contact,phone,competence,business,subBusiness,label){
+function editCompany(code,name,contact,phone,competence,business,subBusiness){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/Register",
 		type: "POST",
@@ -435,7 +448,7 @@ function editCompany(code,name,contact,phone,competence,business,subBusiness,lab
 			competence:competence,
 			business:business,
 			subBusiness:subBusiness,
-			label:label
+			
 		},
 		success: successHandle,
 		error: errorHandle
@@ -443,11 +456,12 @@ function editCompany(code,name,contact,phone,competence,business,subBusiness,lab
 	return ajax;
 }
 
-function getCompany(){//
+function getCompany(id){//
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Company?add_=business&add_=label",
 		type: "POST",
 		data:{
+			id:id,
 		},
 		success: successHandle,
 		error: errorHandle

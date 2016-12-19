@@ -35,12 +35,10 @@
 						<td>{{show.contact}}</td>
 						<td>{{show.business.name}}</td>
 						<td>{{show.business.code}}</td>
-						<td>
-							<div class="admin_ui_button admin_ui_button_xs admin_ui_button_white" data-addShowImageAsTopSlideImage>设置</div>
-						</td>
+						<td>{{show.label?show.label.name:""}}</td>
 						<!-- <td>{{show.label.name}}</td> -->
 						<td class="admin_ui_table_action">
-							<a href="#/companyManagementDetail.html?{{encodeURI(JSON.stringify(website))}}" class="iconButton checkIcon">
+							<a :href="getUrl(show.business.name)" class="iconButton checkIcon">
 								<i class="fa fa-pencil"></i>
 								编辑
 							</a>
@@ -59,17 +57,23 @@
 	</div>
 </div>
 <script>
+
 var vm = new Tvm({
 	el: '#admin_content_innerBox',
 	data:{
 		keyword: "",
 		dataSource: [],
 		dataSource_filter: [],
+		dataSource_label: [],
+		dataSource_filter_label: [],		
 		pageIndex: 1
 	},
 	computed: {
 	},
 	methods: {
+		getUrl:function(val){
+			return '#/companyManagementDetail.html?bus='+val;
+		},
 		search: function(){
 			var self = this;
 			self.dataSource_filter = [];
@@ -157,6 +161,7 @@ var vm = new Tvm({
 				self.dataSource_filter = self.dataSource;
 				self.refreshTable();
 			}
+			
 		});
 	}
 });
