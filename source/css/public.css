@@ -1123,6 +1123,7 @@ body {
   text-decoration: underline;
 }
 .messageShowBox {
+  border-top: 1px solid #ddd;
   border-bottom: 1px solid #eee;
 }
 .messageShowBox a {
@@ -1571,17 +1572,16 @@ a .mui-table-view-cell:after {
   height: 70px;
   margin-right: 3%;
   text-align: center;
-  border: 1px solid #ccc;
+  border: 1px solid #45a3ef;
   border-radius: 4px;
   float: left;
   margin-bottom: 3%;
   line-height: 70px;
-  color: #333;
+  color: #45a3ef;
 }
 .rechargeBox .cashBox .cashContent .blue {
-  border-color: #e74f3a;
-  background-color: #fcedeb;
-  color: #e74f3a;
+  background-color: #45a3ef;
+  color: #fff;
 }
 .rechargeBox .cashBox .cashContent:after {
   display: block;

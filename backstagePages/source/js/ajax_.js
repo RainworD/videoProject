@@ -24,7 +24,7 @@ function successHandle(data){
 //获取个人信息
 function getMyInfo(competence){
 	var ajax = $.ajax({
-		url: "/model/get/User",
+		url: baseUrl+ "/model/get/User",
 		type: "POST",
 		data:{
 			competence:competence,
@@ -37,7 +37,7 @@ function getMyInfo(competence){
 }
 function getSingleUser(id){
 	var ajax = $.ajax({
-		url: "/model/get/User?id="+id,
+		url: baseUrl+ "/model/get/User?id="+id,
 		type: "POST",
 		success: successHandle,
 		error: errorHandle
@@ -46,17 +46,49 @@ function getSingleUser(id){
 }
 function getLabel(){//获得标签列表
 	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Label",
+		url: baseUrl+ "/model/get/Label",
 		type: "POST",
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
-
+function getLabel_c(){//获得标签列表
+	var ajax = $.ajax({
+		url: baseUrl+ "/model/get/Label",
+		type: "POST",
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getRecommend_c(){//获得标签列表
+	var ajax = $.ajax({
+		url: baseUrl+ "/model/get/User",
+		data:{
+			competence:"一般管理员",
+		},
+		type: "POST",
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function addLabel(name){//获得标签列表
+	var ajax = $.ajax({
+		url: baseUrl + "/model/save/Label",
+		type: "POST",
+		data:{
+			name: name,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
 function sendMessage(title,text,business){//获得代理商列表
 	var ajax = $.ajax({
-		url:"/model/save/Announce",
+		url: baseUrl+"/model/save/Announce",
 		type: "POST",
 		traditional:true,
 		data:{
@@ -72,7 +104,7 @@ function sendMessage(title,text,business){//获得代理商列表
 //登入
 function loginApi(username,password){
 	var ajax = $.ajax({
-		url: baseUrl + "/auth/login",
+		url: baseUrl+ "/auth/login",
 		type: "POST",
 		data: {
 			"username":username,
@@ -87,7 +119,7 @@ function loginApi(username,password){
 //登出
 function logoutApi(){
 	var ajax = $.ajax({
-		url: baseUrl + "/auth/logout",
+		url: baseUrl+ "/auth/logout",
 		success: successHandle,
 		error: errorHandle
 	});
@@ -96,7 +128,7 @@ function logoutApi(){
 // 修改密码
 function changePassword(oldPassword,newPassword){
 	var ajax = $.ajax({
-		url: baseUrl + "/changePassword",
+		url: baseUrl+ "/changePassword",
 		type: "POST",
 		data: {
 			"old_password": oldPassword,
@@ -110,7 +142,7 @@ function changePassword(oldPassword,newPassword){
 //新增管理员
 function addAdmin(username,password,name,contact,competence){
 	var ajax = $.ajax({
-		url: baseUrl + "/createAdmin",
+		url: baseUrl+ "/createAdmin",
 		type: "POST",
 		data:{
 			"username": username,
@@ -126,7 +158,7 @@ function addAdmin(username,password,name,contact,competence){
 }
 function editAdmin_(id,name,contact,competence){
 	var ajax = $.ajax({
-		url:"/model/save/User",
+		url: baseUrl+"/model/save/User",
 		type: "POST",
 		data:{
 			"id":id,
@@ -142,7 +174,7 @@ function editAdmin_(id,name,contact,competence){
 //编辑管理员
 function editAdmin(id,password,name,contact,competence,enable){
 	var ajax = $.ajax({
-		url: "/model/save/User",
+		url: baseUrl+ "/model/save/User",
 		type: "POST",
 		data:{
 			"id": id,
@@ -159,7 +191,7 @@ function editAdmin(id,password,name,contact,competence,enable){
 }
 function editpw(id,password){
 	var ajax = $.ajax({
-		url: "/model/save/User",
+		url: baseUrl+ "/model/save/User",
 		type: "POST",
 		data:{
 			"id": id,
@@ -172,7 +204,7 @@ function editpw(id,password){
 }
 function editUserState(id,enable){
 	var ajax = $.ajax({
-		url: "/model/save/User",
+		url: baseUrl+ "/model/save/User",
 		type: "POST",
 		data:{
 			"id": id,
@@ -186,7 +218,7 @@ function editUserState(id,enable){
 
 function deleteLabel(id){
 	var ajax = $.ajax({
-		url: baseUrl + "/model/delete/Label",
+		url: baseUrl+ "/model/delete/Label",
 		data:{
 			"id": id
 		},
@@ -198,7 +230,7 @@ function deleteLabel(id){
 }
 function deletePush(id){
 	var ajax = $.ajax({
-		url: "/model/delete/Announce",
+		url: baseUrl+ "/model/delete/Announce",
 		data:{
 			"id": id
 		},
@@ -210,7 +242,7 @@ function deletePush(id){
 }
 function getArticle(){
 	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Article?add_=label",
+		url: baseUrl+ "/model/get/Article?add_=label",
 		data:{
 		},
 		type: "POST",
@@ -221,7 +253,7 @@ function getArticle(){
 }
 function getArticleDetail(id){
 	var ajax = $.ajax({
-		url:"/model/get/Article?add_=label&id="+id,
+		url: baseUrl+"/model/get/Article?add_=label&id="+id,
 		data:{
 		},
 		type: "POST",
@@ -232,7 +264,7 @@ function getArticleDetail(id){
 }
 function deleteArticle(id){
 	var ajax = $.ajax({
-		url: "/model/delete/Article",
+		url: baseUrl+ "/model/delete/Article",
 		data:{
 			"id": id
 		},
@@ -244,7 +276,7 @@ function deleteArticle(id){
 }
 function getPush(){
 	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Announce?add_=business",
+		url: baseUrl+ "/model/get/Announce?add_=business",
 		type: "POST",
 		success: successHandle,
 		error: errorHandle
@@ -253,7 +285,7 @@ function getPush(){
 }
 function getSinglePush(id){
 	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Announce?add_=business&id="+id,
+		url: baseUrl+ "/model/get/Announce?add_=business&id="+id,
 		type: "POST",
 		success: successHandle,
 		error: errorHandle
@@ -262,7 +294,7 @@ function getSinglePush(id){
 }
 function sendArticle(title,text,label,top){
 	var ajax = $.ajax({
-		url:"/model/save/Article",
+		url: baseUrl+"/model/save/Article",
 		type: "POST",
 		traditional:true,
 		data:{
@@ -278,7 +310,7 @@ function sendArticle(title,text,label,top){
 }
 function editArticle(id,title,text,label,top){
 	var ajax = $.ajax({
-		url:"/model/save/Article",
+		url: baseUrl+"/model/save/Article",
 		type: "POST",
 		traditional:true,
 		data:{
@@ -295,7 +327,7 @@ function editArticle(id,title,text,label,top){
 }
 function changeTop(id,top){
 	var ajax = $.ajax({
-		url:"/model/save/Article?id="+id+"&top="+top,
+		url: baseUrl+"/model/save/Article?id="+id+"&top="+top,
 		type: "POST",
 		traditional:true,
 		data:{
@@ -309,7 +341,7 @@ function changeTop(id,top){
 }
 function getDevice(){//获得设备列表
 	var ajax = $.ajax({
-		url: "/model/get/Device",
+		url: baseUrl+ "/model/get/Device",
 		type: "POST",
 		data:{
 			add_:['business','company'],
@@ -319,7 +351,7 @@ function getDevice(){//获得设备列表
 }
 function deleteDevice(id){//
 	var ajax = $.ajax({
-		url: "/model/delete/Device?id"+id,
+		url: baseUrl+ "/model/delete/Device?id"+id,
 		type: "POST",
 		data:{
 		}
@@ -328,7 +360,7 @@ function deleteDevice(id){//
 }
 function bindDevice(id,business){//获得设备列表
 	var ajax = $.ajax({
-		url: "/device/admin/bind",
+		url: baseUrl+ "/device/admin/bind",
 		type: "POST",
 		traditional:true,
 		data:{
@@ -340,7 +372,7 @@ function bindDevice(id,business){//获得设备列表
 }
 function unbindDevice(id){//获得设备列表
 	var ajax = $.ajax({
-		url: "/device/admin/unbind",
+		url: baseUrl+ "/device/admin/unbind",
 		type: "POST",
 		data:{
 			id:id,
@@ -350,7 +382,7 @@ function unbindDevice(id){//获得设备列表
 }
 function bindDevice(id,business){//获得设备列表
 	var ajax = $.ajax({
-		url: "/device/admin/bind",
+		url: baseUrl+ "/device/admin/bind",
 		type: "POST",
 		data:{
 			id:id,
@@ -361,7 +393,7 @@ function bindDevice(id,business){//获得设备列表
 }
 function addDevice(code,number){//获得设备列表
 	var ajax = $.ajax({
-		url: "/model/save/Device",
+		url: baseUrl+ "/model/save/Device",
 		type: "POST",
 		data:{
 			code:code,
@@ -372,7 +404,7 @@ function addDevice(code,number){//获得设备列表
 }
 function getDynamic(){//
 	var ajax = $.ajax({
-		url: "/model/get/Dynamic",
+		url: baseUrl+ "/model/get/Dynamic",
 		type: "POST",
 		data:{
 			add_:['user.company.business','user','user.company'],
@@ -381,11 +413,12 @@ function getDynamic(){//
 	});
 	return ajax;
 }
-function getBusiness(){
+function getBusiness(name){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Business",
 		type: "POST",
 		data:{
+			name:name,
 		},
 		success: successHandle,
 		error: errorHandle
@@ -393,6 +426,30 @@ function getBusiness(){
 	return ajax;
 }
 
+function getBusiness_c(name){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Business",
+		type: "POST",
+		data:{
+			name:name,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getSubBusiness_c(name){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/SubBusiness",
+		type: "POST",
+		data:{
+			name:name,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
 function getSubBusiness(){//获得代理商列表
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/SubBusiness",
@@ -405,11 +462,40 @@ function getSubBusiness(){//获得代理商列表
 	return ajax;
 }
 
-function editBusiness(code,name,contact,phone,competence){
+function getSubBusiness_c(){//获得代理商列表
 	var ajax = $.ajax({
-		url: baseUrl+"/model/save/Register",
+		url: baseUrl+"/model/get/SubBusiness",
 		type: "POST",
 		data:{
+			add_:'user',
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+function getSubBusinessByBusid(id){//获得代理商列表
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/SubBusiness",
+		type: "POST",
+		data:{
+			business: id,
+			"add_":["business","user"]
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+
+function editBusiness_c(id,code,name,contact,phone,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Business",
+		type: "POST",
+		data:{
+			id:id,
 			code:code,
 			name:name,
 			contact:contact,
@@ -421,21 +507,34 @@ function editBusiness(code,name,contact,phone,competence){
 	});
 	return ajax;
 }
-
-
-function editCompany(code,name,contact,phone,competence,business,subBusiness,label){
+function editSubBusiness_c(id,code,name,contact,competence){
 	var ajax = $.ajax({
-		url: baseUrl+"/model/save/Register",
+		url: baseUrl+"/model/save/SubBusiness",
 		type: "POST",
 		data:{
+			add_:"user",
+			id:id,
+			code:code,
+			
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+
+function editCompany_c(id,code,name,contact,phone,label){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Company",
+		type: "POST",
+		data:{
+			id:id,
 			code:code,
 			name:name,
 			contact:contact,
 			phone:phone,
-			competence:competence,
-			business:business,
-			subBusiness:subBusiness,
-			label:label
+			label:label,
 		},
 		success: successHandle,
 		error: errorHandle
@@ -443,21 +542,18 @@ function editCompany(code,name,contact,phone,competence,business,subBusiness,lab
 	return ajax;
 }
 
-function getCompany(){//
+function getCompany(id){//
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Company?add_=business&add_=label",
 		type: "POST",
 		data:{
+			id:id,
 		},
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
-
-
-
-
 
 
 function getUser(){
@@ -465,6 +561,7 @@ function getUser(){
 		url: baseUrl+"/model/get/User",
 		type: "POST",
 		data:{
+			add_:'company',
 		},
 		success: successHandle,
 		error: errorHandle
@@ -473,11 +570,12 @@ function getUser(){
 }
 function getUserInfo(){
 	var ajax = $.ajax({
-		url: "/model/get/User",
+		url: baseUrl+ "/model/get/User",
 		type: "POST",
 		traditional:true,
 		data:{
 			competence:["一般管理员","财务管理员"],
+
 		},
 		success: successHandle,
 		error: errorHandle
@@ -486,7 +584,7 @@ function getUserInfo(){
 }
 function deleteDynamic(id){//删除设备列表
 	var ajax = $.ajax({
-		url: "/model/delete/Dynamic?id="+id,
+		url: baseUrl+ "/model/delete/Dynamic?id="+id,
 		type: "POST",
 		data:{
 		}
@@ -495,7 +593,7 @@ function deleteDynamic(id){//删除设备列表
 }
 function getComments(){//获得评论列表
 	var ajax = $.ajax({
-		url: "/model/get/Comment",
+		url: baseUrl+ "/model/get/Comment",
 		type: "POST",
 		data:{
 			add_:['user.company.business','user','user.company','dynamic'],
@@ -506,7 +604,7 @@ function getComments(){//获得评论列表
 }
 function deleteComment(id){//删除评论列表
 	var ajax = $.ajax({
-		url: "/model/delete/Comment?id="+id,
+		url: baseUrl+ "/model/delete/Comment?id="+id,
 		type: "POST",
 		data:{
 		}
@@ -515,7 +613,7 @@ function deleteComment(id){//删除评论列表
 }
 function getImgUrl(type){//上传图片
 	var ajax = $.ajax({
-		url: "/upload",
+		url: baseUrl+ "/upload",
 		type: "POST",
 		data:{
 			type:type,
@@ -539,11 +637,11 @@ function uploadImg(formData){//上传图片到oss
 }
 function uploadSlideInfo(photo,url,announce){//上传图片到oss
 	var ajax=$.ajax({
-        url: '/model/save/Carousel',
+        url: baseUrl+ '/model/save/Carousel',
         type: 'POST',
         data: {
         	photo:photo,
-        	url:url,
+        	url: baseUrl+url,
         	announce:announce,
         },
     })
@@ -551,18 +649,18 @@ function uploadSlideInfo(photo,url,announce){//上传图片到oss
 }
 function uploadSlideInfo_(photo,url){//上传图片到oss
 	var ajax=$.ajax({
-        url: '/model/save/Carousel',
+        url: baseUrl+ '/model/save/Carousel',
         type: 'POST',
         data: {
         	photo:photo,
-        	url:url,
+        	url: baseUrl+url,
         },
     })
     return ajax;
 }
 function slideInfo(){//上传图片到oss
 	var ajax=$.ajax({
-        url: '/model/get/Carousel',
+        url: baseUrl+ '/model/get/Carousel',
         type: 'POST',
        	data:{}
     })
@@ -570,7 +668,7 @@ function slideInfo(){//上传图片到oss
 }
 function getAgentFinance(){//获得代理商财务
 	var ajax=$.ajax({
-        url: '/model/get/Business',
+        url: baseUrl+ '/model/get/Business',
         type: 'POST',
        	data:{}
     })
@@ -578,7 +676,7 @@ function getAgentFinance(){//获得代理商财务
 }
 function getSingleAgentFinance(id){//获得代理商财务
 	var ajax=$.ajax({
-        url: '/model/get/Business?id='+id,
+        url: baseUrl+ '/model/get/Business?id='+id,
         type: 'POST',
        	data:{}
     })
@@ -586,7 +684,7 @@ function getSingleAgentFinance(id){//获得代理商财务
 }
 function recharge(type,business,value){
 	var ajax=$.ajax({
-        url: '/model/save/Order',
+        url: baseUrl+ '/model/save/Order',
         type: 'POST',
        	data:{
        		type:type,
@@ -598,7 +696,7 @@ function recharge(type,business,value){
 }
 function getRecharge(add_,order_,state,type){
 	var ajax=$.ajax({
-        url: '/model/get/Order',
+        url: baseUrl+ '/model/get/Order',
         type: 'POST',
        	data:{
        		add_:add_,
@@ -611,7 +709,7 @@ function getRecharge(add_,order_,state,type){
 }
 function setRechargeState(id,success){
 	var ajax=$.ajax({
-        url: '/order/withdraw',
+        url: baseUrl+ '/order/withdraw',
         type: 'POST',
        	data:{
        		id:id,
@@ -622,7 +720,7 @@ function setRechargeState(id,success){
 }
 function setFee(renewal){
 	var ajax=$.ajax({
-        url: '/variable/global/set',
+        url: baseUrl+ '/variable/global/set',
         type: 'POST',
        	data:{
        		renewal:renewal,
@@ -632,7 +730,7 @@ function setFee(renewal){
 }
 function getBill(){
 	var ajax=$.ajax({
-        url: '/model/get/Order',
+        url: baseUrl+ '/model/get/Order',
         type: 'POST',
        	data:{
        		add_:['business'],
@@ -644,7 +742,7 @@ function getBill(){
 }
 function getTodayStatistics(){
 	var ajax=$.ajax({
-        url: '/statistics',
+        url: baseUrl+ '/statistics',
         type: 'POST',
        	data:{
        	}
@@ -653,7 +751,7 @@ function getTodayStatistics(){
 }
 function deleteCarousel(id){//删除轮播图
 	var ajax=$.ajax({
-        url: '/model/delete/Carousel',
+        url: baseUrl+ '/model/delete/Carousel',
         type: 'POST',
        	data:{
        		id:id,
@@ -663,7 +761,7 @@ function deleteCarousel(id){//删除轮播图
 }
 function getFeedback(){//获得意见反馈
 	var ajax=$.ajax({
-        url: '/model/get/Feedback',
+        url: baseUrl+ '/model/get/Feedback',
         type: 'POST',
        	data:{
        		add_:['user.company','user','user.company.business'],
@@ -673,7 +771,7 @@ function getFeedback(){//获得意见反馈
 }
 function deleteFeedback(id){//获得意见反馈
 	var ajax=$.ajax({
-        url: '/model/delete/Feedback',
+        url: baseUrl+ '/model/delete/Feedback',
         type: 'POST',
        	data:{
        		id:id,
@@ -683,7 +781,7 @@ function deleteFeedback(id){//获得意见反馈
 }
 function deleteFeedback(id){//获得意见反馈
 	var ajax=$.ajax({
-        url: '/model/delete/Feedback',
+        url: baseUrl+ '/model/delete/Feedback',
         type: 'POST',
        	data:{
        		id:id,
@@ -693,7 +791,7 @@ function deleteFeedback(id){//获得意见反馈
 }
 function getAboutus_1(){//获得关于我们
 	var ajax=$.ajax({
-        url: '/variable/global/get',
+        url: baseUrl+ '/variable/global/get',
         type: 'POST',
        	data:{
        		key:['flag_1','title_1','content_1']
@@ -703,7 +801,7 @@ function getAboutus_1(){//获得关于我们
 }
 function getAboutus_2(){//获得关于我们
 	var ajax=$.ajax({
-        url: '/variable/global/get',
+        url: baseUrl+ '/variable/global/get',
         type: 'POST',
        	data:{
        		key:['flag_2','title_2','content_2']
@@ -713,7 +811,7 @@ function getAboutus_2(){//获得关于我们
 }
 function setAboutus_1(flag_1,title_1,content_1){//设置关于我们
 	var ajax=$.ajax({
-        url: '/variable/global/set',
+        url: baseUrl+ '/variable/global/set',
         type: 'POST',
        	data:{
        		flag_1:flag_1,
@@ -725,7 +823,7 @@ function setAboutus_1(flag_1,title_1,content_1){//设置关于我们
 }
 function setAboutus_2(flag_2,title_2,content_2){//设置关于我们
 	var ajax=$.ajax({
-        url: '/variable/global/set',
+        url: baseUrl+ '/variable/global/set',
         type: 'POST',
        	data:{
        		flag_2:flag_2,
@@ -736,7 +834,7 @@ function setAboutus_2(flag_2,title_2,content_2){//设置关于我们
     return ajax;
 }function getMoreStatistics(){
 	var ajax=$.ajax({
-        url: '/model/get/Statistics',
+        url: baseUrl+ '/model/get/Statistics',
         type: 'POST',
        	data:{
        		order_:'id desc'
@@ -746,7 +844,7 @@ function setAboutus_2(flag_2,title_2,content_2){//设置关于我们
 }
 function getCarousel(){
 	var ajax=$.ajax({
-        url: '/model/get/Carousel',
+        url: baseUrl+ '/model/get/Carousel',
         type: 'POST',
        	data:{
        		add_:['photo','announce']

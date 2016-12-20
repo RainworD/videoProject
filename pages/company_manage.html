@@ -64,6 +64,7 @@ $(function() {
                     }
                 }
                 return count;
+<<<<<<< HEAD
             },
             getNewest: function () {
                 var self = this;
@@ -76,6 +77,8 @@ $(function() {
             },
             goDetail: function(companyId){
                 window.location.href="company_device_detail.html?"+encodeObj({"companyId": companyId});
+=======
+>>>>>>> origin/master
             }
         },
         created: function() {
@@ -85,20 +88,7 @@ $(function() {
                     self.datalist = data.data;
                 }
             })
-        },
-        ready: function () {
-            var self = this;            
-            mui.init();
-            mui.ready(function(){
-                mui("#scroll").pullRefresh({
-                    down : {
-                        callback : function(data){
-                            self.getNewest();
-                        }
-                    }
-                });
-            });
-        } 
+        }
     })
 });
 </script>

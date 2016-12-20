@@ -1,11 +1,5 @@
 if(!getUser_Id()){
-	refreshUserData();
-}
-function refreshUserData(){
 	window.location.href="user_init.html?"+encodeObj({"url":window.location.href});
-}
-function getUserData(){
-	window.location.href="object:"+window.localStorage.getItem("user_data");
 }
 function getUser_Id(){
 	return window.localStorage.getItem("user_id");
@@ -25,9 +19,6 @@ function getUser_Code(){
 		code =  e;
 	}
 	return code;
-}
-function getUser_PhotoId(){
-	return window.localStorage.getItem("user_photoId");
 }
 function getUser_Phone(){
 	return window.localStorage.getItem("user_phone");

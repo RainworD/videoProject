@@ -47,19 +47,19 @@
         <ul class="mui-table-view" v-if="type == 1">
             <li class="mui-table-view-cell">
                 <span class="leftName">消费金额:</span>
-                <span class="rightName">{{getMoneyValue(order.value)}}元</span>
+                <span class="rightName">3000元</span>
             </li>
             <li class="mui-table-view-cell">
                 <span class="leftName">消费时间:</span>
-                <span class="rightName">{{stamp2formatTime(order.in_time)}}</span>
+                <span class="rightName">2016年07月10日&nbsp;<span>04:33</span></span>
             </li>
             <li class="mui-table-view-cell">
                 <span class="leftName">续费设备号:</span>
-                <span class="rightName">{{order.device_code}}</span>
+                <span class="rightName">65S123</span>
             </li>
             <li class="mui-table-view-cell">
                 <span class="leftName">所属公司:</span>
-                <span class="rightName">{{order.device.company.name}}</span>
+                <span class="rightName">台州某科技有限公司</span>
             </li>
         </ul>
         <ul class="mui-table-view" v-if="type == 2">

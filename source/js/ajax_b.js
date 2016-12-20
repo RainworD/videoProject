@@ -58,20 +58,12 @@ function b_getOrder(){
 	});
 	return ajax;
 }
-function b_getOrderByState(state, start, rows){
-	if(!start){
-		start = 0;
-	}
-	if(!rows){
-		rows = 0;
-	}
+function b_getOrderByState(state){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Order",
 		data:{
 			"order_": "id desc",
 			"state": state,
-			"start_": start,
-			"rows_": rows
 			// "create_user": getUser_Id()
 		}
 	});
@@ -82,19 +74,7 @@ function b_getOrderById(orderId){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Order",
 		data:{
-			"id": orderId,
-			"add_": ["device","device.company"]
-		}
-	});
-	return ajax;
-}
-// 根据deviceId获得所属设备
-function getDeviceByDeciceId(deviceId){
-	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Company",
-		data:{
-			"id": orderId,
-			"add_": ["device","device.company"]
+			"id": orderId
 		}
 	});
 	return ajax;
@@ -154,9 +134,6 @@ function getMessage(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Message",
 		// url: "../announce.json",
-		data: {
-			order_: "id desc"
-		}
 	});
 	return ajax;
 }
@@ -435,14 +412,24 @@ function postFeedback(text,contact){
 	});
 	return ajax;
 }
+// 获得某一种类型的Message
+function getTypeMessage (type) {
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Message",
+		// url: "../announce.json",
+		data: {
+			"type" : type
+		}
+	});
+	return ajax;
+}
 //获得所有Announce
 function getAnnounce () {
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Announce",
 		// url: "../announce.json",
 		data: {
-			add_: "reading",
-			order_: "id desc"
+			add_: "reading"
 		}
 	});
 	return ajax;
@@ -452,8 +439,7 @@ function getAnnounceUnread () {
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Announce",
 		data:{
-			read: 0,
-			order_: "id desc"
+			read: 0
 		}
 	});
 	return ajax;
@@ -464,21 +450,7 @@ function getAnnounceUnreadCount (){
 		url: baseUrl+"/model/get/Announce",
 		data:{
 			read: 0,
-			count_: true,
-			order_: "id desc"
-		}
-	});
-	return ajax;
-}
-//获得固定长度的Announce
-function getAnnounceFixedLength (start, length){
-	var ajax = $.ajax({
-		url: baseUrl+"/model/get/Announce",
-		data:{
-			add_: "reading",
-			order_: "id desc",
-			start_: start,
-			rows_: length
+			count_: true
 		}
 	});
 	return ajax;
@@ -488,9 +460,7 @@ function getMessageUnread(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
-			type: type,
-			reading: false,
-			order_: "id desc"
+			reading: false
 		}
 	});
 	return ajax;
@@ -500,23 +470,8 @@ function getMessageUnreadCount(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
-			type: type,
 			reading: false,
-			count_: true,
-			order_: "id desc"
-		}
-	});
-	return ajax;
-}
-//获得固定长度的Message
-function getMessageFixedLength (type, start, length){
-	var ajax = $.ajax({
-		url: baseUrl+"/model/get/Message",
-		data:{
-			type: type,
-			order_: "id desc",
-			start_: start,
-			rows_: length
+			count_: true
 		}
 	});
 	return ajax;

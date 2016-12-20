@@ -58,7 +58,28 @@
     </div>
 </body>
 <script>
-var DATALENGTH = 20;
+var dataList = [{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "设备发生...",
+    in_time: 0
+},{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "设备发生...",
+    in_time: 0
+},{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "设备发生...",
+    in_time: 0
+},{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "设备发生...",
+    in_time: 0
+}];
+
 $(function() {
     if(getQueryData() === ""){
         window.location.href="message.html";
@@ -73,12 +94,13 @@ $(function() {
                 "异常警告": "../source/img/warning.png",
                 "注册通知": "../source/img/register.png",
                 "系统通告": "../source/img/system.png",
-                "提现通知": "../source/img/drawCash.png",
-                "充值通知": "../source/img/addCash.png",
+                "提现提示": "../source/img/drawCash.png",
+                "充值成功": "../source/img/addCash.png",
                 "设备到期": "../source/img/deadline.png",
                 "动态更新": "../source/img/motivation_.png"
-            },
-            dynamicListStart: 0
+            }
+        },
+        computed: {
         },
         methods: {
             goDetail: function(announceId){
@@ -186,25 +208,18 @@ $(function() {
                 }
             }
         },
-        ready: function() {
-            var self = this;            
-            mui.init();
-            mui.ready(function(){
-                mui("#scroll").pullRefresh({
-                    down : {
-                        callback : function(data){
-                            self.getNewestDynamic();
-                        }
-                    },
-                    up: {
-                        auto: true,
-                        contentnomore: '没有更多消息了',
-                        callback : function(data){
-                            self.getMoreDynamic();
-                        }
-                    }
-                });
-            });
+        created: function() {
+            var self = this;
+            if(self.title=="系统通告"){
+                $.when(getAnnounce ()).done(function(data){
+                    self.announces = data.data;
+                })
+            }
+            else{
+                $.when(getTypeMessage (self.title)).done(function(data){
+                    self.announces = data.data;
+                })
+            }
         }
     });
 });

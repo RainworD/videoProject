@@ -50,12 +50,6 @@
                 })
                 readAnnounce (self.id);
             }
-            else if(self.title == "动态更新"){
-                $.when(getDetailDynamic (self.id)).done(function(data){
-                    self.detail = data.data[0];
-                })
-                readAnnounce (self.id);
-            }
             else{
                 $.when(getDetailMessage (self.id)).done(function(data){
                     self.detail = data.data[0];

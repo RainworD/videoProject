@@ -30,7 +30,7 @@
             <p class="para_2" v-cloak>￥&nbsp;{{getMoneyValue(price)}}</p>
             <p class="para_3" v-cloak>设备押金:&nbsp;&nbsp;￥&nbsp;{{getMoneyValue(deposit)}}</p>
             <p class="bottomBtn">
-                <a href="open:recharge_main.html,navigatorTitle:账户充值">
+                <a href="recharge_main.html">
                     <span class="recharge">充值</span>   
                 </a>
                 <a href="open:withdraw_main.html,navigatorTitle:账户提现">
@@ -55,29 +55,27 @@
     </div>
 </body>
 <script>
-var DATALENGTH = 10;
 $(function() {
-    var vm = new Vue({
+ mui.init();
+ var vm = new Vue({
         el: "body",
         data: {
             price: 0,
             deposit: 0,
-            orderList: [],
-            page: 0
+            orderList: []
         },
         computed: {
 
         },
         methods: {
             getSymbol: function(type){
-                if(type){
-                    if(type.indexOf("消费")>=0||type.indexOf("提现")>=0){
-                        return "-";
-                    }
-                    else{
-                        return ""
-                    }
+                if(type.indexOf("消费")>=0||type.indexOf("提现")>=0){
+                    return "-";
                 }
+                else{
+                    return ""
+                }
+<<<<<<< HEAD
             },
             getNewestOrder: function(){
                 var self = this;
@@ -119,38 +117,24 @@ $(function() {
                     self.price = getB_Price();
                     self.deposit = getB_Deposit();
                 });
+=======
+>>>>>>> origin/master
             }
         },
         created: function() {
             var self = this;
-            self.refreshData();
+            $.when(__getSelf()).done(function(data){
+                self.price = getB_Price();
+                self.deposit = getB_Deposit();
+            })
+            $.when(b_getOrderByState("已完成")).done(function(data){
+                if(data.state == 0){
+                    self.orderList = data.data;
+                }
+            })
         },
         ready: function() {
-            var self = this;
-            mui.init();
-            mui.ready(function(){
-                mui("#scroll1").pullRefresh({
-                    down : {
-                        contentnomore: '没有更多记录了',
-                        callback : function(data){
-                            self.getNewestOrder();
-                        }
-                    },
-                    up: {
-                        auto: true,
-                        contentnomore: '没有更多记录了',
-                        callback : function(data){
-                            self.getMoreOrder();
-                        }
-                    }
-                });
-            });
-            window.refreshDataAndGetNewestOrder = function(){
-                self.refreshData();
-                self.getNewestOrder();
-            }
-            window.refreshData = self.refreshData;
-            window.getNewestOrder = self.getNewestOrder;
+
         }
     })
 });

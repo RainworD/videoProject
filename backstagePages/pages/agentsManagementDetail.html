@@ -10,30 +10,40 @@
 					<a href="#/agentsManagement.html" class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">返回</a>
 				</div>
 				<div style="float:right;height:30px;">
-					<a id="saveButton" href="#/agentsManagement.html" style="display: block;width: 100px;height: 30px;line-height: 28px;border: 1px solid #ccc;background-color:#3eb05b;text-align: center;border-radius: 5px;color: #fafafa;">保存</a>
+					<a id="saveButton" href="#/agentsManagement.html" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; background-color:#3eb05b; padding: 0;" id="saveButton" class="admin_ui_button admin_ui_button_green button_ submitBtn">保存</a>
 				</div>
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">邀请码：</span><span></span></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">邀请码：</span>
+					<input v-model="code_this"></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">代理商名称：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">代理商名称：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input" v-model="name_this"></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input" v-model="contact_this"></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input" v-model="phone_this"></div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 <script>
+	var id_array=window.location.hash;
+	var id_get=id_array.split("=")[1];
+
+	if(id_get){
+		var id_get=id_get.split("&")[0];
+		var id_id=id_array.split("=")[2];
+	}
+
 	// var queryData = getQueryData();
 	// if(!queryData){
 	// 	alert("查询参数错误，为您自动跳转至列表页");
@@ -98,44 +108,63 @@
 	}
 	$("#tinymce").show();
 	editor.render();
-	
+	//
 
+	var vm = new Tvm({
+		el: '.admin_ui_cont',
+		data:{
+			name_this:"",
+			code_this:"",
+			contact_this:"",
+			phone_this:"",
+			bus_type:0,
+		},
+		computed: {
+		},
+		mounted: function(){
+			var self = this;
+			if(id_get){
+				self.name_this = id_get;
+				$.when(getBusiness_c(id_get)).done(function(data){
+					if(data.state == 0){	
+						if(data.data.length){
+							self.bus_type = 0;
+							self.code_this = data.data[0].code;
+							self.contact_this = data.data[0].contact;
+							self.phone_this = data.data[0].phone;
+						}
+					}
+				});	
+				$.when(getSubBusiness_c(id_get)).done(function(data){	
+					if(data.state == 0){
+						if(data.data.length){
+							self.bus_type = 1;
+							self.code_this = data.data[0].code;
+							self.contact_this = data.data[0].contact;
+							self.phone_this = data.data[0].phone;
+						}
+					}
+				});	
 
-	$("#saveButton").bind('click',function(data){
-		var text = $(".admin_ui_input");
-		var name = text[0].value;
-		var contact = text[1].value;
-		var phone = text[2].value;
-		var code="B001";
-		var competence="代理商管理员";
+			}
 
-		$.when(editBusiness(code,name,contact,phone,competence)).done(function(data){	
-		});
-
-		
-	
-		// if(id){
-		// 	$.when(editArticle(id,title,text,label,top)).done(function(data){
-		// 		if(data.state==0){
-		// 			alert("修改成功！");
-		// 		}
-		// 		else{
-		// 			alert("操作失败！")
-		// 		}
-		// 	})	
-		// }
-		// else{
-		// 	$.when(sendArticle(title,text,label,top)).done(function(data){
-		// 		if(data.state==0){
-		// 			alert("新增成功！");
-		// 		}
-		// 		else{
-		// 			alert("操作失败！")
-		// 		}
-		// 	})	
-		// }	
+			$("#saveButton").bind('click',function(data){
+				var text = $(".admin_ui_input");
+				var name = text[0].value;
+				var contact = text[1].value;
+				var phone = text[2].value;
+				var competence="代理商管理员";
+				if(self.bus_type ==0){
+					$.when(editBusiness_c(id_id,self.code_this,name,contact,phone,competence)).done(function(data){	
+					});
+				}
+				else{
+					$.when(editSubBusiness_c(id_id,self.code_this,name,contact,phone,competence)).done(function(data){	
+					});
+				}
+			});
+		},
 	});
-
 
 
 </script>

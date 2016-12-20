@@ -208,6 +208,7 @@
     $(".file_").on("change", function(e){
         type_arr=[];
         var file = e.target.files; //获取图片资源
+        console.log(file);
         for(var i=0; i< file.length; i++){
             var type=file[i] .type;
             type_arr.push(type);  

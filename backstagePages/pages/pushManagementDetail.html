@@ -29,6 +29,7 @@
 				</div>
 				<!-- <div class="admin_ui_cont"> -->
 				<textarea id="editor1"></textarea>
+				<input type="file" name="" class="file_" id="my_form" style="display:none;">
 				<!-- </div> -->
 			</div>
 		</div>
@@ -42,30 +43,8 @@
 	</div>
 </div>
 <script>
-	function getEditorContent(){
-		return editor.getContent();
-	}
-	// 设置编辑器内容
-	function setEditorContent(html){
-		editor.setContent(html);
-	}
-	// 往编辑器中插入内容
-	function insertContentToEditor(html){
-		editor.insertContent(html);
-	}
-	// 设置 "design", "code" or "readonly"
-	function setEditorMode(mode){
-		editor.setMode(mode);
-	}
-	function getBase64Image(img) {
-	    var canvas = document.createElement("canvas");
-	    canvas.width = img.width;
-	    canvas.height = img.height;
-	    var ctx = canvas.getContext("2d");
-	    ctx.drawImage(img, 0, 0, img.width, img.height);
-	    var dataURL = canvas.toDataURL("image/png");
-	    return dataURL;
-	}
+	var type_arr=[];
+	var photo_arr=[];
 	var editor =  new tinymce.Editor('editor1', {
 		selector: '#editor1',
 	    height: 500,
@@ -83,7 +62,6 @@
 	    },
 	    fontsize_formats: "12px 14px 18px 24px 36px 48px 60px 72px 84px 96px 108px 120px",
 		image_advtab: true,
-		image_upload: true,
 		relative_url: false,
 		templates: [
 		    { title: 'Test template 1', content: 'Test 1' },
@@ -91,7 +69,58 @@
 		],
 		content_css: [
 		    '../source/css/tinymce.css'
-		]
+		],
+		file_browser_callback: function(field_name, url, type, win) {
+	    	if(type=='image') 
+			{
+				$('#my_form').click();
+				$("#my_form").on("change", function(e){
+			        type_arr=[];
+			        var file = e.target.files; //获取图片资源
+			        console.log(file.length);
+			        for(var i=0; i< file.length; i++){
+			            var type=file[i] .type;
+			            console.log(type);
+			            type_arr.push(type);  
+			        }
+			        if(type_arr.length){
+			            for(var i=0;i<type_arr.length;i++){
+			                $.when(getImgUrl(type_arr[i])).done(function(data){
+			                    if(data.state==0){
+			                        var data=data.data;
+			                        OSSAccessKeyId=data.OSSAccessKeyId;
+			                        Signature=data.Signature;
+			                        callback=data.callback;
+			                        key=data.key;
+			                        policy=data.policy;
+			                    }
+			                    var picFileList = $("#my_form").get(0).files;
+			                    // var picFileList = $("#pic")[0].files;验证是否可行
+			                    var formData = new FormData();
+			                    for(var i=0; i< picFileList.length; i++){
+			                        formData.append("OSSAccessKeyId",OSSAccessKeyId);
+			                        formData.append("Signature",Signature);
+			                        formData.append("callback",callback);
+			                        formData.append("key",key);
+			                        formData.append("policy",policy);
+			                        formData.append("file",picFileList[i]);
+			                        $.when(uploadImg(formData)).done(function(data){
+			                            // $('.button_2').attr("href","#/pushSelect.html?id="+data.id);
+			                            if(data.state==0){
+			                                photo_arr.push(data.id);
+			                                win.document.getElementById(field_name).value = '/resources/'+data.id;
+			                                console.log(photo_arr);
+			                            }            
+			                        })
+			                    }
+			                    // formData.append('file', $('#file')[0].files[0]);
+			                })
+			            }
+			        } 
+			    });
+			};
+
+	  	},
 	}, tinymce.EditorManager);
 
 	
@@ -130,7 +159,17 @@
 					var id_=business[i].id;
 					$("#"+id_).prop("checked",true);
 				}
-				editor.setContent(data.text);
+				// editor.on('init', function() {
+			 //        editor.setContent(data.text);
+			 //    });
+			    try {
+		            editor.setContent(data.text);
+		        }
+		        catch(ex){
+		           editor.on('init', function() {
+				        editor.setContent(data.text);
+				    });
+		        }
 			}
 		});
 	}
@@ -139,10 +178,21 @@
 	}
 	$("#saveButton").bind('click',function(){
 		// var text = $(editor.getContent());
+		var business=[];
 		var text = editor.getContent();
 		var title=$(".ar-title").val();
-		var business = $("input[name='label']:checked").attr("id");
+<<<<<<< HEAD
+		var business_ = $("input[name='label']:checked");
+		for (var i=0;i<business_.length;i++) {
+			business.push(business_.eq(i).attr("id"));
+
+		}
+		console.log(business);
 		console.log(text);
+=======
+		var business = $("input[name='label']:checked").attr("id");
+		console.log(business);
+>>>>>>> origin/master
 		$.when(sendMessage(title,text,business)).done(function(data){
 			if(data.state == 0){
 				alert("新增成功！");
