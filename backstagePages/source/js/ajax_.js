@@ -64,7 +64,10 @@ function getLabel_c(){//获得标签列表
 }
 function getRecommend_c(){//获得标签列表
 	var ajax = $.ajax({
-		url: baseUrl+ "/model/get/Recommend",
+		url: baseUrl+ "/model/get/User",
+		data:{
+			competence:"一般管理员",
+		},
 		type: "POST",
 		success: successHandle,
 		error: errorHandle
@@ -435,7 +438,18 @@ function getBusiness_c(name){
 	});
 	return ajax;
 }
-
+function getSubBusiness_c(name){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/SubBusiness",
+		type: "POST",
+		data:{
+			name:name,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
 function getSubBusiness(){//获得代理商列表
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/SubBusiness",
@@ -475,6 +489,7 @@ function getSubBusinessByBusid(id){//获得代理商列表
 	return ajax;
 }
 
+
 function editBusiness_c(id,code,name,contact,phone,competence){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/Business",
@@ -486,6 +501,21 @@ function editBusiness_c(id,code,name,contact,phone,competence){
 			contact:contact,
 			phone:phone,
 			competence:competence
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function editSubBusiness_c(id,code,name,contact,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/SubBusiness",
+		type: "POST",
+		data:{
+			add_:"user",
+			id:id,
+			code:code,
+			
 		},
 		success: successHandle,
 		error: errorHandle
