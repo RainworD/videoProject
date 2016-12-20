@@ -40,12 +40,12 @@
             <div class="mui-scroll">
                 <ul class="mui-table-view">
                     <li class="mui-table-view-cell" v-for="announce in announces">
-                        <a href="{{'message_detail.html?'+encodeObj({'id':announce.id,'title':title})}}">
+                        <a @tap="goDetail(announce.id)">
                             <img :src="images[title]" class="mui-media-object mui-pull-left head-img icon-img">
                             <div class="mui-media-body">
                                 <div class="unread" v-if="!announce.reading"></div>
-                                {{announce.title}}
-                                <p class="mui-ellipsis" v-html="announce.text"></p>
+                                {{announce.title||announce.type}}
+                                <p class="mui-ellipsis">{{announce.text|textify}}</p>
                                 <div class="timeShow">
                                     {{stamp2formatTime2(announce.in_time)}}
                                 </div>
@@ -81,6 +81,10 @@ $(function() {
             dynamicListStart: 0
         },
         methods: {
+            goDetail: function(announceId){
+                var self = this;
+                window.location.href = 'message_detail.html?'+encodeObj({'id':announceId,'title':self.title});
+            },
             getNewestDynamic: function () {
                 var self = this;
                 self.dynamicListStart = 0;

@@ -51,6 +51,8 @@
 - aboutus.html
 	- 将会收到页面跳转通知
 
+- message.html
+	- 在页面加载完成后调用方法`reloadMessage(title,text,in_time,unread)`传入异常警告的各个参数
 
 
 

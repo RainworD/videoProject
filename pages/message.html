@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>系统消息</title>
+    <title>b和c的系统消息</title>
     <link rel="stylesheet" href="../source/mui/css/mui.css">
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
@@ -33,12 +33,12 @@
 <body>
     <div class="mui-content messageShowBox">
         <ul class="mui-table-view">
-            <li class="mui-table-view-cell mui-media" v-for="announce in announces">
+            <li class="mui-table-view-cell mui-media" v-for="announce in announces" v-show="announce.text !=''">
                 <a class="mui-navigate-right" href="{{'message_center.html?'+encodeObj({'title':announce.title})}}">
                     <img :src="announce.image" class="mui-media-object mui-pull-left head-img icon-img">
                     <div class="mui-media-body">
                         {{announce.title}}
-                        <p class="mui-ellipsis" v-html="announce.text"></p>
+                        <p class="mui-ellipsis">{{announce.text | textify}}</p>
                     </div>
                     <span class="mui-badge mui-badge-danger" v-if="announce.unread>0">{{announce.unread}}</span>
                 </a>
@@ -48,52 +48,40 @@
 </body>
 <script>
 var dataListB = [{
-    image: "../source/img/warning.png",
-    title: "异常警告",
-    text: "设备发生...",
-    in_time: 0,
-    unread: 0
-},{
     image: "../source/img/register.png",
     title: "注册通知",
-    text: "设备发生...",
+    text: "暂无消息",
     in_time: 0,
     unread: 0
 },{
     image: "../source/img/system.png",
     title: "系统通告",
-    text: "设备发生...",
+    text: "暂无消息",
     in_time: 0,
     unread: 0
 },{
     image: "../source/img/drawCash.png",
     title: "提现通知",
-    text: "设备发生...",
+    text: "暂无消息",
     in_time: 0,
     unread: 0
 },{
     image: "../source/img/addCash.png",
     title: "充值通知",
-    text: "设备发生...",
+    text: "暂无消息",
     in_time: 0,
     unread: 0
 },{
     image: "../source/img/deadline.png",
     title: "设备到期",
-    text: "设备发生...",
+    text: "暂无消息",
     in_time: 0,
     unread: 0
 }];
 var dataListC = [{
-    image: "../source/img/warning.png",
-    title: "异常警告",
-    text: "设备发生...",
-    in_time: 0,
-    unread: 0
-},{
     image: "../source/img/system.png",
     title: "系统通告",
-    text: "设备发生...",
+    text: "暂无消息",
     in_time: 0,
     unread: 0
 }];
@@ -108,50 +96,88 @@ $(function() {
             
         },
         methods: {
+            getNewestAbnormalAnnounce: function(title,text,in_time,unread){
+                var aa = {
+                    image: "../source/img/warning.png",
+                    title: title?title:"异常警告",
+                    text: text?text:"暂无消息",
+                    in_time: in_time?in_time:0,
+                    unread: unread?unread:0
+                };
+                return aa;
+            },
+            getUnreadAndCount: function(object){
+                var def1, def2;
+                if(object.title == "系统通告"){
+                    def1 = getAnnounceUnread();
+                    def2 = getAnnounceUnreadCount();
+                }
+                else{
+                    def1 = getMessageUnread(object.title);
+                    def2 = getMessageUnreadCount(object.title);
+                }
+                return Promise.resolve(def1).then(function(data1){
+                    if(data1.data && data1.data[0]){
+                        object.text = data1.data[0].text;
+                    }
+                    return Promise.resolve(def2);
+                }).then(function(data2){
+                    object.unread = data2.data || 0;
+                    return Promise.resolve(object);
+                });
+            },
+            reloadMessage: function(title,text,in_time,unread){
+                var self = this;
+                self.announces = (getUser_Type() === "b")?dataListB:dataListC;
+                self.announces.push(self.getNewestAbnormalAnnounce(title,text,in_time,unread));
+
+                var ajaxlist = [];
+                // 创建异步队列
+                for(var index in self.announces){
+                    if(self.announces[index].title === "异常警告"){}
+                    else{
+                        ajaxlist.push(self.getUnreadAndCount(self.announces[index]));
+                    }
+                    Promise.all(ajaxlist).then(function(results){
+                        
+                    })
+                }
+                // for(var i in self.announces){
+                //     let index = i;
+                //     if(self.announces[index].title === "异常警告"){}
+                //     else if(self.announces[index].title === "系统通告"){
+                //         $.when(getAnnounceUnread()).done(function(data){
+                //             if(data.data){
+                //                 var newDatas = data.data;
+                //                 if(newDatas.length != 0){
+                //                     self.announces[index].text = newDatas[0].text;
+                //                 }
+                //             }
+                //         })
+                //         // 计数
+                //         $.when(getAnnounceUnreadCount()).done(function(data){
+                //             self.announces[index].unread = data.data;
+                //         })
+                //     }
+                //     else{
+                //         $.when(getMessageUnread(self.announces[index].title)).done(function(data){
+                //             if(data.data && data.data.length >= 1){
+                //                 self.announces[index].text = data.data[0].text;
+                //             }
+                //         })
+                //         // 计数
+                //         $.when(getMessageUnreadCount(self.announces[index].title)).done(function(data){
+                //             self.announces[index].unread = data.data;
+                //         })
+                //     }
+                // }
+            }
         },
         created: function() {
             var self = this;
-            self.announces = (getUser_Type() === "b")?dataListB:dataListC;
-            for(var i in self.announces){
-                let index = i;
-                if(self.announces[index].title === "系统通告"){
-                    $.when(getAnnounceUnread()).done(function(data){
-                        if(data.data){
-                            var newDatas = data.data;
-                            if(newDatas.length != 0){
-                                self.announces[index].text = newDatas[0].text;
-                            }
-                        }
-                    })
-                    $.when(getAnnounceUnreadCount()).done(function(data){
-                        self.announces[index].unread = data.data;
-                    })
-                }
-                // else if(self.announces[index].title === "动态更新"){
-                //     $.when(getDynamicUnread()).done(function(data){
-                //         if(data.data){
-                //             var newDatas = data.data;
-                //             if(newDatas.length != 0){
-                //                 self.announces[index].text = newDatas[0].text;
-                //             }
-                //         }
-                //     })
-                //     $.when(getDynamicUnreadCount()).done(function(data){
-                //         self.announces[index].unread = data.data;
-                //     })
-                // }
-                else{
-                    $.when(getMessageUnread(self.announces[index].title)).done(function(data){
-                        if(data.data && data.data.length >= 1){
-                            self.announces[index].text = data.data[0].text;
-                        }
-                    })
-                    $.when(getMessageUnreadCount(self.announces[index].title)).done(function(data){
-                        self.announces[index].unread = data.data;
-                    })
-                }
-            }
-
+        },
+        ready: function(){
+            window.reloadMessage = this.reloadMessage;
         }
     })
 });

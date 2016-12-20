@@ -138,6 +138,10 @@ var Vue = Vue.extend({
         }
     }
 });
+Vue.filter('textify', function (value) {
+    if (!value) return ''
+    return $('<div>'+value+'</div>').text();
+});
 function cclear(){
     window.localStorage.clear();
 }
