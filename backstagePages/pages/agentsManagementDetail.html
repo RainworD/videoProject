@@ -15,25 +15,34 @@
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">邀请码：</span><span></span></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">邀请码：</span>
+					<input v-model="code_this"></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">代理商名称：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">代理商名称：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input" v-model="name_this"></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input" v-model="contact_this"></div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input"></div>
+					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input style="width: 88%;height: 30px;padding:0 10px" type="" name="" class="admin_ui_input" v-model="phone_this"></div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 <script>
+	var id_array=window.location.hash;
+	var id_get=id_array.split("=")[1];
+	if(id_get){
+		var id_get=id_get.split("&")[0];
+		var id_id=id_array.split("=")[2];
+	}
+
 	// var queryData = getQueryData();
 	// if(!queryData){
 	// 	alert("查询参数错误，为您自动跳转至列表页");
@@ -98,44 +107,44 @@
 	}
 	$("#tinymce").show();
 	editor.render();
-	
+	//
 
+	var vm = new Tvm({
+		el: '.admin_ui_cont',
+		data:{
+			name_this:"",
+			code_this:"",
+			contact_this:"",
+			phone_this:"",
+		},
+		computed: {
+		},
+		mounted: function(){
+			var self = this;
+			if(id_get){
+				self.name_this = id_get;
+				$.when(getBusiness_c(id_get)).done(function(data){	
+					self.code_this = data.data[0].code;
+					self.contact_this = data.data[0].contact;
+					self.phone_this = data.data[0].phone;
+				});	
 
-	$("#saveButton").bind('click',function(data){
-		var text = $(".admin_ui_input");
-		var name = text[0].value;
-		var contact = text[1].value;
-		var phone = text[2].value;
-		var code="B001";
-		var competence="代理商管理员";
+			}
 
-		$.when(editBusiness(code,name,contact,phone,competence)).done(function(data){	
-		});
+			$("#saveButton").bind('click',function(data){
+				var text = $(".admin_ui_input");
+				var name = text[0].value;
+				var contact = text[1].value;
+				var phone = text[2].value;
+				var competence="代理商管理员";
+				var code = self.code_this;
 
-		
-	
-		// if(id){
-		// 	$.when(editArticle(id,title,text,label,top)).done(function(data){
-		// 		if(data.state==0){
-		// 			alert("修改成功！");
-		// 		}
-		// 		else{
-		// 			alert("操作失败！")
-		// 		}
-		// 	})	
-		// }
-		// else{
-		// 	$.when(sendArticle(title,text,label,top)).done(function(data){
-		// 		if(data.state==0){
-		// 			alert("新增成功！");
-		// 		}
-		// 		else{
-		// 			alert("操作失败！")
-		// 		}
-		// 	})	
-		// }	
+				$.when(editBusiness_c(id_id,code,name,contact,phone,competence)).done(function(data){	
+				});
+			
+			});
+		},
 	});
-
 
 
 </script>

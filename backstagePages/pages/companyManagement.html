@@ -38,7 +38,7 @@
 						<td>{{show.label?show.label.name:""}}</td>
 						<!-- <td>{{show.label.name}}</td> -->
 						<td class="admin_ui_table_action">
-							<a :href="getUrl(show.business.name)" class="iconButton checkIcon">
+							<a :href="getUrl(show.business.name,show.id)" class="iconButton checkIcon">
 								<i class="fa fa-pencil"></i>
 								编辑
 							</a>
@@ -71,8 +71,8 @@ var vm = new Tvm({
 	computed: {
 	},
 	methods: {
-		getUrl:function(val){
-			return '#/companyManagementDetail.html?bus='+val;
+		getUrl:function(val1,val2){
+			return '#/companyManagementDetail.html?bus='+val1+'&id='+val2;
 		},
 		search: function(){
 			var self = this;

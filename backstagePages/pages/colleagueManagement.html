@@ -32,10 +32,10 @@
 						<td>{{show.id}}</td>
 						<td>{{show.name}}</td>
 						<td>{{show.code}}</td>
-						<td>{{show.company.name}}</td>
-						<td>{{show.company.code}}</td>
-						<td>{{show.company.contact}}</td>	
-						<td>{{show.company.phone}}</td>
+						<td>{{show.company?show.company.name:""}}</td>
+						<td>{{show.company?show.company.code:""}}</td>
+						<td>{{show.company?show.company.contact:""}}</td>	
+						<td>{{show.company?show.company.phone:""}}</td>
 						
 						<td class="admin_ui_table_action">
 							<div class="iconButton removeIcon" @click="removeWebsite($index)">

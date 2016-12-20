@@ -53,13 +53,19 @@ function getLabel(){//获得标签列表
 	});
 	return ajax;
 }
-function editLabel(name){//获得标签列表
+function getLabel_c(){//获得标签列表
 	var ajax = $.ajax({
-		url: baseUrl + "/model/get/Label",
+		url: baseUrl+ "/model/get/Label",
 		type: "POST",
-		data:{
-			name: name,
-		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getRecommend_c(){//获得标签列表
+	var ajax = $.ajax({
+		url: baseUrl+ "/model/get/Recommend",
+		type: "POST",
 		success: successHandle,
 		error: errorHandle
 	});
@@ -417,6 +423,19 @@ function getBusiness(name){
 	return ajax;
 }
 
+function getBusiness_c(name){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Business",
+		type: "POST",
+		data:{
+			name:name,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
 function getSubBusiness(){//获得代理商列表
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/SubBusiness",
@@ -429,11 +448,39 @@ function getSubBusiness(){//获得代理商列表
 	return ajax;
 }
 
-function editBusiness(code,name,contact,phone,competence){
+function getSubBusiness_c(){//获得代理商列表
 	var ajax = $.ajax({
-		url: baseUrl+"/model/save/Register",
+		url: baseUrl+"/model/get/SubBusiness",
 		type: "POST",
 		data:{
+			add_:'user',
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+function getSubBusinessByBusid(id){//获得代理商列表
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/SubBusiness",
+		type: "POST",
+		data:{
+			business: id,
+			"add_":["business","user"]
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+function editBusiness_c(id,code,name,contact,phone,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Business",
+		type: "POST",
+		data:{
+			id:id,
 			code:code,
 			name:name,
 			contact:contact,
@@ -447,19 +494,17 @@ function editBusiness(code,name,contact,phone,competence){
 }
 
 
-function editCompany(code,name,contact,phone,competence,business,subBusiness){
+function editCompany_c(id,code,name,contact,phone,label){
 	var ajax = $.ajax({
-		url: baseUrl+"/model/save/Register",
+		url: baseUrl+"/model/save/Company",
 		type: "POST",
 		data:{
+			id:id,
 			code:code,
 			name:name,
 			contact:contact,
 			phone:phone,
-			competence:competence,
-			business:business,
-			subBusiness:subBusiness,
-			
+			label:label,
 		},
 		success: successHandle,
 		error: errorHandle
@@ -481,15 +526,12 @@ function getCompany(id){//
 }
 
 
-
-
-
-
 function getUser(){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/User",
 		type: "POST",
 		data:{
+			add_:'company',
 		},
 		success: successHandle,
 		error: errorHandle
@@ -503,6 +545,7 @@ function getUserInfo(){
 		traditional:true,
 		data:{
 			competence:["一般管理员","财务管理员"],
+
 		},
 		success: successHandle,
 		error: errorHandle
