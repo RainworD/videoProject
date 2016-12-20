@@ -53,15 +53,7 @@ function getLabel(){//获得标签列表
 	});
 	return ajax;
 }
-function getBusiness(){//获得代理商列表
-	var ajax = $.ajax({
-		url:"/model/get/Business",
-		type: "POST",
-		success: successHandle,
-		error: errorHandle
-	});
-	return ajax;
-}
+
 function sendMessage(title,text,business){//获得代理商列表
 	var ajax = $.ajax({
 		url:"/model/save/Announce",
@@ -191,19 +183,7 @@ function editUserState(id,enable){
 	});
 	return ajax;
 }
-function getUserInfo(competence){
-	var ajax = $.ajax({
-		url: "/model/get/User",
-		type: "POST",
-		traditional:true,
-		data:{
-			competence:competence,
-		},
-		success: successHandle,
-		error: errorHandle
-	});
-	return ajax;
-}
+
 function deleteLabel(id){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/delete/Label",
@@ -337,7 +317,7 @@ function getDevice(){//获得设备列表
 	});
 	return ajax;
 }
-function deleteDevice(id){//获得设备列表
+function deleteDevice(id){//
 	var ajax = $.ajax({
 		url: "/model/delete/Device?id"+id,
 		type: "POST",
@@ -368,6 +348,17 @@ function unbindDevice(id){//获得设备列表
 	});
 	return ajax;
 }
+function bindDevice(id,business){//获得设备列表
+	var ajax = $.ajax({
+		url: "/device/admin/bind",
+		type: "POST",
+		data:{
+			id:id,
+			business:business,
+		}
+	});
+	return ajax;
+}
 function addDevice(code,number){//获得设备列表
 	var ajax = $.ajax({
 		url: "/model/save/Device",
@@ -379,16 +370,121 @@ function addDevice(code,number){//获得设备列表
 	});
 	return ajax;
 }
-function getDynamic(){//获得设备列表
+function getDynamic(){//
 	var ajax = $.ajax({
-		url: "/model/get/Dynamic?add_=user.company.business&add_=user&add_=user.company",
+		url: "/model/get/Dynamic",
 		type: "POST",
 		data:{
+			add_:['user.company.business','user','user.company'],
+			order_:'id desc',
 		}
 	});
 	return ajax;
 }
-function deleteDynamic(id){//获得设备列表
+function getBusiness(){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Business",
+		type: "POST",
+		data:{
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+function getSubBusiness(){//获得代理商列表
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/SubBusiness",
+		type: "POST",
+		data:{
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+function editBusiness(code,name,contact,phone,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			competence:competence
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+
+function editCompany(code,name,contact,phone,competence,business,subBusiness,label){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			competence:competence,
+			business:business,
+			subBusiness:subBusiness,
+			label:label
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+function getCompany(){//
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Company?add_=business&add_=label",
+		type: "POST",
+		data:{
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+
+
+
+
+
+
+function getUser(){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/User",
+		type: "POST",
+		data:{
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getUserInfo(){
+	var ajax = $.ajax({
+		url: "/model/get/User",
+		type: "POST",
+		traditional:true,
+		data:{
+			competence:["一般管理员","财务管理员"],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function deleteDynamic(id){//删除设备列表
 	var ajax = $.ajax({
 		url: "/model/delete/Dynamic?id="+id,
 		type: "POST",
@@ -399,9 +495,11 @@ function deleteDynamic(id){//获得设备列表
 }
 function getComments(){//获得评论列表
 	var ajax = $.ajax({
-		url: "/model/get/Comment?add_=dynamic&add_=user.company.business&add_=user&add_=user.company",
+		url: "/model/get/Comment",
 		type: "POST",
 		data:{
+			add_:['user.company.business','user','user.company','dynamic'],
+			order_:'id desc',
 		}
 	});
 	return ajax;
@@ -553,26 +651,6 @@ function getTodayStatistics(){
     })
     return ajax;
 }
-function getMoreStatistics(){
-	var ajax=$.ajax({
-        url: '/model/get/Statistics',
-        type: 'POST',
-       	data:{
-       		order_:'id desc'
-       	}
-    })
-    return ajax;
-}
-function getCarousel(){
-	var ajax=$.ajax({
-        url: '/model/get/Carousel',
-        type: 'POST',
-       	data:{
-       		add_:['photo','announce']
-       	}
-    })
-    return ajax;
-}
 function deleteCarousel(id){//删除轮播图
 	var ajax=$.ajax({
         url: '/model/delete/Carousel',
@@ -653,6 +731,25 @@ function setAboutus_2(flag_2,title_2,content_2){//设置关于我们
        		flag_2:flag_2,
        		title_2:title_2,
        		content_2:content_2,
+       	}
+    })
+    return ajax;
+}function getMoreStatistics(){
+	var ajax=$.ajax({
+        url: '/model/get/Statistics',
+        type: 'POST',
+       	data:{
+       		order_:'id desc'
+       	}
+    })
+    return ajax;
+}
+function getCarousel(){
+	var ajax=$.ajax({
+        url: '/model/get/Carousel',
+        type: 'POST',
+       	data:{
+       		add_:['photo','announce']
        	}
     })
     return ajax;
