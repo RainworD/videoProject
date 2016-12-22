@@ -34,7 +34,7 @@
                         <a class="mui-btn mui-btn-red" v-else>停用</a>
                     </div>
                     <a class="mui-slider-handle mui-navigate-right" @tap="goDetail(company.id);">
-                        <span>{{company.name}}</span>
+                        <span class="mui-h5">{{company.name}}</span>
                         <span class="colorred" v-if="!company.enable">(停用)</span>
                         <span class="mui-pull-right color9">{{getAvailableDeviceLength(company.device)}}/{{company.device.length}}</span>
                     </a>
@@ -85,7 +85,20 @@ $(function() {
                     self.datalist = data.data;
                 }
             })
-        }
+        },
+        ready: function () {
+            var self = this;            
+            mui.init();
+            mui.ready(function(){
+                mui("#scroll").pullRefresh({
+                    down : {
+                        callback : function(data){
+                            self.getNewest();
+                        }
+                    }
+                });
+            });
+        } 
     })
 });
 </script>

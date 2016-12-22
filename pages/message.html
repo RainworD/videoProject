@@ -48,6 +48,12 @@
 </body>
 <script>
 var dataListB = [{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "暂无消息",
+    in_time: 0,
+    unread: 0
+},{
     image: "../source/img/register.png",
     title: "注册通知",
     text: "暂无消息",
@@ -79,6 +85,12 @@ var dataListB = [{
     unread: 0
 }];
 var dataListC = [{
+    image: "../source/img/warning.png",
+    title: "异常警告",
+    text: "暂无消息",
+    in_time: 0,
+    unread: 0
+},{
     image: "../source/img/system.png",
     title: "系统通告",
     text: "暂无消息",
@@ -90,7 +102,8 @@ $(function() {
     var vm = new Vue({
         el: "body",
         data: {
-            announces: []
+            announces: [],
+            unread_total: 0
         },
         computed: {
             
@@ -108,9 +121,14 @@ $(function() {
             },
             getUnreadAndCount: function(object){
                 var def1, def2;
+                var self = this;
                 if(object.title == "系统通告"){
                     def1 = getAnnounceUnread();
                     def2 = getAnnounceUnreadCount();
+                }
+                else if(object.title == "异常警告"){
+                    def1 = getWarningUnread();
+                    def2 = getWarningUnreadCount();
                 }
                 else{
                     def1 = getMessageUnread(object.title);
@@ -118,59 +136,33 @@ $(function() {
                 }
                 return Promise.resolve(def1).then(function(data1){
                     if(data1.data && data1.data[0]){
-                        object.text = data1.data[0].text;
+                        if(object.title != "异常警告"){
+                            object.text = data1.data[0].text;
+                        }
+                        else{
+                            object.text = "设备号:"+data1.data[0].device_code+"发现异常";
+                        }
                     }
                     return Promise.resolve(def2);
                 }).then(function(data2){
                     object.unread = data2.data || 0;
+                    self.unread_total += object.unread;
                     return Promise.resolve(object);
                 });
             },
             reloadMessage: function(title,text,in_time,unread){
                 var self = this;
                 self.announces = (getUser_Type() === "b")?dataListB:dataListC;
-                self.announces.push(self.getNewestAbnormalAnnounce(title,text,in_time,unread));
-
                 var ajaxlist = [];
                 // 创建异步队列
                 for(var index in self.announces){
-                    if(self.announces[index].title === "异常警告"){}
-                    else{
-                        ajaxlist.push(self.getUnreadAndCount(self.announces[index]));
-                    }
-                    Promise.all(ajaxlist).then(function(results){
-                        
-                    })
+                    ajaxlist.push(self.getUnreadAndCount(self.announces[index]));
                 }
-                // for(var i in self.announces){
-                //     let index = i;
-                //     if(self.announces[index].title === "异常警告"){}
-                //     else if(self.announces[index].title === "系统通告"){
-                //         $.when(getAnnounceUnread()).done(function(data){
-                //             if(data.data){
-                //                 var newDatas = data.data;
-                //                 if(newDatas.length != 0){
-                //                     self.announces[index].text = newDatas[0].text;
-                //                 }
-                //             }
-                //         })
-                //         // 计数
-                //         $.when(getAnnounceUnreadCount()).done(function(data){
-                //             self.announces[index].unread = data.data;
-                //         })
-                //     }
-                //     else{
-                //         $.when(getMessageUnread(self.announces[index].title)).done(function(data){
-                //             if(data.data && data.data.length >= 1){
-                //                 self.announces[index].text = data.data[0].text;
-                //             }
-                //         })
-                //         // 计数
-                //         $.when(getMessageUnreadCount(self.announces[index].title)).done(function(data){
-                //             self.announces[index].unread = data.data;
-                //         })
-                //     }
-                // }
+                Promise.all(ajaxlist).then(function(results){
+                    window.location.href="object:"+encodeObj({
+                        "newMessageNumber": self.unread_total
+                    });
+                })
             }
         },
         created: function() {

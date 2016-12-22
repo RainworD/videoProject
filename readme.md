@@ -52,9 +52,22 @@
 	- 将会收到页面跳转通知
 
 - message.html
-	- 在页面加载完成后调用方法`reloadMessage(title,text,in_time,unread)`传入异常警告的各个参数
+	- 在页面加载完成后或刷新页面数据调用方法`reloadMessage()`
+	- 会收到object:%7B%22newMessageNumber%22%3A192%7D，即得到未读总量
 
-
+/*下面这段不要了
+- message_center.html
+	会收到`h5action:getWarningFixedLength_{{start}}_{{length}}`，start表示开始第几条，length表示多少条，把数据整合成以下格式
+`{
+	"data":[
+		{"in_time":1482225047205,"reading":true,"id":22,"text":"<p>123</p>","title":"新增test"},
+		{"in_time":1481964564591,"reading":true,"id":21,"text":"<p>123<img src=\"../../resources/685\" alt=\"\" width=\"1600\" height=\"1280\" /></p>","title":"123"}
+	],
+	"state":"0",
+	"time":1482316470349
+}`，
+然后调用`endGetWarningFixedLength(这里传入json数据)`这个方法即可
+*/
 
 
 

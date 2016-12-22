@@ -58,11 +58,15 @@ function b_getOrder(){
 	});
 	return ajax;
 }
-function b_getOrderByState(state){
+function b_getOrderByState(state,start, rows){
+	if(!start){start = 0}
+	if(!rows){rows = 20}
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/Order",
 		data:{
 			"order_": "id desc",
+			"start_": start,
+			"rows_": rows,
 			"state": state,
 			// "create_user": getUser_Id()
 		}
@@ -413,16 +417,16 @@ function postFeedback(text,contact){
 	return ajax;
 }
 // 获得某一种类型的Message
-function getTypeMessage (type) {
-	var ajax = $.ajax({
-		url: baseUrl+"/model/get/Message",
-		// url: "../announce.json",
-		data: {
-			"type" : type
-		}
-	});
-	return ajax;
-}
+// function getTypeMessage (type) {
+// 	var ajax = $.ajax({
+// 		url: baseUrl+"/model/get/Message",
+// 		// url: "../announce.json",
+// 		data: {
+// 			"type" : type
+// 		}
+// 	});
+// 	return ajax;
+// }
 //获得所有Announce
 function getAnnounce () {
 	var ajax = $.ajax({
@@ -439,7 +443,9 @@ function getAnnounceUnread () {
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Announce",
 		data:{
-			read: 0
+			read: 0,
+			rows_: 1,
+			order_: "id desc"
 		}
 	});
 	return ajax;
@@ -455,12 +461,28 @@ function getAnnounceUnreadCount (){
 	});
 	return ajax;
 }
+//获得固定长度的Announce
+function getAnnounceFixedLength (start, length){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Announce",
+		data:{
+			add_: "reading",
+			order_: "id desc",
+			start_: start,
+			rows_: length
+		}
+	});
+	return ajax;
+}
 //获得某一种类型的未读Message
 function getMessageUnread(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
-			reading: false
+			type: type,
+			reading: false,
+			rows_: 1,
+			order_: "id desc"
 		}
 	});
 	return ajax;
@@ -470,8 +492,54 @@ function getMessageUnreadCount(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
+			type: type,
 			reading: false,
 			count_: true
+		}
+	});
+	return ajax;
+}
+//获得固定长度的Message
+function getMessageFixedLength (type, start, length){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Message",
+		data:{
+			type: type,
+			order_: "id desc",
+			start_: start,
+			rows_: length
+		}
+	});
+	return ajax;
+}
+function getWarningUnread(){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Warning",
+		data:{
+			reading: false,
+			rows_: 1,
+			order_: "id desc"
+		}
+	});
+	return ajax;
+}
+function getWarningUnreadCount(){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Warning",
+		data:{
+			reading: false,
+			count_: true
+		}
+	});
+	return ajax;
+}
+function getWarningFixedLength(start, length){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Warning",
+		data:{
+			order_: "id desc",
+			start_: start,
+			rows_: length
 		}
 	});
 	return ajax;
@@ -509,6 +577,16 @@ function getDetailAnnounce (id) {
 	});
 	return ajax;
 }
+//获得某一个Warning的具体内容
+function getDetailWarning (id) {
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Warning",
+		data: {
+			"id": id
+		}
+	});
+	return ajax;
+}
 function readAnnounce(id){
 	var ajax = $.ajax({
 		url: baseUrl+"/announce/read?id="+id,
@@ -517,6 +595,15 @@ function readAnnounce(id){
 function readMessage(id){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/Message",
+		data: {
+			"id": id,
+			"reading": true
+		}
+	});
+}
+function readWarning(id){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Warning",
 		data: {
 			"id": id,
 			"reading": true

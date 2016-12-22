@@ -24,12 +24,12 @@
 </style>
 <body>
     <div class="detailBox">
-        <p class="topTitle">{{detail.title}}</p>
+        <p class="topTitle">{{title}}</p>
         <p class="date">{{stamp2formatTime(detail.in_time)}}</p>
-        <div class="para" v-html="detail.text">
-            <!-- <img src="../source/img/b.png" alt="" class="innerPic">
-            <p class="innerPara">有后台发起的内容展示展示展示...</p> -->
-            <!-- {{detail.text}} -->
+        <div class="para" v-if="title != '异常警告'" v-html="detail.text">
+        </div>
+        <div class="para" v-else>
+            设备号:{{detail.device_code}}发现异常
         </div>
     </div>
 </body>
@@ -49,6 +49,12 @@
                     self.detail = data.data[0];
                 })
                 readAnnounce (self.id);
+            }
+            else if(self.title == "异常警告"){
+                $.when(getDetailWarning (self.id)).done(function(data){
+                    self.detail = data.data[0];
+                })
+                readWarning (self.id);
             }
             else{
                 $.when(getDetailMessage (self.id)).done(function(data){

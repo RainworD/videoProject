@@ -55,14 +55,15 @@
     </div>
 </body>
 <script>
+var DATALENGTH = 20;
 $(function() {
- mui.init();
- var vm = new Vue({
+var vm = new Vue({
         el: "body",
         data: {
             price: 0,
             deposit: 0,
-            orderList: []
+            orderList: [],
+            page: 0
         },
         computed: {
 
@@ -123,15 +124,28 @@ $(function() {
             $.when(__getSelf()).done(function(data){
                 self.price = getB_Price();
                 self.deposit = getB_Deposit();
-            })
-            $.when(b_getOrderByState("已完成")).done(function(data){
-                if(data.state == 0){
-                    self.orderList = data.data;
-                }
-            })
+            });
         },
         ready: function() {
-
+            var self = this;
+            mui.init();
+            mui.ready(function(){
+                mui("#scroll1").pullRefresh({
+                    down : {
+                        contentnomore: '没有更多纪录了',
+                        callback : function(data){
+                            self.getNewestOrder();
+                        }
+                    },
+                    up: {
+                        auto: true,
+                        contentnomore: '没有更多纪录了',
+                        callback : function(data){
+                            self.getMoreOrder();
+                        }
+                    }
+                });
+            });
         }
     })
 });

@@ -44,10 +44,18 @@
                             <img :src="images[title]" class="mui-media-object mui-pull-left head-img icon-img">
                             <div class="mui-media-body">
                                 <div class="unread" v-if="!announce.reading"></div>
-                                {{announce.title||announce.type}}
-                                <p class="mui-ellipsis">{{announce.text|textify}}</p>
-                                <div class="timeShow">
+                                {{title}}
+                                <p class="mui-ellipsis" v-if="title != '异常警告'">
+                                    {{announce.text|textify}}
+                                </p>
+                                <p class="mui-ellipsis" v-else>
+                                    设备号:{{announce.device_code}}发现异常
+                                </p>
+                                <div class="timeShow" v-if="title != '异常警告'">
                                     {{stamp2formatTime2(announce.in_time)}}
+                                </div>
+                                <div class="timeShow" v-else>
+                                    {{stamp2formatTime2(announce.time)}}
                                 </div>
                             </div>
                         </a>
@@ -58,28 +66,7 @@
     </div>
 </body>
 <script>
-var dataList = [{
-    image: "../source/img/warning.png",
-    title: "异常警告",
-    text: "设备发生...",
-    in_time: 0
-},{
-    image: "../source/img/warning.png",
-    title: "异常警告",
-    text: "设备发生...",
-    in_time: 0
-},{
-    image: "../source/img/warning.png",
-    title: "异常警告",
-    text: "设备发生...",
-    in_time: 0
-},{
-    image: "../source/img/warning.png",
-    title: "异常警告",
-    text: "设备发生...",
-    in_time: 0
-}];
-
+var DATALENGTH = 20;
 $(function() {
     if(getQueryData() === ""){
         window.location.href="message.html";
@@ -94,13 +81,12 @@ $(function() {
                 "异常警告": "../source/img/warning.png",
                 "注册通知": "../source/img/register.png",
                 "系统通告": "../source/img/system.png",
-                "提现提示": "../source/img/drawCash.png",
-                "充值成功": "../source/img/addCash.png",
+                "提现通知": "../source/img/drawCash.png",
+                "充值通知": "../source/img/addCash.png",
                 "设备到期": "../source/img/deadline.png",
                 "动态更新": "../source/img/motivation_.png"
-            }
-        },
-        computed: {
+            },
+            dynamicListStart: 0
         },
         methods: {
             goDetail: function(announceId){
@@ -125,6 +111,22 @@ $(function() {
                             }
                         }                
                     });
+                }
+                else if(self.title == "异常警告"){
+                    $.when(getWarningFixedLength(self.dynamicListStart, DATALENGTH)).done(function(data){
+                        if(data.state == 0){
+                            self.announces = data.data;
+                            self.dynamicListStart += DATALENGTH;
+
+                            mui('#scroll').pullRefresh().endPulldownToRefresh();
+                            if(data.data.length < DATALENGTH){
+                                mui('#scroll').pullRefresh().endPullupToRefresh(true);
+                            }
+                            else{
+                                mui('#scroll').pullRefresh().endPullupToRefresh(false);
+                            }
+                        }
+                    })
                 }
                 // else if(self.title=="动态更新"){
                 //     $.when(getDynamicFixedLength(self.dynamicListStart,DATALENGTH)).done(function(data){
@@ -176,8 +178,8 @@ $(function() {
                         }                
                     });
                 }
-                else if(self.title=="动态更新"){
-                    $.when(getDynamicFixedLength(self.dynamicListStart,DATALENGTH)).done(function(data){
+                else if(self.title == "异常警告"){
+                    $.when(getWarningFixedLength(self.dynamicListStart,DATALENGTH)).done(function(data){
                         if(data.state == 0){
                             self.announces = self.announces.concat(data.data);
                             self.dynamicListStart += DATALENGTH;
@@ -191,6 +193,21 @@ $(function() {
                         }                
                     });
                 }
+                // else if(self.title=="动态更新"){
+                //     $.when(getDynamicFixedLength(self.dynamicListStart,DATALENGTH)).done(function(data){
+                //         if(data.state == 0){
+                //             self.announces = self.announces.concat(data.data);
+                //             self.dynamicListStart += DATALENGTH;
+
+                //             if(data.data.length < DATALENGTH){
+                //                 mui('#scroll').pullRefresh().endPullupToRefresh(true);
+                //             }
+                //             else{
+                //                 mui('#scroll').pullRefresh().endPullupToRefresh(false);
+                //             }
+                //         }                
+                //     });
+                // }
                 else{
                     $.when(getMessageFixedLength(self.title,self.dynamicListStart,DATALENGTH)).done(function(data){
                         if(data.state == 0){
@@ -208,18 +225,25 @@ $(function() {
                 }
             }
         },
-        created: function() {
-            var self = this;
-            if(self.title=="系统通告"){
-                $.when(getAnnounce ()).done(function(data){
-                    self.announces = data.data;
-                })
-            }
-            else{
-                $.when(getTypeMessage (self.title)).done(function(data){
-                    self.announces = data.data;
-                })
-            }
+        ready: function() {
+            var self = this;            
+            mui.init();
+            mui.ready(function(){
+                mui("#scroll").pullRefresh({
+                    down : {
+                        callback : function(data){
+                            self.getNewestDynamic();
+                        }
+                    },
+                    up: {
+                        auto: true,
+                        contentnomore: '没有更多消息了',
+                        callback : function(data){
+                            self.getMoreDynamic();
+                        }
+                    }
+                });
+            });
         }
     });
 });

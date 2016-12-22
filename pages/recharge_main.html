@@ -41,6 +41,7 @@
                 <span class="payPara">支付宝支付</span>
             </div>
         </div>
+        <h6 style="margin-top: 10px;" class="mui-text-center">暂不支持其他付款方式</h6>
         <p class="bottomBtn" @tap="requestPayment()">充值</p>
     </div>
 </body>
@@ -86,7 +87,7 @@ $(function() {
             },
             paySuccessCallback: function(){
                 mui.alert("","充值成功",["确认"],function(data){
-                    // mui.back();
+                    window.location.href = "backto:accountBalance.html,javascript:refreshDataAndGetNewestOrder()"
                 })
             },
             payErrorCallback: function(errorText){
