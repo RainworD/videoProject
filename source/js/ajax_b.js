@@ -801,7 +801,16 @@ function getGlobalData(key){
 	});
 	return ajax;
 }
-
+// 获得行业文章
+function getArticleById(id){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Article",
+		data: {
+			'id': id
+		}
+	});
+	return ajax;
+}
 
 
 

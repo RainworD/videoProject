@@ -57,7 +57,7 @@ $(function() {
                 else{
                     mui.confirm("您确定邀请吗？",null,null,function(result){
                         if(result.index == 1){
-                            $.when(b_addColleague(getB_Code(),self.phone)).done(function(data){
+                            $.when(b_addColleague(getUser_Code(),self.phone)).done(function(data){
                                 if(data.state == 0){
                                     mui.toast("邀请成功");
                                     self.phone = "";

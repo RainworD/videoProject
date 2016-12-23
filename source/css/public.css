@@ -157,6 +157,7 @@ h5,
 .mui-table-view .media-object-50 {
   line-height: 50px;
   max-width: 50px;
+  width: 50px;
   height: 50px;
 }
 .mui-radio input[type='radio']:checked:before,
@@ -165,6 +166,10 @@ h5,
 }
 .mui-segmented-control.mui-segmented-control-inverted {
   border-bottom: 1px solid #ddd;
+}
+.mui-table-view-cell > .mui-slider-handle.mui-navigate-right:after,
+.mui-table-view-cell > .mui-slider-handle .mui-navigate-right:after {
+  right: 10px;
 }
 body {
   background-color: #fff;

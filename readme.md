@@ -69,7 +69,8 @@
 然后调用`endGetWarningFixedLength(这里传入json数据)`这个方法即可
 */
 
-
+- article.html
+	- 调用`loadArticle(articleId)`
 
 
 
