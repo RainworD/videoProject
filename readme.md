@@ -72,7 +72,8 @@
 - article.html
 	- 调用`loadArticle(articleId)`
 
-
+- message_detail.html
+	- `getAnnounce(announceId)`调用这个刷新页面
 
 
 

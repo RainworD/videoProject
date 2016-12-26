@@ -70,7 +70,7 @@ $(function() {
                     $.when(applyWithdraw(self.account, self.value*100)).done(function(data){
                         if(data.state == 0){
                             mui.alert("客服人员将与您联系","提现成功",null,function(){
-                                window.location.href = "backto:accountBalance.html,javascript:refreshDataAndGetNewestOrder()"
+                                window.location.href = "h5action:success"
                             })
                         }
                         else if(data.state == 30004){

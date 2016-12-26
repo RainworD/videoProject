@@ -83,8 +83,10 @@ $(function() {
                 if(self.formCheck()){
                     mui.confirm("您确定新增吗？",null,null,function(data){
                         if(data.index == 1){
-                            $.when(b_registerBCompanyParent(getB_Code(),self.companyPhone,self.companyName)).done(function(data){
-                                console.log(data);
+                            $.when(b_registerBCompanyParent(getUser_Code(),self.companyPhone,self.companyName)).done(function(data){
+                                if(data.state == 0){
+                                    mui.toast("新增成功")
+                                }
                             })
                         }
                     })
@@ -97,7 +99,9 @@ $(function() {
                         if(data.index == 1){
                             // id,name,contact,phone
                             $.when(b_editCompany(self.queryData.id,self.companyName,self.companyContractName,self.companyPhone)).done(function(data){
-                                console.log(data);
+                                if(data.state == 0){
+                                    mui.toast("修改成功")
+                                }
                             })
                         }
                     })

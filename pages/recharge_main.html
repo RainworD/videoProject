@@ -87,7 +87,7 @@ $(function() {
             },
             paySuccessCallback: function(){
                 mui.alert("","充值成功",["确认"],function(data){
-                    window.location.href = "backto:accountBalance.html,javascript:refreshDataAndGetNewestOrder()"
+                    window.location.href = "h5action:success"
                 })
             },
             payErrorCallback: function(errorText){
