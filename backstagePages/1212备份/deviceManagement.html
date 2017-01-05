@@ -1,0 +1,212 @@
+<style type="text/css">
+	.button_{
+	    display: inline-block!important;
+	    min-width: 120px;
+	    height: 30px;
+	    line-height: 28px;
+	    padding: 0;
+	}
+</style>
+<div class="admin_content_innerBox" id="admin_content_innerBox">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">设备管理</span>
+		</div>	
+		<div class="admin_ui_cont">
+			<div class="admin_ui_search">
+				<div style="float:left;height:30px;">
+					<a href="#/deviceManagementDetail.html" class="admin_ui_button admin_ui_button_white button_">导入设备</a>
+				</div>
+				<div style="float:right;height:30px;">
+					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
+					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
+				</div>
+			</div>
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>设备号</th>
+						<th>状态</th>
+						<th>有效时间</th>
+						<th>所属企业</th>
+						<th>所属代理商</th>
+						<th>流量卡号</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
+					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
+						<td>{{show.id}}</td>
+						<td>{{show.code}}</td>
+						<td>{{show.business?'已绑定':'未绑定'}}</td>
+						<td>{{stamp2time(show.expire_time)}}</td>
+						<td>{{show.company?show.company.name:''}}</td>
+						<td style="width:136px;">
+							<div class="admin_ui_select">
+							<select @change="topShowButton(index)" id="selectBox" :disabled="show.business?true:false" v-if="show.business">	
+								<!-- <option v-show="show.business?true:false"></option>				 -->
+								<option v-for="(show_,index) in dataSource_business" :id="show_.id">{{show_.name?show_.name:''}}</option>
+							</select>
+							<select @change="topShowButton(index)" id="selectBox" :disabled="show.business?true:false" v-else>	
+								<option v-show="show.business?true:false"></option>				
+								<option v-for="(show_,index) in dataSource_business" :id="show_.id">{{show_.name?show_.name:''}}</option>
+							</select>
+							</div>
+						</td>
+						<td>{{show.number}}</td>
+						<td class="admin_ui_table_action">
+							<!-- <div class="iconButton checkIcon"  @click="changeUserState(show.id,index)" :data-state="show.enable">
+								<i class="fa fa-pencil"></i>
+								<span v-if="show.enable">{{state_1}}</span>
+								<span v-else>{{state_2}}</span>
+							</div> -->
+							<div class="iconButton checkIcon"  @click="show.company?changeUserState('unbind',show.id,index):changeUserState('bind',show.id,index)">
+								<i class="fa fa-pencil"></i>
+								<span>{{show.business?'解绑':'绑定'}}</span>
+							</div>
+							<div class="iconButton removeIcon" @click="deleteLabelButton(index)">
+								<i class="fa fa-remove"></i>
+								删除
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="admin_ui_pagination">
+				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+var vm = new Tvm({
+	el: '#admin_content_innerBox',
+	data:{
+		keyword: "",
+		dataSource: [],
+		dataSource_filter: [],
+		pageIndex: 1,
+		// state_1:"解绑",
+		// state_2:"绑定",
+		// state:"",
+		dataSource_business:[],
+	},
+	computed: {
+	},
+	methods: {
+		search: function(){
+			var self = this;
+			self.dataSource_filter = [];
+			for(index in self.dataSource){
+				var _data = self.dataSource[index];
+				if(self.isContainKeyword([_data.code],self.keyword)){
+					self.dataSource_filter.push(_data);
+				}
+			}
+			self.refreshTable();
+		},
+		isContainKeyword: function(arr,keyword){
+			for(index in arr){
+				if(typeof arr[index] == "undefined"){
+					arr[index]="";
+				}
+				if(typeof arr[index] != "string"){
+					arr[index] = arr[index]+"";
+				}
+				if(arr[index].search(keyword)>=0){
+					return true;
+				}
+			}
+			return false;
+		},
+		refreshTable: function(){
+			var self = this;
+			$('.M-box').pagination({
+				totalData: self.dataSource_filter.length,
+			    showData: 10,
+			    current: self.pageIndex,
+			    count:3,
+			    jump:true,
+				coping:true,
+				prevContent:'<i class="fa fa-angle-left"></i>',		//上一页内容
+				nextContent:'<i class="fa fa-angle-right"></i>',		//下一页内容
+			    callback:function(index){
+			        self.pageIndex = index;
+			    }
+			});
+		},
+		topShowButton: function(index){
+			var self = this;
+			var showId = self.dataSource_filter[index].id,
+				// value = self.dataSource_filter[index].business.name;
+				value=$(".selectBox").val();
+			if(value){
+				$.when(bindDevice(showId,value)).done(function(data){
+					if(data.state == 0){
+					}
+					else{
+						self.dataSource_filter[index].business.name = value;
+					}
+				});
+			}
+			else{
+			}
+		},
+		deleteLabelButton: function(index){
+			var self = this;
+			if(confirm("您确定要删除该设备吗？")){
+				$.when(deleteDevice(self.dataSource_filter[index].id)).done(function(data){
+					if(data.state == 0){
+						alert("删除成功");
+						self.dataSource_filter.splice(index,1);
+						self.refreshTable();
+					}
+				});
+			}
+		},
+		changeUserState: function(flag,id,index){
+			if(flag=="unbind"){
+				if(confirm("您确定要解绑该用户吗？")){
+					$.when(unbindDevice(id)).done(function(data){
+						if(data.state == 0){
+							alert("账户已解绑！");
+							window.location.reload();
+						}
+					});
+				}
+			}
+			else{
+				var val=$("#showImageManagement_data").children("tr").eq(index).children("td").eq(5).find("#selectBox").val();
+				var business=$("#showImageManagement_data").children("tr").eq(index).children("td").eq(5).find("#selectBox").children("option:selected").attr("id");
+				console.log(val);
+				if(confirm("您确定绑定该用户到经销商吗？")){
+					$.when(bindDevice(id,business)).done(function(data){
+						if(data.state == 0){
+							alert("绑定成功！");
+							window.location.reload();
+						}
+					});
+				}
+			}
+
+		},
+	},
+	created: function(){
+		var self = this;
+		$.when(getDevice()).done(function(data){
+			if(data.state == 0){
+				self.dataSource = data.data;
+				self.dataSource_filter = self.dataSource;
+				self.refreshTable();
+			}
+		});
+		$.when(getBusiness()).done(function(data){
+			if(data.state == 0){
+				self.dataSource_business = data.data;
+			}
+		});
+	},
+});
+</script>

@@ -15,131 +15,89 @@
 			</div>
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
-					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">所属代理商：</span>
-						<select v-model="selected1" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+					<div class="admin_ui_name"><span style="width: 110px;display: inline-block;">所属代理商：</span>
+						<!-- <select v-model="selected1" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
 							<option v-for="show in dataSource">{{show.name}}</option>
-						</select>					
+						</select> -->	
+						<div class="admin_ui_select">
+							<select v-model="selected1" class="businessSel">
+								<option v-for="show in dataSource">{{show.name}}</option>
+							</select>
+						</div>				
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
-					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">子代理商：</span>
-						<select v-model="selected2" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+					<div class="admin_ui_name"><span style="width: 110px;display: inline-block;">子代理商：</span>
+						<!-- <select v-model="selected2" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
 							<option v-for="show in dataSource_sub">{{show.user.name}}</option>
-						</select>
-						
+						</select>	 -->	
+						<div class="admin_ui_select">
+							<select v-model="selected2" class="subBusSel">
+								<option v-for="show in dataSource_sub">{{show.user.name}}</option>
+							</select>
+						</div>				
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
 					<div class="admin_ui_name">
-						<span style="width: 100px;display: inline-block;">代理商邀请码：</span>
-						<input v-model="bus_code"></input>
+						<span style="width: 110px;display: inline-block;">代理商邀请码：</span>
+						<span>{{bus_code}}</span>
+						<!-- <input v-model="bus_code" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px"> -->
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name"><span style="width: 110px;display: inline-block;">行业标签：</span>
+					<!-- <select v-model="selected3" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+						<option v-for="show in dataSource_label">{{show.name}}</option>
+					</select> -->
+						<div class="admin_ui_select">
+							<select v-model="selected3">
+								<option v-for="show in dataSource_label">{{show.name}}</option>
+							</select>
+						</div>				
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">行业标签：</span>
-					<select v-model="selected3" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
-						<option v-for="show in dataSource_label">{{show.name}}</option>
-					</select>
-					
+					<div class="admin_ui_name">
+						<span style="width: 110px;display: inline-block;">企业名称：</span>
+						<input v-model="com_name" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name="">
+					</div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">企业名称：</span><input v-model="com_name" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name">
+						<span style="width: 110px;display: inline-block;">负责人：</span>
+						<input v-model="com_contact" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name="">
+					</div>
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">负责人：</span><input v-model="com_contact" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
+					<div class="admin_ui_name">
+						<span style="width: 110px;display: inline-block;">联系方式：</span>
+						<input v-model="com_phone" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name="">
+					</div>
 				</div>
 				<div class="admin_ui_form_field">
-					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">联系方式：</span><input v-model="com_phone" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name=""></div>
-				</div>
-				<div class="admin_ui_form_field">
-					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">邀请码：</span>
-						<input v-model="com_code"></div>
+					<div class="admin_ui_name"><span style="width: 110px;display: inline-block;">邀请码：</span>
+						<input style="width: 88%;height: 30px;padding:0 10px;border:none;background-color: #fff" type="" name="" class="admin_ui_input" v-model="code_auto">
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <script>
-	// var queryData = getQueryData();
-	// if(!queryData){
-	// 	alert("查询参数错误，为您自动跳转至列表页");
-	// 	window.location.hash = "#/showImageManagement.html";
+	// var id_array=window.location.hash;
+	// var id_get=id_array.split("=")[1];
+	// if(id_get){
+	// 	var id_get=id_get.split("&")[0];
+	// 	var id_id=id_array.split("=")[2];
 	// }
-	// $("#showImagePhoto").attr("src", getImageByUrl(handleNullObject(queryData.photo, "url")));
-	// $("#showImageId").text(queryData.id);
-	// $("#showImageLike").text(queryData.like);
-	// $("#showImageComment").text(queryData.comment);
-	// $("#showImageRead").text(queryData.read);
-
-
 	var id_array=window.location.hash;
-	var id_get=id_array.split("=")[1];
-	if(id_get){
-		var id_get=id_get.split("&")[0];
-		var id_id=id_array.split("=")[2];
-	}
-
-	var editor =  new tinymce.Editor('tinymce', {
-	    height: 500,
-		theme: 'modern',
-		language: 'zh_CN',
-		plugins: [
-		    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-		    'searchreplace wordcount visualblocks visualchars code fullscreen',
-		    'insertdatetime media nonbreaking save table contextmenu directionality',
-		    'emoticons template paste textcolor colorpicker textpattern imagetools'
-		],
-		toolbar1: 'insertfile undo redo | fontsizeselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-		toolbar2: 'print preview media | forecolor backcolor | example',
-		setup: function(ed) {
-	    },
-	    fontsize_formats: "12px 14px 18px 24px 36px 48px 60px 72px 84px 96px 108px 120px",
-		image_advtab: true,
-		image_upload: true,
-		relative_url: false,
-		templates: [
-		    { title: 'Test template 1', content: 'Test 1' },
-		    { title: 'Test template 2', content: 'Test 2' }
-		],
-		content_css: [
-		    '../source/css/tinymce.css'
-		]
-	}, tinymce.EditorManager);
-
-	// 获得编辑器中内容
-	function getEditorContent(){
-		return editor.getContent();
-	}
-	// 设置编辑器内容
-	function setEditorContent(html){
-		editor.setContent(html);
-	}
-	// 往编辑器中插入内容
-	function insertContentToEditor(html){
-		editor.insertContent(html);
-	}
-	// 设置 "design", "code" or "readonly"
-	function setEditorMode(mode){
-		editor.setMode(mode);
-	}
-	function getBase64Image(img) {
-	    var canvas = document.createElement("canvas");
-	    canvas.width = img.width;
-	    canvas.height = img.height;
-	    var ctx = canvas.getContext("2d");
-	    ctx.drawImage(img, 0, 0, img.width, img.height);
-	    var dataURL = canvas.toDataURL("image/png");
-	    return dataURL;
-	}
-	$("#tinymce").show()
-	editor.render();
-	
+	var id_=id_array.split("=");
+	var id=id_[1];
+	// console.log(id_id);	
 	var vm = new Tvm({
 		el: '.admin_ui_cont',
 		data:{
@@ -160,69 +118,127 @@
 			com_contact:"",
 			com_phone:"",
 			com_label:"",
+			code_auto:"",
 		},
 		computed: {
 		},
 		mounted: function(){
 			var self = this;
-			$.when(getBusiness_c()).done(function(data){
+			$.when(getBusiness()).done(function(data){
 				self.dataSource = data.data;
 			});	
 			$.when(getLabel_c()).done(function(data){
 				self.dataSource_label = data.data;
 			});	
-			if(id_get){
-				$.when(getBusiness_c(id_get)).done(function(data){
-					self.selected1 = id_get;
-					self.bus_id = data.data[0].id;
-					self.bus_code = data.data[0].code;
-					$.when(getSubBusinessByBusid(self.bus_id)).done(function(data){
-						self.dataSource_tmp = data.data;
-						self.dataSource_sub=[];
-						for(var i = 0; i < self.dataSource_tmp.length; i++) {
-							self.dataSource_sub.push(self.dataSource_tmp[i]);
+			// if(id_get){
+			// 	$.when(getBusiness_c(id_get)).done(function(data){
+			// 		self.selected1 = id_get;
+			// 		self.bus_id = data.data[0].id;
+			// 		// self.bus_code = data.data[0].code;
+			// 		if(self.bus_id){
+			// 			$.when(getSubBusinessByBusid(self.bus_id)).done(function(data){
+			// 				if(data.state==0){
+			// 					self.dataSource_tmp = data.data;
+			// 					self.dataSource_sub=[];
+			// 					if(self.dataSource_tmp){
+			// 						for(var i = 0; i < self.dataSource_tmp.length; i++) {
+			// 							self.dataSource_sub.push(self.dataSource_tmp[i]);
+			// 						}
+			// 					}
+			// 					else{
+			// 						self.bus_code = data.data[0].code;
+			// 					}
+			// 				}
+			// 			});	
+			// 			$.when(getCompany(self.bus_id)).done(function(data){
+			// 				self.com_code = data.data[0].code;
+			// 				self.com_name = data.data[0].name;
+			// 				self.com_contact = data.data[0].contact;
+			// 				self.com_phone = data.data[0].phone;											
+			// 			});
+			// 		}
+			// 	});
+			// }
+			if(id){
+				$.when(getSingleCompany(id)).done(function(data){
+					if(data.state == 0){	
+						if(data.data.length){
+							self.code_auto = data.data[0].code;
+							self.com_name = data.data[0].name;
+							self.com_contact = data.data[0].contact;
+							self.com_phone = data.data[0].phone;
+							// self.selected3 = data.data[0].label.name;
+							if(data.data[0].label){
+								self.selected3 = data.data[0].label.name;
+							}
+							if(data.data[0].business){
+								self.bus_code = data.data[0].business.code;
+								self.selected1 = data.data[0].business.name;
+								console.log(self.selected1);
+								// $(".businessSel").val(data.data[0].business.name);
+								$(".businessSel").prop("disabled",true);
+							}	
+							if(data.data[0].subBusiness){
+								self.selected2 = data.data[0].subBusiness.name;
+								$(".subBusSelgy").prop("disabled",true);
+							}	
 						}
-					});	
-					$.when(getCompany(self.bus_id)).done(function(data){
-						self.com_code = data.data[0].code;
-						self.com_name = data.data[0].name;
-						self.com_contact = data.data[0].contact;
-						self.com_phone = data.data[0].phone;
-						self.selected3 = data.data[0].label.name;
-				
-					});
-				});
+					}
+				});	
 			}
-			
-
+			else{
+				var num = Math.random().toString(36).slice(2, 5);   
+				self.code_auto='C'+num;
+				$.when(checkCode(self.code_auto)).done(function(data){
+					if(data.state==0){
+					}
+					else{
+						var num = Math.random().toString(36).slice(2, 5); 
+						self.code_auto='C'+num;
+					}
+				})
+			}
 			$("select").bind('change',function(data){
 				for (var i = 0; i < self.dataSource.length; i++) {
 					if(self.dataSource[i].name==self.selected1){
 						self.bus_id = self.dataSource[i].id;
-						self.code = self.dataSource[i].code;
-					}
-					$.when(getSubBusinessByBusid(self.bus_id)).done(function(data){
-						self.dataSource_tmp = data.data;
-						self.dataSource_sub=[];
-						for(var i = 0; i < self.dataSource_tmp.length; i++) {
-							self.dataSource_sub.push(self.dataSource_tmp[i]);
-
+						self.bus_code = self.dataSource[i].code;
+						console.log(self.bus_code);
+						if(self.bus_id){
+							$.when(getSubBusinessByBusid(self.bus_id)).done(function(data){
+								if(data.state==0){
+									self.dataSource_tmp = data.data;
+									self.dataSource_sub=[];
+									if(self.dataSource_tmp.length){
+										for(var i = 0; i < self.dataSource_tmp.length; i++) {
+											self.dataSource_sub.push(self.dataSource_tmp[i]);
+										}
+									}
+									else{
+									}
+								}
+							});	
 						}
-					});	
-				}
-				for (var i = 0; i < self.dataSource_sub.length; i++) {
-					if(self.dataSource_sub[i].user.name==self.selected2){
-						self.subBus_id = self.dataSource_sub[i].id;
 					}
 				}
-				for (var i = 0; i < self.dataSource_label.length; i++) {
-					if(self.dataSource_label[i].name==self.selected3)
-						self.com_label = self.dataSource_label[i].id;
+				if(self.dataSource_sub.length){
+					for (var i = 0; i < self.dataSource_sub.length; i++) {
+						if(self.dataSource_sub[i].user.name==self.selected2){
+							self.subBus_id = self.dataSource_sub[i].id;
+							self.bus_code = self.dataSource_sub[i].code;
+							console.log(self.bus_code);
+						}
+					}
+				}
+				if(self.dataSource_label.length){
+					for (var i = 0; i < self.dataSource_label.length; i++) {
+						if(self.dataSource_label[i].name==self.selected3)
+							self.com_label = self.dataSource_label[i].id;
+					}
 				}
 			});
-
 			$("#saveButton").bind('click',function(data){
-				var code = self.code;
+				var code = self.code_auto;
 				var text = $(".admin_ui_input");	
 				var label = self.com_label;
 				var name = text[0].value;
@@ -230,10 +246,58 @@
 				var phone = text[2].value;
 				var business = self.bus_id;
 				var subBusiness = self.subBus_id;
-	
-				$.when(editCompany_c(id_id,code,name,contact,phone,label)).done(function(data){
+				if(id){
+					if(label){
+						$.when(editCompany_c(id,code,name,contact,phone,label)).done(function(data){
+							if(data.state==0){
+								alert("修改成功！");
+							}
+						});
+					}
+					else{
+						$.when(editCompany_c_none(id,code,name,contact,phone)).done(function(data){
+							if(data.state==0){
+								alert("修改成功！");
+							}
+						});
+					}
+				}
+				else{
+					if(business&&!subBusiness){
+						if(label){
+							$.when(addCompany_bus(code,name,contact,phone,label,business)).done(function(data){
+								if(data.state==0){
+									alert("邀请成功！");
+								}
+							});
+						}
+						else{
+							$.when(addCompany_bus_none(code,name,contact,phone,business)).done(function(data){
+								if(data.state==0){
+									alert("邀请成功！");
+								}
+							});
+						}
+					}
+					else if(business&&subBusiness){
+						if(label){
+							$.when(addCompany_sub(code,name,contact,phone,label,business,subBusiness)).done(function(data){
+								if(data.state==0){
+									alert("邀请成功！");
+								}
+							});
+						}
+						else{
+							$.when(addCompany_sub_none(code,name,contact,phone,business,subBusiness)).done(function(data){
+								if(data.state==0){
+									alert("邀请成功！");
+								}
+							});
+						}
+					}
 					
-				});
+				}
+				
 				
 			});
 			

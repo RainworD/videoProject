@@ -1,0 +1,152 @@
+<style type="text/css">
+	.button_{
+	    display: inline-block!important;
+	    min-width: 80px;
+	    height: 30px;
+	    line-height: 28px;
+	    padding: 0;
+	}
+</style>
+<div class="admin_content_innerBox" id="admin_content_innerBox">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">文章管理</span>
+		</div>	
+		<div class="admin_ui_cont">
+			<div class="admin_ui_search">
+				<div style="float:left;height:30px;">
+					<a href="#/articleManagement.html" class="admin_ui_button admin_ui_button_white button_">返回</a>
+				</div>
+				<div style="float:right;height:30px;">
+					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
+					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
+				</div>
+			</div>
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>文章标题</th>
+						<th>行业标签</th>
+						<th>发布时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
+					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
+						<td>{{show.id}}</td>
+						<td>{{show.title}}</td>
+						<td><span v-for="(show_,index) in show.label">{{show_.name}}</span></td>
+						<td>{{stamp2time(show.in_time)}}</td>
+						<td class="admin_ui_table_action">
+							<a class="iconButton checkIcon" @click="enableArticle(index,show.id)">
+								<i class="fa fa-pencil"></i>
+								恢复
+							</a>
+							<div class="iconButton removeIcon" @click="deleteLabelButton(index)">
+								<i class="fa fa-remove"></i>
+								删除
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="admin_ui_pagination">
+				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+var vm = new Tvm({
+	el: '#admin_content_innerBox',
+	data:{
+		keyword: "",
+		dataSource: [],
+		dataSource_filter: [],
+		pageIndex: 1
+	},
+	computed: {
+	},
+	methods: {
+		search: function(){
+			var self = this;
+			self.dataSource_filter = [];
+			for(index in self.dataSource){
+				var _data = self.dataSource[index];
+				if(self.isContainKeyword([_data.title],self.keyword)){
+					self.dataSource_filter.push(_data);
+				}
+			}
+			self.refreshTable();
+		},
+		isContainKeyword: function(arr,keyword){
+			for(index in arr){
+				if(typeof arr[index] == "undefined"){
+					arr[index]="";
+				}
+				if(typeof arr[index] != "string"){
+					arr[index] = arr[index]+"";
+				}
+				if(arr[index].search(keyword)>=0){
+					return true;
+				}
+			}
+			return false;
+		},
+		refreshTable: function(){
+			var self = this;
+			$('.M-box').pagination({
+				totalData: self.dataSource_filter.length,
+			    showData: 10,
+			    current: self.pageIndex,
+			    count:3,
+			    jump:true,
+				coping:true,
+				prevContent:'<i class="fa fa-angle-left"></i>',		//上一页内容
+				nextContent:'<i class="fa fa-angle-right"></i>',		//下一页内容
+			    callback:function(index){
+			        self.pageIndex = index;
+			    }
+			});
+		},
+
+		enableArticle:function(index,id){
+			var self = this;
+			if(confirm("您确定要恢复该篇文章吗？")){
+				$.when(setEnableArticle(id,true)).done(function(data){
+					if(data.state == 0){
+						alert("文章已经恢复到文章列表！");
+						self.dataSource_filter.splice(index,1);
+						self.refreshTable();
+						self.refreshTable();
+					}
+				});
+			}
+		},
+		deleteLabelButton: function(index){
+			var self = this;
+			if(confirm("您确定要删除该篇文章吗？")){
+				$.when(deleteArticle(self.dataSource_filter[index].id)).done(function(data){
+					if(data.state == 0){
+						alert("删除成功");
+						self.dataSource_filter.splice(index,1);
+						self.refreshTable();
+					}
+				});
+			}
+		},
+	},
+	created: function(){
+		var self = this;
+		$.when(getEnableArticle(false)).done(function(data){
+			if(data.state == 0){
+				self.dataSource = data.data;
+				self.dataSource_filter = self.dataSource;
+				self.refreshTable();
+			}
+		});
+	}
+});
+</script>

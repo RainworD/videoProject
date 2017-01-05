@@ -48,6 +48,7 @@ $("#loginButton").bind("click",function(){
 			if (data.state == 0) {
 				localStorage.setItem("username",data.username);
 				localStorage.setItem("competence",data.competence);
+				localStorage.setItem("userid",data.id);
 				window.location.href = "index.html";
 			}
 			else{

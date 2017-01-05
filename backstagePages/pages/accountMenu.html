@@ -29,11 +29,11 @@
 				</div>
 			</div>
 			<div class="admin_ui_search">
-				<div style="float:left;width:20%;line-height: 30px;"><span>今日提现总额:</span>{{dataSource_statistics.withdraw}}</div>
-				<div style="float:left;width:20%;line-height: 30px;"><span>今日充值总额:</span>{{dataSource_statistics.recharge}}</div>
-				<div style="float:left;width:20%;line-height: 30px;"><span>今日消费总额:</span>{{dataSource_statistics.consumption}}</div>
-				<div style="float:left;width:20%;line-height: 30px;"><span>所有代理商账户余额:</span>{{dataSource_statistics.account}}</div>
-				<div style="float:left;width:20%;line-height: 30px;"><span>押金总额:</span>{{dataSource_statistics.deposit}}</div>
+				<div style="float:left;width:20%;line-height: 30px;"><span>今日提现总额:</span>{{dataSource_statistics.withdraw/100}}</div>
+				<div style="float:left;width:20%;line-height: 30px;"><span>今日充值总额:</span>{{dataSource_statistics.recharge/100}}</div>
+				<div style="float:left;width:20%;line-height: 30px;"><span>今日消费总额:</span>{{dataSource_statistics.consumption/100}}</div>
+				<div style="float:left;width:25%;line-height: 30px;"><span>所有代理商账户余额:</span>{{dataSource_statistics.account/100}}</div>
+				<div style="float:left;width:15%;line-height: 30px;"><span>押金总额:</span>{{dataSource_statistics.deposit/100}}</div>
 			</div>
 			<table class="admin_ui_table">
 				<thead>
@@ -53,7 +53,7 @@
 						<td>
 							{{stamp2time(comment.success_time)}}
 						</td>
-						<td>{{comment.value}}</td>
+						<td>{{comment.value/100}}</td>
 						<td>
 							{{comment.type}}
 						</td>

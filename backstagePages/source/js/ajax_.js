@@ -156,7 +156,7 @@ function addAdmin(username,password,name,contact,competence){
 	});
 	return ajax;
 }
-function editAdmin_(id,name,contact,competence){
+function editAdmin_(id,name,contact){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/User",
 		type: "POST",
@@ -164,7 +164,7 @@ function editAdmin_(id,name,contact,competence){
 			"id":id,
 			'name':name,
 			'contact':contact,
-			"competence":competence,
+			// "competence":competence,
 		},
 		success: successHandle,
 		error: errorHandle
@@ -172,7 +172,7 @@ function editAdmin_(id,name,contact,competence){
 	return ajax;
 }
 //编辑管理员
-function editAdmin(id,password,name,contact,competence,enable){
+function editAdmin(id,password,name,contact){
 	var ajax = $.ajax({
 		url: baseUrl+ "/model/save/User",
 		type: "POST",
@@ -181,8 +181,8 @@ function editAdmin(id,password,name,contact,competence,enable){
 			"password": password,
 			'name':name,
 			'contact':contact,
-			"competence":competence,
-			"enable":enable,
+			// "competence":competence,
+			// "enable":enable,
 		},
 		success: successHandle,
 		error: errorHandle
@@ -242,8 +242,10 @@ function deletePush(id){
 }
 function getArticle(){
 	var ajax = $.ajax({
-		url: baseUrl+ "/model/get/Article?add_=label",
+		url: baseUrl+ "/model/get/Article",
 		data:{
+			order_:'id desc',
+			add_:['label']
 		},
 		type: "POST",
 		success: successHandle,
@@ -253,8 +255,23 @@ function getArticle(){
 }
 function getArticleDetail(id){
 	var ajax = $.ajax({
-		url: baseUrl+"/model/get/Article?add_=label&id="+id,
+		url: baseUrl+"/model/get/Article",
 		data:{
+			add_:['label','photo'],
+			id:id,
+		},
+		type: "POST",
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getEnableArticle(enable){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Article",
+		data:{
+			add_:['label','photo'],
+			enable:enable,
 		},
 		type: "POST",
 		success: successHandle,
@@ -276,8 +293,12 @@ function deleteArticle(id){
 }
 function getPush(){
 	var ajax = $.ajax({
-		url: baseUrl+ "/model/get/Announce?add_=business",
+		url: baseUrl+ "/model/get/Announce",
 		type: "POST",
+		data:{
+			order_:'id desc',
+			add_:['business'],
+		},
 		success: successHandle,
 		error: errorHandle
 	});
@@ -292,7 +313,7 @@ function getSinglePush(id){
 	});
 	return ajax;
 }
-function sendArticle(title,text,label,top){
+function sendArticle(title,text,label,top,photo){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/Article",
 		type: "POST",
@@ -302,13 +323,14 @@ function sendArticle(title,text,label,top){
 			text:text,
 			label:label,
 			top:top,
+			photo:photo,
 		},
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
-function editArticle(id,title,text,label,top){
+function editArticle(id,title,text,label,top,photo){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/Article",
 		type: "POST",
@@ -319,6 +341,21 @@ function editArticle(id,title,text,label,top){
 			text:text,
 			label:label,
 			top:top,
+			photo:photo,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function setEnableArticle(id,enable){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Article",
+		type: "POST",
+		traditional:true,
+		data:{
+			id:id,
+			enable:enable,
 		},
 		success: successHandle,
 		error: errorHandle
@@ -349,11 +386,13 @@ function getDevice(){//获得设备列表
 	});
 	return ajax;
 }
-function deleteDevice(id){//
+function deleteDevice(id,enable){//
 	var ajax = $.ajax({
-		url: baseUrl+ "/model/delete/Device?id"+id,
+		url: baseUrl+ "/model/save/Device",
 		type: "POST",
 		data:{
+			id:id,
+			enable:false
 		}
 	});
 	return ajax;
@@ -380,13 +419,68 @@ function unbindDevice(id){//获得设备列表
 	});
 	return ajax;
 }
-function bindDevice(id,business){//获得设备列表
+function unbindSubBusiness(id){//获得设备列表
 	var ajax = $.ajax({
-		url: baseUrl+ "/device/admin/bind",
+		url: baseUrl+ "/model/save/SubBusiness",
 		type: "POST",
 		data:{
 			id:id,
-			business:business,
+			enable:false,
+		}
+	});
+	return ajax;
+}
+function unbindBusiness(id){//获得设备列表
+	var ajax = $.ajax({
+		url: baseUrl+ "/model/save/Business",
+		type: "POST",
+		data:{
+			id:id,
+			enable:false,
+		}
+	});
+	return ajax;
+}
+function bindBusiness(id){//获得设备列表
+	var ajax = $.ajax({
+		url: baseUrl+ "/model/save/Business",
+		type: "POST",
+		data:{
+			id:id,
+			enable:true,
+		}
+	});
+	return ajax;
+}
+function bindSubBusiness(id){//获得设备列表
+	var ajax = $.ajax({
+		url: baseUrl+ "/model/save/SubBusiness",
+		type: "POST",
+		data:{
+			id:id,
+			enable:true,
+		}
+	});
+	return ajax;
+}
+function bindCompany(id){//获得设备列表
+	var ajax = $.ajax({
+		url: baseUrl+ "/model/save/Company",
+		type: "POST",
+		data:{
+			id:id,
+			enable:true,
+		}
+	});
+	return ajax;
+}
+function unbindCompany(id){//获得设备列表
+	var ajax = $.ajax({
+		url: baseUrl+ "/model/save/Company",
+		type: "POST",
+		data:{
+			id:id,
+			enable:false,
 		}
 	});
 	return ajax;
@@ -413,37 +507,91 @@ function getDynamic(){//
 	});
 	return ajax;
 }
-function getBusiness(name){
+function getBusiness(){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Business",
 		type: "POST",
 		data:{
-			name:name,
+			add_:['user','recommend'],
 		},
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
-
-function getBusiness_c(name){
+function getBusRegister(){
 	var ajax = $.ajax({
-		url: baseUrl+"/model/get/Business",
+		url: baseUrl+"/model/get/Register",
 		type: "POST",
 		data:{
-			name:name,
+			complete:false,
+			add_:['user','recommend'],
+			competence:['代理商管理员']
 		},
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
-function getSubBusiness_c(name){
+function getBusiness_c(recommend){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Business",
+		type: "POST",
+		data:{
+			recommend:recommend,
+			add_:['user','recommend'],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getBusiness_cR(recommend){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Register",
+		type: "POST",
+		data:{
+			complete:false,
+			recommend:recommend,
+			add_:['user','recommend'],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getSingleBusiness(id){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Business",
+		type: "POST",
+		data:{
+			id:id,
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getSingleCompany(id){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Company",
+		type: "POST",
+		data:{
+			id:id,
+			add_:['label','business','subBusiness'],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getSubBusiness_c(recommend){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/SubBusiness",
 		type: "POST",
 		data:{
-			name:name,
+			recommend:recommend,
+			add_:'user',
 		},
 		success: successHandle,
 		error: errorHandle
@@ -451,18 +599,6 @@ function getSubBusiness_c(name){
 	return ajax;
 }
 function getSubBusiness(){//获得代理商列表
-	var ajax = $.ajax({
-		url: baseUrl+"/model/get/SubBusiness",
-		type: "POST",
-		data:{
-		},
-		success: successHandle,
-		error: errorHandle
-	});
-	return ajax;
-}
-
-function getSubBusiness_c(){//获得代理商列表
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/SubBusiness",
 		type: "POST",
@@ -475,6 +611,19 @@ function getSubBusiness_c(){//获得代理商列表
 	return ajax;
 }
 
+// function getSubBusiness_c(){//获得代理商列表
+// 	var ajax = $.ajax({
+// 		url: baseUrl+"/model/get/SubBusiness",
+// 		type: "POST",
+// 		data:{
+// 			add_:'user',
+// 		},
+// 		success: successHandle,
+// 		error: errorHandle
+// 	});
+// 	return ajax;
+// }
+
 function getSubBusinessByBusid(id){//获得代理商列表
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/SubBusiness",
@@ -483,13 +632,29 @@ function getSubBusinessByBusid(id){//获得代理商列表
 			business: id,
 			"add_":["business","user"]
 		},
+		// async: false,
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
 
-
+function addBusiness_c(code,name,contact,phone,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			competence:competence
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
 function editBusiness_c(id,code,name,contact,phone,competence){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/Business",
@@ -522,8 +687,78 @@ function editSubBusiness_c(id,code,name,contact,competence){
 	});
 	return ajax;
 }
-
-
+function addCompany_bus(code,name,contact,phone,label,business,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			label:label,
+			business:business,
+			competence:['企业管理员'],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function addCompany_bus_none(code,name,contact,phone,business,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			business:business,
+			competence:['企业管理员'],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function addCompany_sub(code,name,contact,phone,label,business,subBusiness,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			label:label,
+			business:business,
+			subBusiness:subBusiness,
+			competence:['企业管理员'],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function addCompany_sub_none(code,name,contact,phone,business,subBusiness,competence){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			business:business,
+			subBusiness:subBusiness,
+			competence:['企业管理员'],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
 function editCompany_c(id,code,name,contact,phone,label){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/save/Company",
@@ -535,26 +770,92 @@ function editCompany_c(id,code,name,contact,phone,label){
 			contact:contact,
 			phone:phone,
 			label:label,
+			// competence:['企业管理员'],
 		},
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
-
-function getCompany(id){//
+function editCompany_c_none(id,code,name,contact,phone){
 	var ajax = $.ajax({
-		url: baseUrl+"/model/get/Company?add_=business&add_=label",
+		url: baseUrl+"/model/save/Company",
 		type: "POST",
 		data:{
 			id:id,
+			code:code,
+			name:name,
+			contact:contact,
+			phone:phone,
+			// competence:['企业管理员'],
 		},
 		success: successHandle,
 		error: errorHandle
 	});
 	return ajax;
 }
-
+// function editCompany_bus(id,code,name,contact,phone,label){
+// 	var ajax = $.ajax({
+// 		url: baseUrl+"/model/save/Company",
+// 		type: "POST",
+// 		data:{
+// 			id:id,
+// 			code:code,
+// 			name:name,
+// 			contact:contact,
+// 			phone:phone,
+// 			label:label,
+// 			business:business,
+// 			competence:['企业管理员'],
+// 		},
+// 		success: successHandle,
+// 		error: errorHandle
+// 	});
+// 	return ajax;
+// }
+// function editCompany_sub(id,code,name,contact,phone,label,business,subBusiness){
+// 	var ajax = $.ajax({
+// 		url: baseUrl+"/model/save/Company",
+// 		type: "POST",
+// 		data:{
+// 			code:code,
+// 			name:name,
+// 			contact:contact,
+// 			phone:phone,
+// 			label:label,
+// 			business:business,
+// 			subBusiness:subBusiness,
+// 		},
+// 		success: successHandle,
+// 		error: errorHandle
+// 	});
+// 	return ajax;
+// }
+function getCompany(){//
+	var ajax = $.ajax({
+		url: baseUrl+"/model/get/Company",
+		type: "POST",
+		data:{
+			add_:['business','label','business.user'],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getCompanyRegister(){//
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Register",
+		type: "POST",
+		data:{
+			complete:false,
+			add_:['business','label','business.user'],
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
 
 function getUser(){
 	var ajax = $.ajax({
@@ -575,6 +876,21 @@ function getUserInfo(){
 		traditional:true,
 		data:{
 			competence:["一般管理员","财务管理员"],
+
+		},
+		success: successHandle,
+		error: errorHandle
+	});
+	return ajax;
+}
+function getUserInfo_(){
+	var ajax = $.ajax({
+		url: baseUrl+ "/model/get/User",
+		type: "POST",
+		traditional:true,
+		data:{
+			competence:["企业同事"],
+			add_:['company'],
 
 		},
 		success: successHandle,
@@ -635,14 +951,14 @@ function uploadImg(formData){//上传图片到oss
     })
     return ajax;
 }
-function uploadSlideInfo(photo,url,announce){//上传图片到oss
+function uploadSlideInfo(photo,url,article){//上传图片到oss
 	var ajax=$.ajax({
         url: baseUrl+ '/model/save/Carousel',
         type: 'POST',
         data: {
         	photo:photo,
-        	url: baseUrl+url,
-        	announce:announce,
+        	url: url,
+        	article:article,
         },
     })
     return ajax;
@@ -653,7 +969,7 @@ function uploadSlideInfo_(photo,url){//上传图片到oss
         type: 'POST',
         data: {
         	photo:photo,
-        	url: baseUrl+url,
+        	url: url,
         },
     })
     return ajax;
@@ -700,7 +1016,7 @@ function getRecharge(add_,order_,state,type){
         type: 'POST',
        	data:{
        		add_:add_,
-       		order_:order_,
+			order_:'id desc',
        		state:state,
        		type:type,
        	}
@@ -724,6 +1040,16 @@ function setFee(renewal){
         type: 'POST',
        	data:{
        		renewal:renewal,
+       	}
+    })
+    return ajax;
+}
+function getFee(){
+	var ajax=$.ajax({
+        url: baseUrl+ '/variable/global/get',
+        type: 'POST',
+       	data:{
+       		key:'renewal',
        	}
     })
     return ajax;
@@ -847,7 +1173,22 @@ function getCarousel(){
         url: baseUrl+ '/model/get/Carousel',
         type: 'POST',
        	data:{
-       		add_:['photo','announce']
+       		add_:['photo','article']
+       	}
+    })
+    return ajax;
+}
+function GetRandomNum(Min,Max){   
+	var Range = Max - Min;   
+	var Rand = Math.random();   
+	return(Min + Math.round(Rand * Range));   
+}   
+function checkCode(code){
+	var ajax=$.ajax({
+        url: baseUrl+ '/verify/checkReg',
+        type: 'POST',
+       	data:{
+       		code:code,
        	}
     })
     return ajax;

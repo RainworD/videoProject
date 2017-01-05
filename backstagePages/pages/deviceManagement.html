@@ -46,11 +46,11 @@
 						<td style="width:136px;">
 							<div class="admin_ui_select">
 							<select @change="topShowButton(index)" id="selectBox" :disabled="show.business?true:false" v-if="show.business">	
-								<!-- <option v-show="show.business?true:false"></option>				 -->
-								<option v-for="(show_,index) in dataSource_business" :id="show_.id">{{show_.name?show_.name:''}}</option>
+								<option v-show="show.business?true:false">{{show.business.name}}</option>				
+								<!-- <option v-for="(show_,index) in dataSource_business" :id="show_.id">{{show_.name?show_.name:''}}</option> -->
 							</select>
 							<select @change="topShowButton(index)" id="selectBox" :disabled="show.business?true:false" v-else>	
-								<option v-show="show.business?true:false"></option>				
+								<option>未选择</option>				
 								<option v-for="(show_,index) in dataSource_business" :id="show_.id">{{show_.name?show_.name:''}}</option>
 							</select>
 							</div>
@@ -62,11 +62,11 @@
 								<span v-if="show.enable">{{state_1}}</span>
 								<span v-else>{{state_2}}</span>
 							</div> -->
-							<div class="iconButton checkIcon"  @click="show.company?changeUserState('unbind',show.id,index):changeUserState('bind',show.id,index)">
+							<div class="iconButton checkIcon"  @click="show.business?changeUserState('unbind',show.id,index):changeUserState('bind',show.id,index)">
 								<i class="fa fa-pencil"></i>
 								<span>{{show.business?'解绑':'绑定'}}</span>
 							</div>
-							<div class="iconButton removeIcon" @click="deleteLabelButton(index)">
+							<div class="iconButton removeIcon" @click="deleteLabelButton(index)" v-show="show.business?false:true">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -157,7 +157,7 @@ var vm = new Tvm({
 		deleteLabelButton: function(index){
 			var self = this;
 			if(confirm("您确定要删除该设备吗？")){
-				$.when(deleteDevice(self.dataSource_filter[index].id)).done(function(data){
+				$.when(deleteDevice(self.dataSource_filter[index].id,false)).done(function(data){
 					if(data.state == 0){
 						alert("删除成功");
 						self.dataSource_filter.splice(index,1);

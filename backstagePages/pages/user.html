@@ -35,7 +35,7 @@
 					</tr>
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="(show,index) in dataSource_filter">
+					<tr v-for="(show,index) in dataSource_filter"  v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<!-- <td>{{show.id}}</td> -->
 						<td>{{show.username}}</td>
 						<td>{{show.contact}}</td>
@@ -110,13 +110,13 @@ var vm = new Tvm({
 				totalData: self.dataSource_filter.length,
 			    showData: 10,
 			    current: self.pageIndex,
-			    count:3,
-			    jump:true,
-				coping:true,
+			    count: 3,
+			    jump: true,
+				coping: true,
 				prevContent:'<i class="fa fa-angle-left"></i>',		//上一页内容
 				nextContent:'<i class="fa fa-angle-right"></i>',		//下一页内容
 			    callback:function(index){
-			        self.pageIndex = index;
+			    	self.pageIndex = index;
 			    }
 			});
 		},
@@ -160,7 +160,7 @@ var vm = new Tvm({
 	},
 	created: function(){ 
 		var self = this;
-		$.when(getUser()).done(function(data){
+		$.when(getUserInfo()).done(function(data){
 			if(data.state == 0){
 				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;

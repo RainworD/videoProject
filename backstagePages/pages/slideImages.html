@@ -39,6 +39,11 @@
     .grey{
         background-color: #ccc!important;
     }
+    #cancelSel{
+        width: 40px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
 </style>
 <div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
 	<div class="admin_scrollBox">
@@ -60,7 +65,7 @@
                     <!-- <a class="admin_ui_button admin_ui_button_white button_2" v-if="!show.announce" :data-id="-1">选择文章</a>
                     <a class="admin_ui_button admin_ui_button_white button_2" v-else :data-id="show.announce.id">选择文章</a>
                     </p> -->
-                    <a class="admin_ui_button admin_ui_button_white button_2" :data-id="!show.announce?'-1':show.announce.id" :class="show.announce?active:''">选择文章</a>
+                    <a class="admin_ui_button admin_ui_button_white button_2" :data-id="!show.article?'-1':show.article.id" :class="show.article?active:''">选择文章</a>
                     <!-- <p>url:<input type="text" style="margin-top:10px;width:85%;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input"></p> -->
                     <!-- <div class="admin_ui_button admin_ui_button_green checkButton button_ upload">
                         确认
@@ -93,21 +98,24 @@
             <tr>
                 <th></th>
                 <th>文章标题</th>
-                <th>推送时间</th>
-                <th>推送范围</th>
+                <th>发布时间</th>
+                <th>行业标签</th>
             </tr>
         </thead>
         <tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
             <tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
                 <td><input type="radio" name="article" :data-id="show.id"></td>
                 <td>{{show.title}}</td>
-                <td>{{show.in_time}}</td>
-                <td><span v-for="(show_,index) in show.business">{{show_.name}}</span></td>
+                <td>{{stamp2time(show.in_time)}}</td>
+                <td><span v-for="(show_,index) in show.label">{{show_.name}}</span></td>
             </tr>
         </tbody>
     </table>
     <div class="admin_ui_pagination">
         <div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+    </div>
+    <div class="admin_ui_button admin_ui_button_white checkButton button_" id="cancelSel">
+        取消选择
     </div>
     <div class="admin_ui_button admin_ui_button_green checkButton button_  button_new upload_new">
         确认
@@ -157,7 +165,7 @@
         },
         created: function(){
             var self = this;
-            $.when(getPush()).done(function(data){
+            $.when(getArticle()).done(function(data){
                 if(data.state == 0){
                     self.dataSource = data.data;
                     self.dataSource_filter = self.dataSource;
@@ -221,11 +229,15 @@
               // 渲染文件
             reader.onload = function(arg) {
                 var img=$(".admin_ui_slideImageBox").last().clone(true);
-                img.addClass("deleteSome");
-                img.find(".slideImageUpload").empty();
-                img.find(".slideImageUpload").append('<img src="' + arg.target.result + '" class="upload_pic">');
-            // var img = '<img class="preview" src="' + arg.target.result + '" alt="preview"/>';
-                $("#topSlideImagesBox").children(".admin_ui_slideImageBox").last().before(img);
+                if($(".admin_ui_slideImageBox").length>5){
+                    alert("轮播图至多添加五张");
+                }
+                else{
+                    img.addClass("deleteSome");
+                    img.find(".slideImageUpload").empty();
+                    img.find(".slideImageUpload").append('<img src="' + arg.target.result + '" class="upload_pic">');
+                    $("#topSlideImagesBox").children(".admin_ui_slideImageBox").last().before(img);
+                }
             }
         }
         if(type_arr.length){
@@ -335,6 +347,7 @@
         var id_=$(this).attr("data-id");
         if(id_>0){
             $("input[data-id="+id_+"]").prop("checked",true);
+            $("input[name='article']").attr("disabled","disabled");  
         }
         else{
             $("input[name='article']").prop("checked",false);  
@@ -353,6 +366,9 @@
     })
     $("#topSlideImagesBox").on("click",".deleteSome .deleteButton",function(){
         $(this).parents(".admin_ui_slideImageBox").remove();
+    })
+    $("#cancelSel").bind("click",function(){
+        $("input[name='article']").prop("checked",false);  
     })
 </script>
 

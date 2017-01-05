@@ -38,17 +38,17 @@
 					<tr v-for="(comment,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{stamp2time(comment.time)}}</td>
 						<td>
-							{{comment.withdraw}}
+							{{comment.withdraw/100}}
 						</td>
-						<td>{{comment.recharge}}</td>
+						<td>{{comment.recharge/100}}</td>
 						<td>
-							{{comment.consumption}}
-						</td>
-						<td>
-							{{comment.account}}
+							{{comment.consumption/100}}
 						</td>
 						<td>
-							{{comment.deposit}}
+							{{comment.account/100}}
+						</td>
+						<td>
+							{{comment.deposit/100}}
 						</td>
 					</tr>
 				</tbody>

@@ -18,6 +18,9 @@
 				<div style="float:left;height:30px;">
 					<a href="#/articleManagementDetail.html" class="admin_ui_button admin_ui_button_white button_">新增文章</a>
 				</div>
+				<div style="float:left;height:30px;">
+					<a href="#/draftManagement.html" class="admin_ui_button admin_ui_button_white button_">历史文章</a>
+				</div>
 				<div style="float:right;height:30px;">
 					<input v-model="keyword" @keyup.13="search" type="text" style="width:250px;height:30px;border:1px solid #ccc;margin-left:10px;" class="ui-input" id="search" placeholder="请输入关键词进行搜索">
 					<i @click="search" class="fa fa-search" style="margin-left:-30px;cursor:pointer;width:20px;height:20px;" id="searching"></i>
@@ -38,7 +41,7 @@
 					<tr v-for="(show,index) in dataSource_filter" v-show="index >= (pageIndex-1)*10 && index < pageIndex*10">
 						<td>{{show.id}}</td>
 						<td>{{show.title}}</td>
-						<td><span v-for="(show_,index) in show.label">{{show_.name}}</span></td>
+						<td><span v-for="(show_,index) in show.label">{{show_.name+" "}}</span></td>
 						<td>{{stamp2time(show.in_time)}}</td>
 						<td style="width:136px;">
 							<div class="admin_ui_select">
@@ -53,9 +56,9 @@
 								<i class="fa fa-pencil"></i>
 								编辑
 							</a>
-							<div class="iconButton removeIcon" @click="deleteLabelButton(index)">
+							<div class="iconButton removeIcon" @click="enableArticle(index,show.id)">
 								<i class="fa fa-remove"></i>
-								删除
+								移除
 							</div>
 						</td>
 					</tr>
@@ -162,10 +165,22 @@ var vm = new Tvm({
 				});
 			}
 		},
+		enableArticle:function(index,id){
+			var self = this;
+			if(confirm("您确定要移除该篇文章吗？")){
+				$.when(setEnableArticle(id,false)).done(function(data){
+					if(data.state == 0){
+						alert("文章已经移除到历史文章！");
+						self.dataSource_filter.splice(index,1);
+						self.refreshTable();
+					}
+				});
+			}
+		},
 	},
 	created: function(){
 		var self = this;
-		$.when(getArticle()).done(function(data){
+		$.when(getEnableArticle(true)).done(function(data){
 			if(data.state == 0){
 				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;

@@ -1,0 +1,242 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-file-image-o fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">企业管理</span>
+		</div>
+		<div class="admin_ui_cont">
+			<div class="admin_ui_search">
+				<div style="float:left;height:30px;">
+					<a href="#/companyManagement.html"  class="admin_ui_button admin_ui_button_white button_" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; padding: 0;">返回</a>
+				</div>
+				<div style="float:right;height:30px;">
+					<a href="#/companyManagement.html" style="display: inline-block!important; min-width: 120px; height: 30px; line-height: 28px; background-color:#3eb05b; padding: 0;" id="saveButton" class="admin_ui_button admin_ui_button_green button_ submitBtn">保存</a>
+				</div>
+			</div>
+			<div class="admin_ui_border admin_ui_cont">
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name"><span style="width: 110px;display: inline-block;">所属代理商：</span>
+						<!-- <select v-model="selected1" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+							<option v-for="show in dataSource">{{show.name}}</option>
+						</select> -->	
+						<div class="admin_ui_select">
+							<select v-model="selected1">
+								<option v-for="show in dataSource">{{show.name}}</option>
+							</select>
+						</div>				
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name"><span style="width: 110px;display: inline-block;">子代理商：</span>
+						<!-- <select v-model="selected2" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+							<option v-for="show in dataSource_sub">{{show.user.name}}</option>
+						</select>	 -->	
+						<div class="admin_ui_select">
+							<select v-model="selected2">
+								<option v-for="show in dataSource_sub">{{show.user.name}}</option>
+							</select>
+						</div>				
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name">
+						<span style="width: 110px;display: inline-block;">代理商邀请码：</span>
+						<input v-model="bus_code" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px">
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name"><span style="width: 110px;display: inline-block;">行业标签：</span>
+					<!-- <select v-model="selected3" style="width: 88%;height: 30px;padding:0 10px;border:2px solid initial; font-size: 14px;" type="" name="">
+						<option v-for="show in dataSource_label">{{show.name}}</option>
+					</select> -->
+						<div class="admin_ui_select">
+							<select v-model="selected3">
+								<option v-for="show in dataSource_label">{{show.name}}</option>
+							</select>
+						</div>				
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
+					<div class="admin_ui_name">
+						<span style="width: 110px;display: inline-block;">企业名称：</span>
+						<input v-model="com_name" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name="">
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
+					<div class="admin_ui_name">
+						<span style="width: 110px;display: inline-block;">负责人：</span>
+						<input v-model="com_contact" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name="">
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
+					<div class="admin_ui_name">
+						<span style="width: 110px;display: inline-block;">联系方式：</span>
+						<input v-model="com_phone" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px" type="" name="">
+					</div>
+				</div>
+				<div class="admin_ui_form_field">
+					<div class="admin_ui_name"><span style="width: 110px;display: inline-block;">邀请码：</span>
+						<input v-model="com_code" class="admin_ui_input" style="width: 88%;height: 30px;padding:0 10px"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var id_array=window.location.hash;
+	var id_get=id_array.split("=")[1];
+	if(id_get){
+		var id_get=id_get.split("&")[0];
+		var id_id=id_array.split("=")[2];
+	}	
+	var vm = new Tvm({
+		el: '.admin_ui_cont',
+		data:{
+			selected1:"",
+			selected2:"",
+			selected3:"",
+			dataSource: [],
+			dataSource_sub:[],
+			dataSource_tmp:[],
+			dataSource_label:[],
+			bus_id:"",
+			subBus_id:"",
+			code:"",
+			id_this:"",
+			bus_code:"",
+			com_code:"",
+			com_name:"",
+			com_contact:"",
+			com_phone:"",
+			com_label:"",
+		},
+		computed: {
+		},
+		mounted: function(){
+			var self = this;
+			$.when(getBusiness_c()).done(function(data){
+				self.dataSource = data.data;
+			});	
+			$.when(getLabel_c()).done(function(data){
+				self.dataSource_label = data.data;
+			});	
+			if(id_get){
+				$.when(getBusiness_c(id_get)).done(function(data){
+					self.selected1 = id_get;
+					self.bus_id = data.data[0].id;
+					self.bus_code = data.data[0].code;
+					if(self.bus_id){
+						$.when(getSubBusinessByBusid(self.bus_id)).done(function(data){
+							if(data.state==0){
+								self.dataSource_tmp = data.data;
+								self.dataSource_sub=[];
+								if(self.dataSource_tmp){
+									for(var i = 0; i < self.dataSource_tmp.length; i++) {
+										self.dataSource_sub.push(self.dataSource_tmp[i]);
+									}
+								}
+							}
+						});	
+						$.when(getCompany(self.bus_id)).done(function(data){
+							self.com_code = data.data[0].code;
+							self.com_name = data.data[0].name;
+							self.com_contact = data.data[0].contact;
+							self.com_phone = data.data[0].phone;
+							self.selected3 = data.data[0].label.name;
+					
+						});
+					}
+				});
+			}
+			
+
+			$("select").bind('change',function(data){
+				for (var i = 0; i < self.dataSource.length; i++) {
+					if(self.dataSource[i].name==self.selected1){
+						self.bus_id = self.dataSource[i].id;
+						self.code = self.dataSource[i].code;
+					}
+					if(self.bus_id){
+						$.when(getSubBusinessByBusid(self.bus_id)).done(function(data){
+							if(data.state==0){
+								self.dataSource_tmp = data.data;
+								self.dataSource_sub=[];
+								if(self.dataSource_tmp){
+									for(var i = 0; i < self.dataSource_tmp.length; i++) {
+										self.dataSource_sub.push(self.dataSource_tmp[i]);
+									}
+								}
+							}
+						});	
+					}
+				}
+				if(self.dataSource_sub.length){
+					for (var i = 0; i < self.dataSource_sub.length; i++) {
+						if(self.dataSource_sub[i].user.name==self.selected2){
+							self.subBus_id = self.dataSource_sub[i].id;
+						}
+					}
+				}
+				if(self.dataSource_label.length){
+					for (var i = 0; i < self.dataSource_label.length; i++) {
+						if(self.dataSource_label[i].name==self.selected3)
+							self.com_label = self.dataSource_label[i].id;
+					}
+				}
+			});
+
+			$("#saveButton").bind('click',function(data){
+				var code = self.code;
+				var text = $(".admin_ui_input");	
+				var label = self.com_label;
+				var name = text[1].value;
+				var contact = text[2].value;
+				var phone = text[3].value;
+				var business = self.bus_id;
+				var subBusiness = self.subBus_id;
+				if(id_id){
+					$.when(editCompany_c(id_id,code,name,contact,phone,label)).done(function(data){
+						if(data.state==0){
+							alert("修改成功！");
+						}
+					});
+				}
+				else{
+					if(business&&!subBusiness){
+						$.when(addCompany_bus(code,name,contact,phone,label,business)).done(function(data){
+							if(data.state==0){
+								alert("邀请成功！");
+							}
+						});
+					}
+					else if(business&&subBusiness){
+						$.when(addCompany_sub(code,name,contact,phone,label,business,subBusiness)).done(function(data){
+							if(data.state==0){
+								alert("邀请成功！");
+							}
+						});
+					}
+					
+				}
+				
+				
+			});
+			
+
+		}
+	});
+	
+
+</script>
+
+
+
+
+
+
+
+
+

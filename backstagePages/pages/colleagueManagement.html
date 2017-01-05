@@ -28,7 +28,7 @@
 					</tr>
 				</thead>
 				<tbody id="showImageManagement_data" class="admin_ui_table_hoverEffect">
-					<tr v-for="show in dataSource_filter">
+					<tr v-for="(show,index) in dataSource_filter">
 						<td>{{show.id}}</td>
 						<td>{{show.name}}</td>
 						<td>{{show.code}}</td>
@@ -38,9 +38,10 @@
 						<td>{{show.company?show.company.phone:""}}</td>
 						
 						<td class="admin_ui_table_action">
-							<div class="iconButton removeIcon" @click="removeWebsite($index)">
+							<div class="iconButton removeIcon"  @click="changeUserState(show.id,index)" :data-state="show.enable">
 								<i class="fa fa-remove"></i>
-								启用
+								<span v-if="show.enable">{{state_1}}</span>
+								<span v-else>{{state_2}}</span>
 							</div>
 						</td>
 					</tr>
@@ -59,7 +60,10 @@ var vm = new Tvm({
 		keyword: "",
 		dataSource: [],
 		dataSource_filter: [],
-		pageIndex: 1
+		pageIndex: 1,
+		state_1:"禁用",
+		state_2:"启用",
+		state:"",
 	},
 	computed: {
 	},
@@ -105,47 +109,32 @@ var vm = new Tvm({
 			    }
 			});
 		},
-		topShowButton: function(index){
+		changeUserState: function(id,index){
 			var self = this;
-			var showId = self.dataSource_filter[index].id,
-				value = self.dataSource_filter[index]._top;
-			if(!value){
-				// 取消置顶
-				$.when(cancelTopShow(showId)).done(function(data){
-					if(data.state == 0){
-						alert("取消置顶成功！");
-					}
-					else{
-						self.dataSource_filter[index]._top = true;
-					}
-				});
+			var val=$(".removeIcon").eq(index).children("span").text();
+			console.log(val);
+			if(val==self.state_1){
+				self.state=self.state_1;
+				enable=false;
+				$(".removeIcon").eq(index).children("span").text(self.state_2);
 			}
 			else{
-				// 置顶
-				$.when(topShow(showId)).done(function(data){
+				self.state=self.state_2;
+				$(".removeIcon").eq(index).children("span").text(self.state_1);
+				enable=true;
+			}
+			if(confirm("您确定要"+self.state+"该用户吗？")){
+				$.when(editUserState(id,enable)).done(function(data){
 					if(data.state == 0){
-						alert("置顶成功！");
-					}
-					else{
-						self.dataSource_filter[index]._top = false;
+						alert("账户已"+self.state);
 					}
 				});
 			}
-		},
-		addShowImageAsBottomSlideImage: function(index){
-			var self = this;
-			var showId = self.dataSource_filter[index].id;
-			// 设为底部轮播图
-			$.when(addShowImageAsBottomSlideImage(showId)).done(function(data){
-				if(data.state == 0){
-					alert("设置成功！");
-				}
-			});
 		}
 	},
 	created: function(){
 		var self = this;
-		$.when(getUserInfo("企业同事")).done(function(data){
+		$.when(getUserInfo_()).done(function(data){
 			if(data.state == 0){
 				self.dataSource = data.data;
 				self.dataSource_filter = self.dataSource;

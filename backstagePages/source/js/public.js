@@ -16,7 +16,12 @@ $(function(){
         //     }
         // });
         var name=localStorage.getItem("username");
-        $("#admin_name").text(name);
+        if(name=="root"){
+            $("#admin_name").text("智联科技");
+        }
+        else{
+            $("#admin_name").text(name);
+        }
     	eventBind();
     }
 });

@@ -16,7 +16,7 @@
 			<div class="admin_ui_border admin_ui_cont">
 				<div class="admin_ui_form_field">
 					<div class="admin_ui_name"><span style="width: 100px;display: inline-block;">邀请码：</span>
-					<input v-model="code_this"></div>
+					<input style="width: 88%;height: 30px;padding:0 10px;border:none;background-color: #fff" type="" name="" class="admin_ui_input" v-model="code_auto">
 				</div>
 				<div class="admin_ui_form_field">
 					<!-- <div class="admin_ui_name">id：<span id="showImageId"></span></div> -->
@@ -42,74 +42,7 @@
 	if(id_get){
 		var id_get=id_get.split("&")[0];
 		var id_id=id_array.split("=")[2];
-	}
-
-	// var queryData = getQueryData();
-	// if(!queryData){
-	// 	alert("查询参数错误，为您自动跳转至列表页");
-	// 	window.location.hash = "#/showImageManagement.html";
-	// }
-	// $("#showImagePhoto").attr("src", getImageByUrl(handleNullObject(queryData.photo, "url")));
-	// $("#showImageId").text(queryData.id);
-	// $("#showImageLike").text(queryData.like);
-	// $("#showImageComment").text(queryData.comment);
-	// $("#showImageRead").text(queryData.read);
-	var editor =  new tinymce.Editor('tinymce', {
-	    height: 500,
-		theme: 'modern',
-		language: 'zh_CN',
-		plugins: [
-		    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-		    'searchreplace wordcount visualblocks visualchars code fullscreen',
-		    'insertdatetime media nonbreaking save table contextmenu directionality',
-		    'emoticons template paste textcolor colorpicker textpattern imagetools'
-		],
-		toolbar1: 'insertfile undo redo | fontsizeselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-		toolbar2: 'print preview media | forecolor backcolor | example',
-		setup: function(ed) {
-	    },
-	    fontsize_formats: "12px 14px 18px 24px 36px 48px 60px 72px 84px 96px 108px 120px",
-		image_advtab: true,
-		image_upload: true,
-		relative_url: false,
-		templates: [
-		    { title: 'Test template 1', content: 'Test 1' },
-		    { title: 'Test template 2', content: 'Test 2' }
-		],
-		content_css: [
-		    '../source/css/tinymce.css'
-		]
-	}, tinymce.EditorManager);
-
-	// 获得编辑器中内容
-	function getEditorContent(){
-		return editor.getContent();
-	}
-	// 设置编辑器内容
-	function setEditorContent(html){
-		editor.setContent(html);
-	}
-	// 往编辑器中插入内容
-	function insertContentToEditor(html){
-		editor.insertContent(html);
-	}
-	// 设置 "design", "code" or "readonly"
-	function setEditorMode(mode){
-		editor.setMode(mode);
-	}
-	function getBase64Image(img) {
-	    var canvas = document.createElement("canvas");
-	    canvas.width = img.width;
-	    canvas.height = img.height;
-	    var ctx = canvas.getContext("2d");
-	    ctx.drawImage(img, 0, 0, img.width, img.height);
-	    var dataURL = canvas.toDataURL("image/png");
-	    return dataURL;
-	}
-	$("#tinymce").show();
-	editor.render();
-	//
-
+	}  
 	var vm = new Tvm({
 		el: '.admin_ui_cont',
 		data:{
@@ -118,48 +51,90 @@
 			contact_this:"",
 			phone_this:"",
 			bus_type:0,
+			code_auto:"",
 		},
 		computed: {
 		},
 		mounted: function(){
 			var self = this;
-			if(id_get){
+			console.log(id_id);
+			if(id_id){
 				self.name_this = id_get;
-				$.when(getBusiness_c(id_get)).done(function(data){
+				$.when(getSingleBusiness(id_id)).done(function(data){
 					if(data.state == 0){	
 						if(data.data.length){
 							self.bus_type = 0;
-							self.code_this = data.data[0].code;
+							self.code_auto = data.data[0].code;
 							self.contact_this = data.data[0].contact;
 							self.phone_this = data.data[0].phone;
 						}
 					}
 				});	
-				$.when(getSubBusiness_c(id_get)).done(function(data){	
-					if(data.state == 0){
-						if(data.data.length){
-							self.bus_type = 1;
-							self.code_this = data.data[0].code;
-							self.contact_this = data.data[0].contact;
-							self.phone_this = data.data[0].phone;
-						}
+			}
+			else{
+				var num = Math.random().toString(36).slice(2, 5); 
+				self.code_auto='B'+num;
+				$.when(checkCode(self.code_auto)).done(function(data){
+					if(data.state==0){
 					}
-				});	
-
+					else{
+						var num = Math.random().toString(36).slice(2, 5);   
+						self.code_auto='B'+num;
+					}
+				})
 			}
 
+			// if(id_get){
+			// 	self.name_this = id_get;
+			// 	$.when(getBusiness_c(id_get)).done(function(data){
+			// 		if(data.state == 0){	
+			// 			if(data.data.length){
+			// 				self.bus_type = 0;
+			// 				self.code_this = data.data[0].code;
+			// 				self.contact_this = data.data[0].contact;
+			// 				self.phone_this = data.data[0].phone;
+			// 			}
+			// 		}
+			// 	});	
+			// 	$.when(getSubBusiness_c(id_get)).done(function(data){	
+			// 		if(data.state == 0){
+			// 			if(data.data.length){
+			// 				self.bus_type = 1;
+			// 				self.code_this = data.data[0].code;
+			// 				self.contact_this = data.data[0].contact;
+			// 				self.phone_this = data.data[0].phone;
+			// 			}
+			// 		}
+			// 	});	
+			// }
 			$("#saveButton").bind('click',function(data){
 				var text = $(".admin_ui_input");
-				var name = text[0].value;
-				var contact = text[1].value;
-				var phone = text[2].value;
-				var competence="代理商管理员";
+				var name = text[1].value;
+				var contact = text[2].value;
+				var phone = text[3].value;
+				var competence=["代理商管理员"];
 				if(self.bus_type ==0){
-					$.when(editBusiness_c(id_id,self.code_this,name,contact,phone,competence)).done(function(data){	
-					});
+					if(id_id){
+						$.when(editBusiness_c(id_id,self.code_auto,name,contact,phone,competence)).done(function(data){	
+							if(data.state==0){
+								alert("修改成功！");
+							}
+						});
+					}
+					else{
+						$.when(addBusiness_c(self.code_auto,name,contact,phone,competence)).done(function(data){	
+							if(data.state==0){
+								alert("邀请成功！");
+							}
+						});
+					}
+					
 				}
-				else{
-					$.when(editSubBusiness_c(id_id,self.code_this,name,contact,phone,competence)).done(function(data){	
+				else{				
+					$.when(editSubBusiness_c(id_id,self.code_auto,name,contact,phone,competence)).done(function(data){	
+						if(data.state==0){
+							alert("新增成功！");
+						}
 					});
 				}
 			});

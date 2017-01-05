@@ -6,14 +6,42 @@
 	    line-height: 28px;
 	    padding: 0;
 	}
-	.file_{
+	.file_new{
         position: absolute;
         width: 100%;
         height: 100%;
         opacity: 0;
         z-index: 2;
         cursor: pointer;
+        top: 0;
+        left: 0;
     }
+	.slideImageUpload {
+	    position: relative;
+	    width: 200px;
+	    height: 150px;
+	    border: 1px solid #dddddd;
+	    margin-bottom: 5px;
+	    cursor: pointer;
+	    display: inline-block;
+	    vertical-align: top;
+	}
+	.tip{
+	    position: absolute;
+	    left: 50%;
+	    top: 50%;
+	    transform: translate(-50%, -50%);
+	    -webkit-transform: translate(-50%, -50%);
+	    width: 100%;
+	    padding: 10px;
+	    color: #999999;
+	    text-align: center
+	}
+	.upload_pic{
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
 </style>
 <div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
 	<div class="admin_scrollBox">
@@ -40,12 +68,12 @@
 								<i class="fa fa-cloud-upload"></i>
 								点击上传图片
 							</p>
-	                        <input type="file" name="" class="file_">
+	                        <input type="file" name="" class="file_new">
 						</div>
 					</div>
 				</div>
 				<div class="admin_ui_form_field" >
-					<div class="admin_ui_name">行业标签：<label v-for="(show,index) in dataSource_filter" :for=show.id style="margin:5px"><input type="radio" :id=show.id name="label"><span class="themeContent">{{show.name}}</span></label>
+					<div class="admin_ui_name">行业标签：<label v-for="(show,index) in dataSource_filter" :for=show.id style="margin:5px"><input type="checkbox" :id=show.id name="label"><span class="themeContent">{{show.name}}</span></label>
 					</div>
 				</div>
 				<div class="admin_ui_form_field">
@@ -75,10 +103,10 @@
 		theme: 'modern',
 		language: 'zh_CN',
 		plugins: [
-		    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+		    'wordcount advlist autolink lists link image charmap print preview hr anchor pagebreak',
 		    'searchreplace wordcount visualblocks visualchars code fullscreen',
 		    'insertdatetime media nonbreaking save table contextmenu directionality',
-		    'emoticons template paste textcolor colorpicker textpattern imagetools'
+		    'emoticons template paste textcolor colorpicker textpattern imagetools',
 		],
 		toolbar1: 'insertfile undo redo | fontsizeselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
 		toolbar2: 'print preview media | forecolor backcolor | example',
@@ -198,9 +226,12 @@
 				if(data_.label.length){
 					val=data_.label[0].id;
 				}
-				// console.log(val.toString());
-				// var selector=document.getElementById(val.toString());
-				// console.log(selector);
+				if(data_.photo){
+					photo_=data_.photo.id;
+					var url='/resources/'+data_.photo.id;
+					$(".slideImageUpload").children("p").remove();
+					$(".slideImageUpload").append('<img src='+url+' class="upload_pic">');
+				}
 				$("#"+val).prop("checked",true);
 				var val_=data_.top;
 				if(val_){
@@ -226,10 +257,74 @@
 	}
 	else{
 	}
+	// var type_arr_new=[];
+ //    var photo_arr_new=[];
+ 	var type_;
+ 	var photo_;
+    var announce;
+    $(".file_new").on("change", function(e){
+        type_arr_new=[];
+        var file = e.target.files; //获取图片资源
+        console.log(file);
+        // for(var i=0; i< file.length; i++){
+            type_=file[0] .type;
+            // type_arr_new.push(type);  
+            if (!file[0].type.match('image.*')) {
+                return false;
+            }//只选取图片文件
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file[0]); // 读取文件
+              // 渲染文件
+            reader.onload = function(arg) {
+                $(".slideImageUpload").children(".tip").remove();
+                $(".slideImageUpload").children("img").remove();
+                $(".slideImageUpload").append('<img src="' + arg.target.result + '" class="upload_pic">');
+            // var img = '<img class="preview" src="' + arg.target.result + '" alt="preview"/>';
+            }
+        // if(type_arr_new.length){
+            // for(var i=0;i<type_arr_new.length;i++){
+                $.when(getImgUrl(type_)).done(function(data){
+                    if(data.state==0){
+                        var data=data.data;
+                        OSSAccessKeyId=data.OSSAccessKeyId;
+                        Signature=data.Signature;
+                        callback=data.callback;
+                        key=data.key;
+                        policy=data.policy;
+                    }
+                    var picFileList = $(".slideImageUpload").find(".file_new").get(0).files;
+                    // var picFileList = $("#pic")[0].files;验证是否可行
+                    var formData = new FormData();
+                    // for(var i=0; i< picFileList.length; i++){
+                        formData.append("OSSAccessKeyId",OSSAccessKeyId);
+                        formData.append("Signature",Signature);
+                        formData.append("callback",callback);
+                        formData.append("key",key);
+                        formData.append("policy",policy);
+                        formData.append("file",picFileList[0]);
+                        $.when(uploadImg(formData)).done(function(data){
+                            // $('.button_2').attr("href","#/pushSelect.html?id="+data.id);
+                            if(data.state==0){
+                                photo_=data.id;;
+                            }            
+                        })
+                    // }
+                    // formData.append('file', $('#file')[0].files[0]);
+                })
+            // }
+        // } 
+    });
 	$("#saveButton").bind('click',function(data){
 		var top;
 		var text = editor.getContent();
-		var label = $("input[name='label']:checked").attr("id");
+		var label=[];
+		// var label = $("input[name='label']:checked").attr("id");
+		var label_ = $("input[name='label']:checked");
+		for (var i=0;i<label_.length;i++) {
+			label.push(label_.eq(i).attr("id"));
+
+		}
 		var title=$(".ar-title").val();
 		var top_ = $("input[name='selName']:checked").attr("id");
 		if(top_=="up"){
@@ -238,26 +333,31 @@
 		else{
 			top=false;
 		}
-		if(id){
-			$.when(editArticle(id,title,text,label,top)).done(function(data){
-				if(data.state==0){
-					alert("修改成功！");
-				}
-				else{
-					alert("操作失败！")
-				}
-			})	
-		}
-		else{
-			$.when(sendArticle(title,text,label,top)).done(function(data){
-				if(data.state==0){
-					alert("新增成功！");
-				}
-				else{
-					alert("操作失败！")
-				}
-			})	
-		}	
+		if(photo_){
+    		if(id){
+				$.when(editArticle(id,title,text,label,top,photo_)).done(function(data){
+					if(data.state==0){
+						alert("修改成功！");
+					}
+					else{
+						alert("操作失败！")
+					}
+				})	
+			}
+			else{
+				$.when(sendArticle(title,text,label,top,photo_)).done(function(data){
+					if(data.state==0){
+						alert("新增成功！");
+					}
+					else{
+						alert("操作失败！")
+					}
+				})	
+			}	
+    	}
+    	else{
+    		alert("请先上传封面图片！");
+    	}
 	});
 
 </script>

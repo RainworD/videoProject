@@ -86,9 +86,10 @@
 		var name=$(".userName").val();
 		var password=$(".pw").val();
 		var competence=$(".userType").val();
-		var contact=$("#contact_").children().eq(1).find("input").val();
+		var contact;
 		var username=$(".account_1").next("span").text();
 		if(password&&!id){
+			contact=$("#contact_").children().eq(0).find("input").val();
 			$.when(addAdmin(username,password,name,contact,competence)).done(function(data){
 				if(data.state == 0){
 					alert("新增用户成功！")
@@ -99,7 +100,8 @@
 			});
 		}
 		else if(!password&&id){
-			$.when(editAdmin_(id,name,contact,competence)).done(function(data){
+			contact=$("#contact_").children().eq(1).find("input").val();
+			$.when(editAdmin_(id,name,contact)).done(function(data){
 				if(data.state == 0){
 					alert("修改用户成功！")
 				}
@@ -109,7 +111,8 @@
 			});
 		}
 		else if(password&&id){
-			$.when(editAdmin(id,password,name,contact,competence,enable)).done(function(data){
+			contact=$("#contact_").children().eq(1).find("input").val();
+			$.when(editAdmin(id,password,name,contact)).done(function(data){
 				if(data.state == 0){
 					alert("修改用户成功！")
 				}

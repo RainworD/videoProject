@@ -25,7 +25,7 @@
 					<div class="admin_ui_name">文章标题：<input style="width: 92%;height: 30px" type="" name="" class="ar-title ui-input"></div>
 				</div>
 				<div class="admin_ui_form_field">
-					<div class="admin_ui_name">推送范围：<label v-for="(show,index) in dataSource_filter" :for=show.id><input :id=show.id type="checkbox" name="label" style="margin: 5px;" ><span>{{show.name}}</span></label></div>
+					<div class="admin_ui_name">推送范围：<label v-for="(show,index) in dataSource_filter" :for=show.id><input :id=show.id type="checkbox" name="label" style="margin: 5px;" class="busArea"><span>{{show.name}}</span></label></div>
 				</div>
 				<!-- <div class="admin_ui_cont"> -->
 				<textarea id="editor1"></textarea>
@@ -150,6 +150,8 @@
 	var id=id_[1];
 	if(id){
 		$(".admin_ui_cont_bottomFixed").hide();
+		// $(".ar-title").attr("disabled","disabled");
+		// $(".busArea").prop("disabled",true);
 		$.when(getSinglePush(id)).done(function(data){
 			if(data.state == 0){
 				var data=data.data[0];
@@ -158,6 +160,8 @@
 				for (var i=0;i<business.length;i++) {
 					var id_=business[i].id;
 					$("#"+id_).prop("checked",true);
+					$("#"+id_).prop("disabled",true);
+					$(".busArea").prop("disabled",true);
 				}
 				// editor.on('init', function() {
 			 //        editor.setContent(data.text);
@@ -168,6 +172,7 @@
 		        catch(ex){
 		           editor.on('init', function() {
 				        editor.setContent(data.text);
+				        tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
 				    });
 		        }
 			}
@@ -181,7 +186,6 @@
 		var business=[];
 		var text = editor.getContent();
 		var title=$(".ar-title").val();
-<<<<<<< HEAD
 		var business_ = $("input[name='label']:checked");
 		for (var i=0;i<business_.length;i++) {
 			business.push(business_.eq(i).attr("id"));
@@ -189,10 +193,8 @@
 		}
 		console.log(business);
 		console.log(text);
-=======
-		var business = $("input[name='label']:checked").attr("id");
-		console.log(business);
->>>>>>> origin/master
+		// var business = $("input[name='label']:checked").attr("id");
+		// console.log(business);
 		$.when(sendMessage(title,text,business)).done(function(data){
 			if(data.state == 0){
 				alert("新增成功！");

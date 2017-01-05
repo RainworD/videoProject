@@ -28,6 +28,13 @@
 	</div>
 </div>
 <script>
+	$.when(getFee()).done(function(data){
+		if(data.state==0){
+			if(data.data[0]>0){
+				$(".admin_ui_name input").val(data.data[0]/100);
+			}
+		}
+	})
 	$(".submitBtn").bind("click",function(){
 		var val=$(".enterFee").val();
 		console.log(val);
