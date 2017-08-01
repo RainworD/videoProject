@@ -30,12 +30,12 @@
             <p class="para_2" v-cloak>￥&nbsp;{{getMoneyValue(price)}}</p>
             <p class="para_3" v-cloak>设备押金:&nbsp;&nbsp;￥&nbsp;{{getMoneyValue(deposit)}}</p>
             <p class="bottomBtn">
-                <a href="open:recharge_main.html,navigatorTitle:账户充值">
+                <a href="open:recharge_main.html,navigatorTitle:账户充值" style="margin-left: 25%;">
                     <span class="recharge">充值</span>   
                 </a>
-                <a href="open:withdraw_main.html,navigatorTitle:账户提现">
+                <!-- <a href="open:withdraw_main.html,navigatorTitle:账户提现">
                     <span class="withdraw">提现</span>
-                </a>
+                </a> -->
             </p>
         </div>
         <h6 class="mui-content-padded">收支明细</h6>
@@ -113,7 +113,7 @@ var vm = new Vue({
             },
             refreshData: function(){
                 var self = this;
-                mui.alert("123")
+                self.getNewestOrder();
                 $.when(__getSelf()).done(function(data){
                     self.price = getB_Price();
                     self.deposit = getB_Deposit();

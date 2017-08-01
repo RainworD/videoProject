@@ -134,8 +134,8 @@
         </div>    
     </div>
     <div class="mui-input-row enterHide" v-show="showInput">
-        <input v-model="commentValue" type="text" placeholder="请输入评论...">
-        <div class="button" @tap="sendComment();">发送</div>
+        <input id="commentInput" v-model="commentValue" type="text" placeholder="请输入评论...">
+        <div class="button" @tap="sendComment();" :class="{'colorblue':commentValue!=''}">发送</div>
     </div>
 </body>
 <script src="../source/mui/js/mui.zoom.js"></script>
@@ -176,8 +176,14 @@ $(function() {
                 self.showInput = true;
                 self.focusDynamic = dynamic;
                 setTimeout(function(){
-                    $("#commentInput").focus();
-                },50)
+                    document.getElementById('commentInput').focus();
+                },0);
+                window.location.href="h5action:inputFocus";
+            },
+            inputFocus: function(){
+                setTimeout(function(){
+                    document.getElementById('commentInput').focus();
+                },0);
             },
             sendComment: function(){
                 var self = this;
@@ -321,6 +327,7 @@ $(function() {
             });
             
             window.positionTo = self.positionTo;
+            window.inputFocus = self.inputFocus;
         }
     })
 });

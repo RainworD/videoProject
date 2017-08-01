@@ -25,14 +25,14 @@
 <body>
     <div class="addworkmates">
         <div class="mui-content">
-            <h5 class="mui-content-padded">邀请码:&nbsp;&nbsp;<span>{{code}}</span></h5>
-            <form class="mui-input-group">
+            <h5 class="mui-content-padded">邀请码:&nbsp;&nbsp;<span class="colorred" style="font-size: 17px;">{{code}}</span></h5>
+            <div class="mui-input-group">
                 <div class="mui-input-row">
                     <label>手机号</label>
-                    <input v-model="phone" type="text">
+                    <input id="phoneInput" v-model="phone" type="text" @keyup.13="applyButton()">
                     <img class="imageIcon" style="position: absolute;right: 10px; top: 10px;" src="../source/img/phone.png" @tap="getAddressBook()">
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </body>
@@ -42,7 +42,7 @@ $(function() {
     var vm = new Vue({
         el: "body",
         data: {
-            code: getUser_Code(),
+            code: "",
             phone: ""
         },
         computed: {
@@ -51,16 +51,19 @@ $(function() {
         methods: {
             applyButton: function(){
                 var self = this;
+                $("#phoneInput").blur()
                 if(!isRightPhoneNumber(self.phone)){
                     mui.toast("请输入合法的手机号");
                 }
                 else{
                     mui.confirm("您确定邀请吗？",null,null,function(result){
                         if(result.index == 1){
-                            $.when(b_addColleague(getUser_Code(),self.phone)).done(function(data){
+                            var competence = getUser_Type() == "c"? "企业同事":"代理商同事";
+                            $.when(addColleague(self.code,self.phone,competence)).done(function(data){
                                 if(data.state == 0){
                                     mui.toast("邀请成功");
                                     self.phone = "";
+                                    self.getRandomCode();
                                 }
                             });
                         }
@@ -73,12 +76,19 @@ $(function() {
             },
             getAddressBook: function(){
                 window.location.href="h5action:getAddressBook";
+            },
+            getRandomCode: function(){
+                var self = this;
+                $.when(getRandomCode(getUser_Code()+"0")).done(function(data){
+                    self.code = data.code;
+                })
             }
         },
         created: function() {
             var self = this;
             window.applyButton = self.applyButton;
             window.setPhoneNumber = self.setPhoneNumber;
+            self.getRandomCode()
         }
     })
 });

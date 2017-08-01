@@ -21,6 +21,9 @@
     body{
         background-color: #f3f3f3;
     }
+    [v-cloak]{
+        display: none;
+    }
 </style>
 <body>
     <div class="cash_detail" v-cloak>
@@ -75,13 +78,14 @@
     </div>
 </body>
 <script>
+
 $(function() {
  mui.init();
  var vm = new Vue({
         el: "body",
         data: {
             order: {},
-            type: 0
+            type: 52071
         },
         computed: {
             

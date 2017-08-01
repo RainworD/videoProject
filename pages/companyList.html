@@ -24,20 +24,21 @@
     }
 </style>
 <body>
-    <div class=" mui-content">
-        <ul class="mui-table-view">
-            <li class="mui-table-view-cell" v-for="child in list" @tap="companyTap(child.id)">
-                <a class="mui-navigate-right" href="company_activity.html?{{encodeObj({'companyId':child.id, 'newDynamicNumber':child.dynamic,'newCommentDynamicNumber':child.comment})}}">
-                    <span class="mui-h5">{{child.name}}</span>
-                    <span class="mui-badge mui-badge-danger" v-if="child.comment + child.dynamic>0">{{child.comment + child.dynamic}}</span>
-                </a>
-            </li>
-        </ul>
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+        <div class="mui-scroll">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell" v-for="child in list" @tap="companyTap(child.id,child.dynamic,child.comment)" v-show="child.enable">
+                    <a class="mui-navigate-right">
+                        <span class="mui-h5">{{child.name}}</span>
+                        <span class="mui-badge mui-badge-danger" v-if="child.comment + child.dynamic>0">{{child.comment + child.dynamic}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </body>
 <script>
 $(function() {
-    mui.init();
     var vm = new Vue({
         el: "body",
         data: {
@@ -63,10 +64,12 @@ $(function() {
             }
         },
         methods: {
-            companyTap: function(companyId){
-                setCompanyDynamicLastStamp(companyId,new Date() - 0);
+            companyTap: function(companyId,dynamic,comment){
+                setCompanyDynamicLastStamp(companyId,new Date() - 0).done(function(){
+                    window.location.href="company_activity.html?"+encodeObj({'companyId':companyId, 'newDynamicNumber':dynamic,'newCommentDynamicNumber':comment})
+                });
             },
-            getNumberOfCompanyDynamic: function(companyId, name){
+            getNumberOfCompanyDynamic: function(companyId, name, enable){
                 // 根据companyId获得上次浏览时间
                 return Promise.resolve(getCompanyDynamicLastStamp(companyId)).then(function(data){
                     var stamp = data.data[0];
@@ -78,11 +81,12 @@ $(function() {
                     return Promise.resolve({
                         id: companyId,
                         dynamic: number,
-                        name: name
+                        name: name,
+                        enable: enable
                     })
                 })
             },
-            getNumberOfCompanyCommentDynamic: function(companyId, name){
+            getNumberOfCompanyCommentDynamic: function(companyId, name, enable){
                 return Promise.resolve(getCompanyCommentDynamicLastStamp(companyId)).then(function(data){
                     var stamp = data.data[0];
                     stamp = stamp? stamp: 0;
@@ -93,7 +97,8 @@ $(function() {
                     return Promise.resolve({
                         id: companyId,
                         comment: number,
-                        name: name
+                        name: name,
+                        enable: enable
                     })
                 })
                 var self = this;
@@ -107,8 +112,9 @@ $(function() {
                         var p_s = []
                         for(var i = 0, length = self.children.length; i < length; i++){
                             var name = data.data[i].name
-                            p_s.push(self.getNumberOfCompanyDynamic(self.children[i].id, name))
-                            p_s.push(self.getNumberOfCompanyCommentDynamic(self.children[i].id, name))
+                            var enable = data.data[i].enable
+                            p_s.push(self.getNumberOfCompanyDynamic(self.children[i].id, name,enable))
+                            p_s.push(self.getNumberOfCompanyCommentDynamic(self.children[i].id, name,enable))
                         }
 
                         Promise.all(p_s).then(function(comments){
@@ -118,10 +124,11 @@ $(function() {
                                 ret[id] = ret[id] || {
                                     dynamic: 0,
                                     comment: 0,
-                                    name: comment.name
+                                    name: comment.name,
+                                    enable: comment.enable
                                 }
-                                ret[id].dynamic += (comment.dynamic || 0)
-                                ret[id].comment += (comment.comment || 0)
+                                ret[id].dynamic = (ret[id].dynamic || comment.dynamic || 0)
+                                ret[id].comment = (ret[id].comment || comment.comment || 0)
                                 totalNumber += (ret[id].dynamic + ret[id].comment);
                             })
                             window.location.href="Object:"+encodeObj({'newDynamicNumber':totalNumber});
@@ -131,9 +138,11 @@ $(function() {
                                     id: key,
                                     dynamic: ret[key].dynamic,
                                     comment: ret[key].comment,
-                                    name: ret[key].name
+                                    name: ret[key].name,
+                                    enable: ret[key].enable
                                 })
                             });
+                            mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
                         });
                     }
                 });
@@ -142,8 +151,20 @@ $(function() {
         created: function() {
             var self = this;
             self.reloadCompanyList();
+
         },
         ready: function() {
+            var self = this;
+            mui.init({
+                pullRefresh: {
+                    container: '#pullrefresh',
+                    down: {
+                        callback: function(){
+                            self.reloadCompanyList();
+                        }
+                    }
+                }
+            });
             window.companyTap = this.companyTap;
             window.reloadCompanyList = this.reloadCompanyList;
         }

@@ -30,7 +30,7 @@
             </div>
             <p class="rightTitle">v1.0</p>
         </div>
-        <ul class="mui-table-view" v-for="article in articleList">
+        <ul class="mui-table-view" v-for="article in articleList" v-show="article[0]" style="min-height: 43px;">
             <li class="mui-table-view-cell">
                 <a class="mui-navigate-right" @tap="goDetail(article[0],$index)">
                     {{article[0]}}

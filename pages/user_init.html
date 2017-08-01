@@ -23,10 +23,11 @@ $.when(getSelf()).done(function(data){
 		var _data = data.data[0];
 		window.localStorage.setItem("user_data",encodeObj(_data));
 		window.localStorage.setItem("user_code",_data.code);
-		window.localStorage.setItem("user_name",_data.name);
-		window.localStorage.setItem("user_username",_data.username);
+		window.localStorage.setItem("user_name",_data.name || "");
+		window.localStorage.setItem("user_username",_data.username || "");
 		window.localStorage.setItem("user_competence",_data.competence);
-		window.localStorage.setItem("user_phone",_data.contact);
+		window.localStorage.setItem("user_phone",_data.contact || "");
+		window.localStorage.setItem("user_intime", _data.in_time || 0);
 		if(!_data.photo){
 			_data.photo = {};
 			_data.photo.id = 1;
@@ -36,6 +37,20 @@ $.when(getSelf()).done(function(data){
 		if(_data.business){
 			window.localStorage.setItem("b_deposit",_data.business.deposit);
 			window.localStorage.setItem("b_price",_data.business.price);
+		}
+		
+		// c端情况
+		else if(_data.company){
+			window.localStorage.setItem("c_company", JSON.stringify(_data.company||""))
+			if(_data.company.business){
+				window.localStorage.setItem("c_business", JSON.stringify(_data.company.business||""))
+			}
+			if(_data.company.subBusiness){
+				window.localStorage.setItem("c_subBusiness", JSON.stringify(_data.company.subBusiness||""))
+			}
+		}
+		else{
+			
 		}
 		window.localStorage.setItem("user_id",_data.id);
 		window.location.href = getQueryData().url;

@@ -18,9 +18,15 @@ function successHandle(data){
 		// 未登录
 		window.location.href="h5action:error:10001";
 	}
-	if(data.state != 0){
-		mui.toast(data.msg);
+	else if(data.state != 0){
+		if(data.state == 30006){
+
+		}
+		else{
+			mui.toast(data.msg);
+		}
 	}
+	else{}
 }
 function errorHandle(data){
 	mui.toast("网络异常");
@@ -31,7 +37,7 @@ function getSelf(){
 		url: baseUrl + "/model/get/User",
 		data: {
 			"my":1,
-			"add_":["photo","business"]
+			"add_":["photo","business","company","company.business","company.business.user","company.business.user.photo","company.subBusiness.user.photo"]
 		}
 	});
 	return ajax;
@@ -47,6 +53,17 @@ function b_editCompany(id,name,contact,phone){
 			"phone":phone
 		}
 	})
+	return ajax;
+}
+function getCompanyById(companyId){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Company",
+		data:{
+			"id": companyId,
+			"add_": ["business", "subBusiness","business.user", "subBusiness.user"]
+		}
+	});
+	return ajax;
 }
 // 获取用户账单
 function b_getOrder(){
@@ -88,7 +105,7 @@ function b_getSubBussiness(){
 	var ajax = $.ajax({
 		url: baseUrl + "/model/get/SubBusiness",
 		data: {
-
+			"add_": ['user', 'business']
 		}
 	});
 	return ajax;
@@ -103,13 +120,26 @@ function b_getAllCompany(){
 	});
 	return ajax;
 }
+// 获取已邀请但未注册的企业
+function b_getUnregisterCompany(userId){
+	var ajax = $.ajax({
+		url: baseUrl + "/model/get/Register",
+		data: {
+			"complete": false,
+			"user": userId,
+			"competence": "企业管理员",
+			"add_": ["enable","name","concat"]
+		}
+	});
+	return ajax;
+}
 // 注册（新增）一个企业管理员 c端管理员（企业端管理员,c母账户）
 function b_registerBCompanyParent(code,phone,name){
 	return b_addOneRegister(code,phone,name,"企业管理员");
 }
 // 邀请一个同事
-function b_addColleague(code,phone){
-	return b_addOneRegister(code, phone, undefined,"代理商同事");
+function addColleague(code,phone, competence){
+	return b_addOneRegister(code, phone, undefined,competence);
 }
 function b_addOneRegister(code, phone, name,competence){
 	var ajax = $.ajax({
@@ -433,17 +463,19 @@ function getAnnounce () {
 		url: baseUrl+"/model/get/Announce",
 		// url: "../announce.json",
 		data: {
+			in_time_begin_: getUser_Intime(),
 			add_: "reading"
 		}
 	});
 	return ajax;
 }
-//获得未读的Announce
+// 获得最新的一个announce
 function getAnnounceUnread () {
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Announce",
 		data:{
-			read: 0,
+			// read: 0,
+			in_time_begin_: getUser_Intime(),
 			rows_: 1,
 			order_: "id desc"
 		}
@@ -455,6 +487,7 @@ function getAnnounceUnreadCount (){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Announce",
 		data:{
+			in_time_begin_: getUser_Intime(),
 			read: 0,
 			count_: true
 		}
@@ -466,6 +499,7 @@ function getAnnounceFixedLength (start, length){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Announce",
 		data:{
+			in_time_begin_: getUser_Intime(),
 			add_: "reading",
 			order_: "id desc",
 			start_: start,
@@ -474,13 +508,14 @@ function getAnnounceFixedLength (start, length){
 	});
 	return ajax;
 }
-//获得某一种类型的未读Message
+// 获得最新的一个message
 function getMessageUnread(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
+			in_time_begin_: getUser_Intime(),
 			type: type,
-			reading: false,
+			// reading: false,
 			rows_: 1,
 			order_: "id desc"
 		}
@@ -492,6 +527,7 @@ function getMessageUnreadCount(type){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
+			in_time_begin_: getUser_Intime(),
 			type: type,
 			reading: false,
 			count_: true
@@ -504,6 +540,7 @@ function getMessageFixedLength (type, start, length){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Message",
 		data:{
+			in_time_begin_: getUser_Intime(),
 			type: type,
 			order_: "id desc",
 			start_: start,
@@ -512,13 +549,15 @@ function getMessageFixedLength (type, start, length){
 	});
 	return ajax;
 }
+// 获得最新的一个warning
 function getWarningUnread(){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Warning",
 		data:{
-			reading: false,
+			// reading: false,
+			in_time_begin_: getUser_Intime(),
 			rows_: 1,
-			order_: "id desc"
+			order_: "time desc"
 		}
 	});
 	return ajax;
@@ -527,6 +566,7 @@ function getWarningUnreadCount(){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Warning",
 		data:{
+			in_time_begin_: getUser_Intime(),
 			reading: false,
 			count_: true
 		}
@@ -537,7 +577,8 @@ function getWarningFixedLength(start, length){
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Warning",
 		data:{
-			order_: "id desc",
+			in_time_begin_: getUser_Intime(),
+			order_: "time desc",
 			start_: start,
 			rows_: length
 		}
@@ -582,7 +623,8 @@ function getDetailWarning (id) {
 	var ajax = $.ajax({
 		url: baseUrl+"/model/get/Warning",
 		data: {
-			"id": id
+			"id": id,
+			"add_": "time"
 		}
 	});
 	return ajax;
@@ -737,7 +779,7 @@ function getNumberOfInformedDynamicAfter(stamp){
 		data: {
 			"count_": true,
 			"informed": 1,
-			"in_time_begin_": stamp
+			"in_time_begin_": stamp || 0
 		}
 	});
 	return ajax;
@@ -749,7 +791,7 @@ function getNumberOfCommentDynamicAfter(stamp){
 		data: {
 			"count_": true,
 			"commented": 1,
-			"update_time_begin_": stamp
+			"update_time_begin_": stamp || 0
 		}
 	});
 	return ajax;
@@ -760,7 +802,7 @@ function getNumberOfAllDynamicAfter(stamp){
 		url: baseUrl+"/model/get/Dynamic",
 		data: {
 			"count_": true,
-			"in_time_begin_": stamp
+			"in_time_begin_": stamp ||0 
 		}
 	});
 	return ajax;
@@ -772,7 +814,7 @@ function getNumberOfCompanyDynamicByCompanyIdAndStamp(companyId, stamp){
 		data: {
 			"company": companyId,
 			"count_": true,
-			"in_time_begin_": stamp
+			"in_time_begin_": stamp||0
 		}
 	});
 	return ajax;
@@ -785,7 +827,7 @@ function getNumberOfCompanyCommentDynamicByCompanyIdAndStamp(companyId, stamp){
 			"company": companyId,
 			"commented": 1,
 			"count_": true,
-			"update_time_begin_": stamp
+			"update_time_begin_": stamp||0
 		}
 	});
 	return ajax;
@@ -811,11 +853,66 @@ function getArticleById(id){
 	});
 	return ajax;
 }
-
-
-
-
-
+// 停用or启用企业
+function changeCompanyEnable(id,bool){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/Company",
+		data: {
+			'id': id,
+			'enable': bool
+		}
+	});
+	return ajax;
+}
+// 极光推送清空
+function emptyRegistration_id(userId){
+	var ajax = $.ajax({
+		url: baseUrl+"/model/save/User",
+		data: {
+			'id': userId,
+			'registration_id': ""
+		}
+	});
+	return ajax;
+}
+// 随机生成一个邀请码
+function getRandomCode(prefix,def){
+	var code = prefix+parseInt(Math.random()*1000);
+	if(!def){
+		var def = $.Deferred();
+	}
+	$.when(checkCodeRepeat(code)).done(function(data){
+		if(data.state == 0){
+			def.resolve({"code":code});
+		}
+		else{
+			getRandomCode(prefix,def);
+		}
+	});
+	return def;
+}
+// 验证邀请码是否重复
+function checkCodeRepeat(code){
+	var ajax = $.ajax({
+		url: baseUrl+"/verify/checkReg",
+		data: {
+			'code': code
+		}
+	});
+	return ajax;
+}
+// 变更企业代理商
+function changeBusiness(companyId,businessId,subBusinessId){
+	var ajax = $.ajax({
+		url: baseUrl+"/company/changeBusiness",
+		data: {
+			'companyId': companyId,
+			'businessId': businessId,
+			'subBusinessId': subBusinessId
+		}
+	});
+	return ajax;
+}
 
 
 

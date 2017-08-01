@@ -20,6 +20,7 @@
     <script src="../source/js/public_b.js"></script>
     <script src="../source/mui/js/mui.zoom.js"></script>
     <script src="../source/mui/js/mui.previewimage.js"></script>
+    <!-- <script src="../source/js/vconsole.min.js"></script> -->
 </head>
 <body>
     <div class="mui-content">
@@ -54,7 +55,7 @@
                                 </div>
                                 <div class="rightContent">
                                     <div class="rightContent_1">
-                                        <p class="rightTitle">{{dynamic.user.name}}</p>
+                                        <p class="rightTitle">{{dynamic.user.username}}</p>
                                         <p class="rightPara wordbreak">{{dynamic.text}}</p>
                                         <div class="photoPreviewBox">
                                             <template v-for="photoUrl in dynamic.photo">
@@ -196,7 +197,7 @@
     </div>
     <div class="mui-input-row enterHide" v-show="showInput">
         <input id="commentInput" v-model="commentValue" type="text" placeholder="请输入评论...">
-        <div class="button" @tap="sendComment();">发送</div>
+        <div class="button" @tap="sendComment();" :class="{'colorblue':commentValue!=''}">发送</div>
     </div>
 </body>
 <script>
@@ -234,8 +235,14 @@ $(function() {
                 self.showInput = true;
                 self.focusDynamic = dynamic;
                 setTimeout(function(){
-                    $("#commentInput").focus();
-                },50)
+                    document.getElementById('commentInput').focus();
+                },0);
+                window.location.href="h5action:inputFocus";
+            },
+            inputFocus: function(){
+                setTimeout(function(){
+                    document.getElementById('commentInput').focus();
+                },0);
             },
             sendComment: function(){
                 var self = this;
@@ -381,7 +388,7 @@ $(function() {
             positionTo: function(index){
                 var self = this;
                 self.activeIndex = index;
-                mui("#scroll"+index).pullRefresh().pulldownLoading();
+                mui("#scroll"+(index-0+1)).pullRefresh().pulldownLoading();
             },
             notifyObj: function(){
                 var self = this;
@@ -461,6 +468,7 @@ $(function() {
             });
             self.reloadDynamicNumber();
             window.positionTo = self.positionTo;
+            window.inputFocus = self.inputFocus;
         }
     })
 });

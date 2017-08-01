@@ -29,15 +29,19 @@
             <ul class="mui-table-view mui-table-view-chevron mui-table-view-chevron-35">
                 <li class="mui-table-view-cell" v-for="company in datalist">
                     <div class="mui-slider-right mui-disabled">
-                        <a class="mui-btn mui-btn-grey" href="addCompany.html">编辑</a>
-                        <a class="mui-btn mui-btn-green" v-if="!company.enable">启用</a>
-                        <a class="mui-btn mui-btn-red" v-else>停用</a>
+                        <a class="mui-btn mui-btn-grey" @tap="goEdit(company.id)">编辑</a>
+                        <a class="mui-btn mui-btn-green" @tap="changeCompanyEnable(company.id,true, $index)" v-show="!company.enable">启用</a>
+                        <a class="mui-btn mui-btn-red" @tap="changeCompanyEnable(company.id,false, $index)" v-show="company.enable">停用</a>
                     </div>
                     <a class="mui-slider-handle mui-navigate-right" @tap="goDetail(company.id);">
                         <span class="mui-h5">{{company.name}}</span>
-                        <span class="colorred" v-if="!company.enable">(停用)</span>
+                        <span class="colorred" v-show="!company.enable">(停用)</span>
                         <span class="mui-pull-right color9">{{getAvailableDeviceLength(company.device)}}/{{company.device.length}}</span>
                     </a>
+                </li>
+                <li class="mui-table-view-cell" v-for="company in unregisterList">
+                    <span class="mui-h5">{{company.name}}</span>
+                    <span class="colorgreen">(未注册，邀请码：{{company.code}})</span>
                 </li>
             </ul>
         </div>
@@ -49,7 +53,8 @@ $(function() {
     var vm = new Vue({
         el: "body",
         data: {
-            datalist: []
+            datalist: [],
+            unregisterList: []
         },
         computed: {
             
@@ -67,24 +72,38 @@ $(function() {
             },
             getNewest: function () {
                 var self = this;
-                $.when(b_getAllCompany()).done(function(data){
-                    if(data.state == 0){
-                        self.datalist = data.data;
-                        mui('#scroll').pullRefresh().endPulldownToRefresh();
+                $.when(b_getAllCompany(),b_getUnregisterCompany(getUser_Id())).done(function(data1,data2){
+                    if(data1[0].state == 0){
+                        self.datalist = data1[0].data;
                     }
+                    if(data2[0].state == 0){
+                        self.unregisterList = data2[0].data;
+                    }
+                    mui('#scroll').pullRefresh().endPulldownToRefresh();
                 })
             },
             goDetail: function(companyId){
                 window.location.href="company_device_detail.html?"+encodeObj({"companyId": companyId});
+            },
+            goEdit: function(companyId){
+                window.location.href="open:addCompany.html?"+encodeObj({"companyId": companyId})+",navigatorRightButton:保存,navigatorRightButtonCallback:saveButton()";
+            },
+            changeCompanyEnable: function(companyId,bool,index){
+                var self = this;
+                $.when(changeCompanyEnable(companyId,bool)).done(function(data){
+                    if(data.state == 0){
+                        self.datalist[index].enable = bool;
+                    }
+                });
             }
         },
         created: function() {
             var self = this;
-            $.when(b_getAllCompany()).done(function(data){
-                if(data.state == 0){
-                    self.datalist = data.data;
-                }
-            })
+            // $.when(b_getAllCompany()).done(function(data){
+            //     if(data.state == 0){
+            //         self.datalist = data.data;
+            //     }
+            // })
         },
         ready: function () {
             var self = this;            
@@ -98,6 +117,7 @@ $(function() {
                     }
                 });
             });
+            window.refreshData = self.getNewest;
         } 
     })
 });

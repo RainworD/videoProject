@@ -1,3 +1,8 @@
+function checkUserId(userid){
+    if(userid != getUser_Id()){
+        refreshUserData();
+    }
+}
 // 检查输入是否为空，空的话返回true
 function checkEmpty(str){
     return !$.trim(str);
@@ -35,8 +40,11 @@ function getTimeBy(stamp){
     var day = time.getDate();
     day = day < 10 ? "0" + day : day;
     var hour = time.getHours();
+    hour = hour < 10 ? "0" + hour : hour;
     var minute = time.getMinutes();
+    minute = minute < 10 ? "0" + minute : minute;
     var second = time.getSeconds();
+    second = second < 10 ? "0" + second : second;
     return {
         "date": time,
         "year": year,
@@ -50,12 +58,12 @@ function getTimeBy(stamp){
 // 时间戳转化为yyyy-mm-dd hh-mm-ss
 function stamp2formatTime(stamp){
     var time = getTimeBy(stamp);
-    return time.year+"-"+(time.month<=9?"0":"")+time.month+"-"+time.day+" "+(time.hour<=9?"0":"") +time.hour+":"+(time.minute<=9?"0":"") + time.minute+":"+(time.second<=9?"0":"") +time.second;
+    return time.year+"-"+time.month+"-"+time.day+" "+time.hour+":"+ time.minute+":"+time.second;
 }
 // 时间戳转化为yyyy-mm-dd hh-mm
 function stamp2formatTime2(stamp){
     var time = getTimeBy(stamp);
-    return time.year+"-"+ (time.month<=9?"0":"") + time.month +"-" + time.day+" "+ (time.hour<=9?"0":"") + time.hour+":"+(time.minute<=9?"0":"") +time.minute;
+    return time.year+"-"+ time.month +"-" + time.day+" "+time.hour+":"+time.minute;
 }
 function stamp2formatDate(stamp){
     var time = getTimeBy(stamp);

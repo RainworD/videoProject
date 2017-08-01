@@ -18,7 +18,7 @@
     <script src="../source/js/public.js"></script>
     <script src="../source/js/public_b.js"></script>
 </head>
-<body @tap="showInput = false">
+<body>
     <div class="mui-content">
         <div id="pullrefresh" class="mui-scroll-wrapper">
             <div class="mui-scroll">
@@ -71,45 +71,13 @@
     </div>
     <div class="mui-input-row enterHide" v-show="showInput">
         <input id="commentInput" v-model="commentValue" type="text" placeholder="请输入评论...">
-        <div class="button" @tap="sendComment();">发送</div>
+        <div class="button" @tap="sendComment();" :class="{'colorblue':commentValue!=''}">发送</div>
     </div>
 </body>
 <script src="../source/mui/js/mui.zoom.js"></script>
 <script src="../source/mui/js/mui.previewimage.js"></script>
 <script>
 $(function() {
-    
-    // function pulldownRefresh() {
-    //     setTimeout(function() {
-    //         var table = document.body.querySelector('.mui-table-view');
-    //         var cells = document.body.querySelectorAll('.mui-table-view-cell');
-    //         for (var i = cells.length, len = i + 3; i < len; i++) {
-    //             var li = document.createElement('li');
-    //             li.className = 'mui-table-view-cell';
-    //             li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-    //             //下拉刷新，新纪录插到最前面；
-    //             table.insertBefore(li, table.firstChild);
-    //         }
-    //         mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
-    //     }, 1500);
-    // }
-    // var count = 0;
-    /**
-     * 上拉加载具体业务实现
-     */
-    // function pullupRefresh() {
-    //     setTimeout(function() {
-    //         mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
-    //         var table = document.body.querySelector('.mui-table-view');
-    //         var cells = document.body.querySelectorAll('.mui-table-view-cell');
-    //         for (var i = cells.length, len = i + 20; i < len; i++) {
-    //             var li = document.createElement('li');
-    //             li.className = 'mui-table-view-cell';
-    //             li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-    //             table.appendChild(li);
-    //         }
-    //     }, 1500);
-    // }
 
 var vm = new Vue({
         el: "body",
@@ -119,16 +87,28 @@ var vm = new Vue({
             commentValue: "",
             dynamicList: [],
             nowpage: 0,
+            minifiedWidth: 89
         },
         computed: {
-            
+            minifiedHeight: function(){
+                var self = this;
+                return parseInt(self.minifiedWidth*5/7);
+            }
         },
         methods: {
             beginComment: function(dynamic){
                 var self = this;
                 self.showInput = true;
                 self.focusDynamic = dynamic;
-                document.getElementById('commentInput').focus();
+                setTimeout(function(){
+                    document.getElementById('commentInput').focus();
+                },0);
+                window.location.href="h5action:inputFocus";
+            },
+            inputFocus: function(){
+                setTimeout(function(){
+                    document.getElementById('commentInput').focus();
+                },0);
             },
             sendComment: function(e){
                 var self = this;
@@ -140,9 +120,12 @@ var vm = new Vue({
                 });
             },
             refreshDynamicById: function(dynamic){
+                var self = this;
                 $.when(getDynamicById(dynamic.id)).done(function(data){
                     if(data.state == 0){
-                        dynamic.comment = data.data.comment;
+                        dynamic.comment = data.data[0].comment;
+                        self.showInput = false;
+                        self.commentValue = "";
                     }
                 })
             },

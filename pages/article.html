@@ -27,7 +27,10 @@
         <div class="detailBox" v-if="detail.id">
             <p class="topTitle">{{detail.title}}</p>
             <p class="date">{{stamp2formatTime(detail.in_time)}}</p>
-            <div class="para" v-html="detail.text">
+            <div class="para" v-show="hasload == false">
+                加载中...
+            </div>
+            <div class="para" v-html="detail.text" v-show="hasload == true">
             </div>
         </div>
     </div>
@@ -38,17 +41,38 @@ $(function() {
     var vm = new Vue({
         el: "body",
         data: {
+            hasload: false,
+            loadedImgNumber: 0,
             detail: {}    
         },
         computed: {
-            
         },
         methods: {
             loadArticle: function(id){
                 var self = this;
                 $.when(getArticleById(id)).done(function(data){
                     if(data.state == 0){
-                        self.detail=  data.data[0];
+                        if(data.data.length){
+                            self.detail = data.data[0];
+                            var imgs = $(self.detail.text).find("img");
+                            $.each(imgs, function(){
+                                this.onload = function(){
+                                    self.loadedImgNumber ++;
+                                    if(self.loadedImgNumber == imgs.length){
+                                        self.hasload = true;
+                                    }
+                                }
+                                this.onerror = function(e){
+                                    self.loadedImgNumber ++;
+                                    if(self.loadedImgNumber == imgs.length){
+                                        self.hasload = true;
+                                    }
+                                }
+                            })
+                        }
+                        else{
+                            mui.toast("文章不存在");
+                        } 
                     }
                 })
             }

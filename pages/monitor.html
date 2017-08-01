@@ -26,7 +26,7 @@
     <div id="scroll" class="mui-content mui-scroll-wrapper">
         <div class="mui-scroll">
             <ul class="mui-table-view mui-table-view-chevron mui-table-view-chevron-35">
-                <li class="mui-table-view-cell" v-for="company in datalist">
+                <li class="mui-table-view-cell" v-for="company in datalist" v-show="company.enable">
                     <a class="mui-navigate-right" @tap="goDetail(company.id);">
                         <span class="mui-h5">{{company.name}}</span>
                         <span class="colorred" v-if="!company.enable">(停用)</span>

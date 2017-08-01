@@ -71,13 +71,13 @@
                         <a class="mui-navigate-right" href="addCompany.html">
                             <img class="mui-media-object mui-pull-left head-img" id="head-img" :src="getMinifiedImage(photoId,60,60)">
                             <div class="mui-media-body" v-cloak>
-                                <p class="mui-h5">真实姓名：{{name}}</p>
+                                <p class="mui-h5">真实姓名：{{name||"未设置"}}</p>
                                 <p class="mui-h5">手机号码：{{phone}}</p>
                             </div>
                         </a>
                     </li>
                 </ul>
-                <ul class="mui-table-view mui-table-view-chevron mui-table-view-chevron-35">
+                <ul class="mui-table-view mui-table-view-chevron mui-table-view-chevron-35" v-if="user_competence == '代理商管理员'">
                     <li class="mui-table-view-cell">
                         <a href="accountBalance.html" class="mui-navigate-right"><img class="icon-img" src="../source/img/accountRest.png">
                             账户余额
@@ -99,6 +99,9 @@
                 </ul>
                 <ul class="mui-table-view mui-table-view-chevron">
                     <li class="mui-table-view-cell">
+                        <a href="commonSetting.html" class="mui-navigate-right"><img class="icon-img" src="../source/img/setting.png">通用设置</a>
+                    </li>
+                    <li class="mui-table-view-cell">
                         <a href="aboutus.html" class="mui-navigate-right"><img class="icon-img" src="../source/img/about.png">
                             关于我们
                         </a>
@@ -118,11 +121,12 @@ $(function() {
     mui.init();
     var vm = new Vue({
         el: "body",
-        data: {
-            price: getB_Price()/100,
+        data: {      
+            price: ((getB_Price()-0)+(getB_Deposit()-0))/100,
             photoId: getUser_PhotoId(),
             phone: getUser_Phone(),
-            name: getUser_Name()
+            name: getUser_Name(),
+            user_competence: getUser_competence()
         },
         computed: {
             
@@ -131,11 +135,15 @@ $(function() {
             logout: function(){
                 mui.confirm("","确认退出该账号？",null,function(result){
                     if(result.index == 1){
-                        $.when(b_logout()).done(function(data){
-                            if(data.state == 0){
-                                window.location.href="h5action:logout";
+                        $.when(emptyRegistration_id(getUser_Id())).done(function(data1){
+                            if(data1.state == 0){
+                                $.when(b_logout()).done(function(data){
+                                    if(data.state == 0){
+                                        window.location.href="h5action:logout";
+                                    }
+                                });
                             }
-                        });
+                        });   
                     }
                 });
             }
@@ -145,38 +153,5 @@ $(function() {
         }
     })
 });
-</script>
-<script type="text/javascript">
-    // document.getElementById("confirmBtn").addEventListener('tap', function() {
-    //     var btnArray = ['否', '是'];
-    //     mui.confirm('', '确认退出该账号？', btnArray, function(e) {
-    //         // if (e.index == 1) {
-    //         //     info.innerText = '你刚确认MUI是个好框架';
-    //         // } else {
-    //         //     info.innerText = 'MUI没有得到你的认可，继续加油'
-    //         // }
-    //     })
-    // });
-    // $(".checkImg").bind("click",function(){
-    //     var class_=$(this).attr("class");
-    //     var array=class_.split(" ");
-    //     console.log(class_);
-    //     if(array.length>1){
-    //         $(this).attr("src","../source/img/uncheck.png");
-    //         $(this).removeClass("checkJudge");
-    //     }
-    //     else{
-    //         $(this).attr("src","../source/img/checked.png");
-    //         $(this).addClass("checkJudge");
-    //     }
-    // })
-    // $(".quitBtn").bind("click",function(){
-    //     $(".mask").addClass("show");
-    //     $(".submitBox").addClass("show");
-    // })
-    // $(".para_bot span").bind("click",function(){
-    //     $(".mask").removeClass("show");
-    //     $(".submitBox").removeClass("show");
-    // })
 </script>
 </html>

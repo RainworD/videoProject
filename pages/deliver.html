@@ -20,7 +20,7 @@
     <script src="../source/js/vue-tap.js"></script>
     <script src="../source/js/public.js"></script>
     <script src="../source/js/public_b.js"></script>
-
+    <!-- <script src="../source/js/vconsole.min.js"></script> -->
 </head>
 <style type="text/css">
     body{
@@ -52,7 +52,7 @@
                 </div>
                 <img src="../source/img/remove.png" alt="" class="removeBtn" @tap="removeImage($index);">
             </div>
-            <div class="photo" @tap="pickImage();" style="z-index: 0;" v-show="selectedImageList.length < 3">
+            <div class="photo" @tap="pickImage();" style="z-index: 0;" v-show="selectedImageList.length < 9">
                 <div class="fix7_5 nobackground">
                     <img src="../source/img/plus.png">
                 </div>
@@ -73,17 +73,21 @@
             <a id="upload">确认发布</a>
         </li>
     </ul> -->
-</body>
+
 <script>
 $(function() {
     mui.init();
+    mui.previewImage();
     var vm = new Vue({
         el: "body",
         data: {
             selectedImageList: [],
             imageFileList: [],
             workmates:[],
-            text: ""
+            text: undefined,
+            androidFinishPickDef: "",
+            isAndroid: navigator.userAgent.indexOf('Android')>=0,
+            pickedId: []
         },
         computed: {
             workmateIdList: function(){
@@ -96,25 +100,45 @@ $(function() {
             }
         },
         methods: {
-            pickImage: function(){
+            androidFinishPick: function(ids){
                 var self = this;
-                var fileInput = document.createElement("input");
-                fileInput.type = "file";
-                fileInput.multiple = "multiple";
-                fileInput.accept = "image/*";
-                fileInput.click();
-                window.fileInput = fileInput;
-                fileInput.onchange = function(e){
-                    self.fileIndex = 0;
-                    var files = e.target.files;
-                    if(files.length + self.selectedImageList.length > 3){
-                        mui.alert("您最多只能选择3张");
-                    }
-                    else{
-                        console.log("126: fileInput onchange")
-                        self.readerOnload(files);
+                ids = ids.split(",");
+                if(ids.length + self.pickedId.length > 9){
+                    mui.alert("您最多只能选择9张");
+                }
+                else{
+                    self.pickedId = self.pickedId.concat(ids);
+                    for(var i=0, length = ids.length; i < length; i++){
+                        self.selectedImageList.push(getMinifiedImage(ids[i],150,106));
                     }
                 }
+                
+            },
+            pickImage: function(){
+                var self = this;
+                if(self.isAndroid){
+                    window.location.href="h5action:gallery.pick";
+                }
+                else{
+                    var fileInput = document.createElement("input");
+                    fileInput.type = "file";
+                    fileInput.multiple = "multiple";
+                    fileInput.accept = "image/*";
+                    fileInput.click();
+                    window.fileInput = fileInput;
+                    fileInput.onchange = function(e){
+                        self.fileIndex = 0;
+                        var files = e.target.files;
+                        console.log(files)
+                        if(files.length + self.selectedImageList.length > 9){
+                            mui.alert("您最多只能选择3张");
+                        }
+                        else{
+                            console.log("126: fileInput onchange")
+                            self.readerOnload(files);
+                        }
+                    }
+                } 
             },
             readerOnload: function(files){
                 var self = this;
@@ -136,6 +160,7 @@ $(function() {
             removeImage: function(index){
                 var self = this;
                 self.selectedImageList.splice(index,1);
+                self.pickedId.splice(index,1);
                 self.imageFileList.splice(index,1);
                 self.fileIndex--;
             },
@@ -153,17 +178,24 @@ $(function() {
             applyButton: function(){
                 var self = this;
                 var uploadImages = $.Deferred();
-                $.when(uploadImageFileListAndGetIdArray(self.imageFileList)).done(function(data){
-                    var photo = data.idList;
-                    $.when(saveDynamic(self.text,photo,self.workmateIdList)).done(function(data){
+                if(self.isAndroid){
+                    $.when(saveDynamic(self.text,self.pickedId,self.workmateIdList)).done(function(data){
+                        console.log(self.text,self.pickedId,self.workmateIdList);
+                        console.log(JSON.stringify(data));
                         if(data.state == 0){
                             window.location.href="backto:activityCenter.html,javascript:positionTo(2)";
                         }
                     });
-                });
-                // $.when(uploadImageAndGetId(self.imageFileList[0])).done(function(){
-                //     152
-                // });
+                }else{
+                    $.when(uploadImageFileListAndGetIdArray(self.imageFileList)).done(function(data){
+                        var photo = data.idList;
+                        $.when(saveDynamic(self.text,photo,self.workmateIdList)).done(function(data){
+                            if(data.state == 0){
+                                window.location.href="backto:activityCenter.html,javascript:positionTo(2)";
+                            }
+                        });
+                    });
+                }
             }
         },
         created: function() {
@@ -171,10 +203,18 @@ $(function() {
             var qd = getQueryData();
             $.when(getAllUser("企业同事")).done(function(data){
                 if(data.state == 0){
-                    for(i in data.data){
-                        data.data[i].picked = true;
+                    self.workmates = data.data
+                    var business = getC_business()
+                    var subBusiness = getC_subBusiness()
+                    if(business){
+                        self.workmates.push(business.user)
                     }
-                    self.workmates = data.data;
+                    if(subBusiness){
+                        self.workmates.push(subBusiness.user)
+                    }
+                    for(i in self.workmates){
+                        self.workmates[i].picked = true;
+                    }
                 }
             });
         },
@@ -183,128 +223,10 @@ $(function() {
             window.chooseWorkmates = self.chooseWorkmates;
             window.writeWorkmates = self.writeWorkmates;
             window.applyButton = self.applyButton;
+            window.androidFinishPick = self.androidFinishPick;
         }
     })
 });
 </script>
-<script type="text/javascript">
-    // $(".removeBtn").bind("click",function(){
-    //     $(this).parents(".deliverImg_").remove();
-    // })
-    // $(".userPic").bind("click",function(){
-    //     $(this).remove();
-    // })
-    // $(".plusMoreImg").bind("click",function(){
-    //     $(".mask").addClass("show");
-    //     $(".addPhoto").addClass("show");
-    // })
-    // $(".cancelBtn").bind("click",function(){
-    //     $(".mask").removeClass("show");
-    //     $(".addPhoto").removeClass("show");
-    // })
-    // $(".userPlus").bind("click",function(){
-    //     window.location.href="workmatesList.html"
-    // })
-</script>
-
-<script>
-    // mui.init({
-    //     swipeBack:true //启用右滑关闭功能
-    // });
-    // mui('body').on('shown', '.mui-popover', function(e) {
-    //     //console.log('shown', e.detail.id);//detail为当前popover元素
-    // });
-    // mui('body').on('hidden', '.mui-popover', function(e) {
-    //     //console.log('hidden', e.detail.id);//detail为当前popover元素
-    // });
-    // // var info = document.getElementById("info");
-    // mui('body').on('tap', '.mui-popover-action li>a', function() {
-    //     var a = this,
-    //         parent;
-    //     //根据点击按钮，反推当前是哪个actionsheet
-    //     for (parent = a.parentNode; parent != document.body; parent = parent.parentNode) {
-    //         if (parent.classList.contains('mui-popover-action')) {
-    //             break;
-    //         }
-    //     }
-    //     //关闭actionsheet
-    //     mui('#' + parent.id).popover('toggle');
-    //     // info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
-    // })
-    mui.previewImage();
-</script>
-<script>
-    // var type_arr=[];
-    // $("#file").on("change", function(e){
-    //     type_arr=[];
-    //     var btn=document.getElementById("cancel");
-    //     mui.trigger(btn,'tap');
-    //     // $("#picture").css("display","none");
-    //     // $(".mui-backdrop").removeClass("mui-active");
-    //     var file = e.target.files; //获取图片资源
-    //     // console.log(file.length);
-    //     for(var i=0; i< file.length; i++){
-    //         var type=file[i] .type;
-    //         type_arr.push(type);  
-    //         // if (!file[i].type.match('image.*')) {
-    //         //     return false;
-    //         // }//只选取图片文件
-            // var reader = new FileReader();
-
-            // reader.readAsDataURL(file[i]); // 读取文件
-            //   // 渲染文件
-            // reader.onload = function(arg) {
-            //     var img='<div class="deliverImg_">'+
-            //                 '<img src="' + arg.target.result + '" data-preview-src="" data-preview-group="1" class="commonImg">'+
-            //                 '<img src="../source/img/remove.png" alt="" class="removeBtn">'+
-            //             '</div>'
-            // // var img = '<img class="preview" src="' + arg.target.result + '" alt="preview"/>';
-            //     $(".deliverImg").prepend(img);
-            // }
-    //     }
-    // });
-    // $("#upload").bind("click",function(){
-    //     var photo_arr=[];
-    //     if(type_arr.length){
-    //         console.log("success");
-    //         for(var i=0;i<type_arr.length;i++){
-    //             $.when(getImgUrl(type_arr[i])).done(function(data){
-    //                 console.log(data);
-    //                 if(data.state==0){
-    //                     var data=data.data;
-    //                     OSSAccessKeyId=data.OSSAccessKeyId;
-    //                     Signature=data.Signature;
-    //                     callback=data.callback;
-    //                     key=data.key;
-    //                     policy=data.policy;
-    //                 }
-    //                 var picFileList = $("#file").get(0).files;
-    //                 // var picFileList = $("#pic")[0].files;验证是否可行
-    //                 var formData = new FormData();
-    //                 for(var i=0; i< picFileList.length; i++){
-    //                     formData.append("OSSAccessKeyId",OSSAccessKeyId);
-    //                     formData.append("Signature",Signature);
-    //                     formData.append("callback",callback);
-    //                     formData.append("key",key);
-    //                     formData.append("policy",policy);
-    //                     formData.append("file" , picFileList[i]);
-    //                     $.when(uploadImg(formData)).done(function(data){
-    //                         alert("2222");
-    //                         photo_arr.push(data.id);
-    //                         var title;
-    //                         var text=$("#textArea").val();
-    //                         informed=[];
-    //                         $.when(deliverActivity(title,text,photo_arr,informed)).done(function(data){
-    //                             if(data.state==0){
-    //                                 alert("发布成功！")
-    //                             }
-    //                         })
-    //                     })
-    //                 }
-    //                 // formData.append('file', $('#file')[0].files[0]);
-    //             })
-    //         }
-    //     }
-    // }) 
-</script>
+</body>
 </html>

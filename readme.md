@@ -37,7 +37,7 @@
 
 - accountBalance.html
 	- 进入提现和充值界面会收到通知
-
+	- `refreshDataAndGetNewestOrder()`刷新数据
 - rechange_main.html
 	- 充值成功后会收到通知，回到accountBalance.html
 
@@ -73,8 +73,15 @@
 	- 调用`loadArticle(articleId)`
 
 - message_detail.html
-	- `getAnnounce(announceId)`调用这个刷新页面
+	- 页面跳转进来message_detail.html?%7B"id"%3A'+{{messageId}}+'%2C"title"%3A"系统通告"%7D'
+
+- company_management.html
+	- `refreshData()`调用这个刷新数据
+
+- 弹出键盘 "h5action:inputFocus"
+
+- 任何界面，调用`checkUserId(userid)`，检查用户id是否正确
 
 
-
-
+- company_device_detail.html
+	- 设备解绑成功后，会收到"h5action:deviceUnbindSuccess:"+id

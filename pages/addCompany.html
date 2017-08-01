@@ -7,10 +7,12 @@
     <meta name="format-detection" content="telephone=no">
     <title>邀请企业</title>
     <link rel="stylesheet" href="../source/mui/css/mui.css">
+    <link rel="stylesheet" href="../source/mui/css/mui.picker.all.css">
     <link rel="stylesheet" href="../source/css/init.css">
     <link rel="stylesheet" href="../source/css/public.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
     <script src="../source/mui/js/mui.js"></script>
+    <script src="../source/mui/js/mui.picker.all.js"></script>
     <script src="../source/js/ajax_b.js"></script>
     <script src="../source/js/vue.js"></script>
     <script src="../source/js/vue-tap.js"></script>
@@ -26,7 +28,7 @@
     <div class="addworkmates">
         <div class="mui-content">
             <h6 class="mui-content-padded">邀请码:&nbsp;&nbsp;<span>{{code}}</span></h6>
-            <form class="mui-input-group">
+            <div class="mui-input-group">
                 <div class="mui-input-row">
                     <label>企业名称</label>
                     <input v-model="companyName" class="mui-text-right" type="text" placeholder="请输入企业名称">
@@ -39,26 +41,35 @@
                     <label>联系电话</label>
                     <input v-model="companyPhone" class="mui-text-right" type="text" placeholder="请输入联系电话">
                 </div>
-            </form>
+            </div>
+            <div class="mui-input-group" style="margin-top: 15px;" v-if="isBusiness">
+                <div class="mui-input-row">
+                    <label>所属代理商</label>
+                    <div class="mui-text-right" style="padding: 10px 15px;">
+                        <span type="text" @tap.prevent="showBusinessPicker">{{businessName}}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 <script>
-// mui.alert(window.addButton);
-function test(){
-    mui.alert("测试");
-}
 
 $(function() {
-    mui.init();
     var vm = new Vue({
         el: "body",
         data: {
-            code: getUser_Code(),
+            code: "",
             companyName: "",
             companyContractName: "",
             companyPhone: "",
-            queryData: {}
+            queryData: {},
+            userPicker: "",
+            businessList: [],
+            businessName: "",
+            businessId: "",
+            subBusinessId: "",
+            isBusiness: (getUser_competence() == '代理商管理员')? true : false
         },
         computed: {
             
@@ -83,9 +94,17 @@ $(function() {
                 if(self.formCheck()){
                     mui.confirm("您确定新增吗？",null,null,function(data){
                         if(data.index == 1){
-                            $.when(b_registerBCompanyParent(getUser_Code(),self.companyPhone,self.companyName)).done(function(data){
+                            $.when(b_registerBCompanyParent(self.code,self.companyPhone,self.companyName)).done(function(data){
                                 if(data.state == 0){
-                                    mui.toast("新增成功")
+                                    mui.toast("新增成功");
+                                    // 刷新邀请码，并清空
+                                    $.when(getRandomCode("C")).done(function(data){
+                                        self.code = data.code;
+                                    });
+                                    self.companyName = "";
+                                    self.companyContractName = "";
+                                    self.companyPhone = "";
+                                    // window.location.href="h5action:addCompanySuccess"
                                 }
                             })
                         }
@@ -97,20 +116,95 @@ $(function() {
                 if(self.formCheck()){
                     mui.confirm("您确定保存修改吗？",null,null,function(data){
                         if(data.index == 1){
+                            var _def = $.Deferred();
                             // id,name,contact,phone
-                            $.when(b_editCompany(self.queryData.id,self.companyName,self.companyContractName,self.companyPhone)).done(function(data){
-                                if(data.state == 0){
-                                    mui.toast("修改成功")
+                            // console.log(self.queryData.companyId)
+                            $.when(
+                                b_editCompany(self.queryData.companyId,self.companyName,self.companyContractName,self.companyPhone),
+                                changeBusiness(self.queryData.companyId,self.businessId,self.subBusinessId)
+                            ).done(function(data1, data2){
+                                if(data1[0].state == 0 && data2[0].state == 0){
+                                    mui.toast("修改成功");
+                                    // window.location.href="backto:company_management.html,javascript:refreshData()"
                                 }
                             })
+                            // changeBusiness(self.queryData.companyId,self.businessId,self.subBusinessId).done(function(data){
+
+                            // })
                         }
                     })
                 }
+            },
+            showBusinessPicker: function(){
+                var self = this;
+                self.userPicker.show(function(items){
+                    self.businessName = items[0].text;
+
+                    self.subBusinessId = (self.businessList.indexOf(items[0]) == 0)?"":items[0].value;
+                    
+                },false);
             }
         },
         created: function() {
             var self = this;
             self.queryData = getQueryData();
+            if(self.queryData.companyId){
+                // 修改
+                $.when(getCompanyById(self.queryData.companyId)).done(function(data){
+                    // console.log(data)
+                    if(data.state == 0){
+                        self.companyName = data.data[0].name;
+                        self.companyContractName = data.data[0].contact;
+                        self.companyPhone = data.data[0].phone;
+                        self.code = data.data[0].code;
+                        if(data.data[0].subBusiness){
+                            self.businessName = data.data[0].subBusiness.user.username+"("+data.data[0].subBusiness.user.name+")";
+                            self.subBusinessId = data.data[0].subBusiness.id;
+                        }
+                        else{
+                            self.businessName = data.data[0].business.name+"("+data.data[0].business.user.name+")";
+                        }
+                    }
+                })
+            }
+            else{
+                // 新增
+                $.when(getRandomCode("C")).done(function(data){
+                    self.code = data.code;
+                })
+            }
+            if(self.isBusiness && self.queryData.companyId){
+                // 获取子代理商列表
+                var userdata = JSON.parse(decodeURIComponent(window.localStorage.getItem("user_data")))
+                self.businessId = userdata.business.id;
+                self.businessList.push({
+                    value: userdata.business.id,
+                    text: userdata.business.name+"("+userdata.name+")"
+                })
+                var _def = $.Deferred();
+                b_getSubBussiness().done(function(data){
+                    if(data.state == 0){
+                        var list = data.data;
+                        for(var i = 0, length = list.length; i < length; i++){
+                            self.businessList.push({
+                                value: list[i].id,
+                                text: list[i].user.username + "("+list[i].user.name+")"
+                            })
+                        }
+                        _def.resolve();
+                    }
+                        
+                })
+                mui.ready(function(){
+                    $.when(_def).done(function(){
+                        self.userPicker = new mui.PopPicker();
+                        self.userPicker.setData(self.businessList)
+                    })  
+                })
+            }
+                
+            mui.init();
+            
             window.addButton = self.addButton;
             window.saveButton = self.saveButton;
         }

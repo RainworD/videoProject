@@ -26,6 +26,10 @@ function getUser_Code(){
 	}
 	return code;
 }
+// 获得用户注册时间
+function getUser_Intime(){
+	return window.localStorage.getItem("user_intime");
+}
 function getUser_PhotoId(){
 	return window.localStorage.getItem("user_photoId");
 }
@@ -44,3 +48,21 @@ function getB_Price(){
 function getB_Deposit(){
 	return window.localStorage.getItem("b_deposit");
 }
+// c端获得自己company信息
+function getC_company(){
+	return JSON.parse(window.localStorage.getItem("c_company"));
+}
+// c端获得自己的business
+function getC_business(){
+	return JSON.parse(window.localStorage.getItem("c_business"))
+}
+// c端获得自己的subBusiness
+function getC_subBusiness(){
+	return JSON.parse(window.localStorage.getItem("c_subBusiness"));
+}
+
+
+
+
+
+

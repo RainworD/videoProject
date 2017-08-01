@@ -67,6 +67,9 @@ li {
 .colorgreen {
   color: #4cd964;
 }
+.colorblue {
+  color: #007aff !important;
+}
 .mui-btn-negative,
 .mui-btn-danger,
 .mui-btn-red {
@@ -232,7 +235,7 @@ body {
 }
 .messageBox .leftImg {
   float: left;
-  margin-right: 12px;
+  margin-right: 10px;
 }
 .messageBox .leftImg img {
   display: block;
@@ -287,7 +290,10 @@ body {
   width: 18px;
   height: 12px;
   float: right;
-  margin-top: 5px;
+  box-sizing: content-box;
+  padding: 5px;
+  margin: -5px;
+  margin-top: 0px;
 }
 .messageBox:after,
 .commentBox:after {

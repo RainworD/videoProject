@@ -22,7 +22,7 @@
         <ul class="mui-table-view">
             <li class="mui-table-view-cell mui-checkbox mui-right" v-for="user in datalist">
                 <input class="vertical-align" name="checkbox1" type="checkbox" @true-value="true" v-model="user.picked">
-                <img src="../source/img/q.png" class="mui-media-object mui-pull-left media-object-50">
+                <img :src="getMinifiedImage(user.photo.id,50,50)" class="mui-media-object mui-pull-left media-object-50" style="border-radius: 50%;">
                 <span class="vertical-align mui-h5">{{user.username}}</span>
             </li>
         </ul>

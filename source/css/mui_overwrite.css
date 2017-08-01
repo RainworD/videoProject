@@ -67,6 +67,9 @@ li {
 .colorgreen {
   color: #4cd964;
 }
+.colorblue {
+  color: #007aff !important;
+}
 .mui-btn-negative,
 .mui-btn-danger,
 .mui-btn-red {
@@ -156,6 +159,7 @@ h5,
 }
 .mui-table-view .media-object-50 {
   line-height: 50px;
+  max-width: 50px;
   width: 50px;
   height: 50px;
 }

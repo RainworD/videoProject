@@ -37,7 +37,7 @@
                     </button>
                 </div>
                 <div class="mui-slider-handle listContent" v-else>
-                    设备号
+                    设备号：{{device.code}}
                     <p class="mui-ellipsis">有效期截止:<span>{{stamp2formatDate(device.expire_time)}}</span></p>
                     <button type="button" class="mui-btn" @tap="renew(device.id,device.expire_time)">
                         续费
@@ -88,6 +88,7 @@ $(function() {
                     if(data.state == 0){
                         mui.toast("解绑成功");
                         self.datalist.splice(index,1);
+                        window.location.href="h5action:deviceUnbindSuccess:"+id
                     }
                 });
             },
